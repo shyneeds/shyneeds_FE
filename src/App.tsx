@@ -1,9 +1,10 @@
 import React from 'react';
-import { Counter } from './features/counter/Counter';
+// import { Counter } from './features/counter/Counter';
+import { LoginPage } from './pages/LoginPage';
 
 function App() {
   return (
-    <Counter />
+    <LoginPage />
   );
 }
 
