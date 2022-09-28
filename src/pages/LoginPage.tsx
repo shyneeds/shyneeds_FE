@@ -1,16 +1,15 @@
-import { TextField } from "../components/TextField";
+import { TextField } from "../components/Login/TextField";
+import styled from 'styled-components';
+
+const LoginSection = styled.div`
+
+`
 
 export const LoginPage = () => {
   return (
-    <div>
-      <div>로그인</div>
-      <div>
-        <TextField /> 
-      </div>
-      <div>
-        <TextField /> 
-      </div>
-
-    </div>
+    <LoginSection>
+      <TextField />
+      <TextField />
+    </LoginSection>
   )
 }
