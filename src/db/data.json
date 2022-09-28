@@ -1,3 +1,16 @@
 {
-  
+  "user" : [
+    {
+      "id": "oldman68@naver.com", 
+      "password": "wjfadmsdl00"
+    },
+    {
+      "id": "youngman86@gmail.com", 
+      "password": "gjf5060"
+    },
+    {
+      "id": "shyneeds@gmail.com", 
+      "password": "gkftndlTek9"
+    }
+  ]
 }
