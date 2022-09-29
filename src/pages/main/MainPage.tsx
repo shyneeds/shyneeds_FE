@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { PersonalSection } from "../components/PersonalSection/PersonalSection"
+import { PersonalSection } from "../.././components/personalSection/PersonalSection"
 
 const MainPageStyles = styled.div`
   width: 62vw;
