@@ -1,11 +1,5 @@
 import styled from 'styled-components';
 
-const PersonalBrowserStyles = styled.div`
-  margin: 5rem 5rem;
-  font-size: 30px;
-  text-align: center;
-` 
-
 export const PersonalBrowser = () => {
   return (
     <PersonalBrowserStyles>
@@ -15,3 +9,9 @@ export const PersonalBrowser = () => {
     </PersonalBrowserStyles>
   ) 
 }
+
+const PersonalBrowserStyles = styled.div`
+  margin: 5rem 5rem;
+  font-size: 30px;
+  text-align: center;
+`

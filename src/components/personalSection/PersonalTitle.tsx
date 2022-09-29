@@ -1,11 +1,5 @@
 import styled from 'styled-components';
 
-const PersonalTitleStyles = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  margin-top: 1rem;
-`
-
 export const PersonalTitle = () => {
   return (
     <PersonalTitleStyles>
@@ -13,3 +7,9 @@ export const PersonalTitle = () => {
     </PersonalTitleStyles>
   )
 }
+
+const PersonalTitleStyles = styled.h1`
+  font-size: 36px;
+  font-weight: bold;
+  margin-top: 1rem;
+`

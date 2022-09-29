@@ -5,11 +5,6 @@ import { PersonalButton } from './PersonalButton';
 import { PersonalBrowser } from './PersonalBrowser';
 import { RecommendButton } from './PersonalRecommendButton';
 
-const PersonalSectionStyles = styled.div`
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-`
-
 export const PersonalSection = () => {
   return (
     <PersonalSectionStyles>
@@ -21,3 +16,8 @@ export const PersonalSection = () => {
     </PersonalSectionStyles>
   )
 }
+
+const PersonalSectionStyles = styled.div`
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+`
