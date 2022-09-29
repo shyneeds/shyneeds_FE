@@ -1,9 +1,13 @@
-import React from 'react';
-import { Counter } from './features/counter/Counter';
+import React from "react";
+import { Counter } from "./features/counter/Counter";
+import Carousel from './components/carousel/Carousel';
 
 function App() {
   return (
-    <Counter />
+    <>
+      <Carousel/>
+      {/* <Counter /> */}
+    </>
   );
 }
 
