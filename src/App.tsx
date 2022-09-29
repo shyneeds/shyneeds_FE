@@ -1,12 +1,12 @@
 import React from "react";
 import { Counter } from "./features/counter/Counter";
-import { Reset } from "styled-reset";
+import Carousel from './components/carousel/Carousel';
 
 function App() {
   return (
     <>
-      <Reset />
-      <Counter />
+      <Carousel/>
+      {/* <Counter /> */}
     </>
   );
 }
