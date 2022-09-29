@@ -12,5 +12,13 @@
       "id": "shyneeds@gmail.com", 
       "password": "gkftndlTek9"
     }
+  ],
+
+  "product" : [
+    {
+      "id": 1,
+      "title": "Greece",
+      "price": "5,890,000"
+    }
   ]
 }
