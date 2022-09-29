@@ -62,7 +62,7 @@ export const PersonalGoods = () => {
       <Mobile>
         <PersonalGoodsStylesM>
           <GoodsImageStyles src={images[1]} />
-            <IoMdHeartEmpty className='wishBtn'/>
+            <IoMdHeartEmpty size="20px" className='wishBtn'/>
             <GoodsTitleStyles>
               <p>5070 이제 가보자!<br />스위스 알프스 트래킹 초급 10일</p>
             </GoodsTitleStyles>

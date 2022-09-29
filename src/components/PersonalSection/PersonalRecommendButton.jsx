@@ -10,6 +10,10 @@ const RecommendButtonStyles = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 1rem;
+
+  &:hover {
+    cursor: pointer;
+  }
 `
 
 export const RecommendButton = () => {
