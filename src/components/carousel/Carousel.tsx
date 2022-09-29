@@ -12,7 +12,6 @@ function SamplePrevArrow(props: any) {
       style={{ ...style, display: "block", background: "green" }}
       onClick={onClick}
     >
-      test
     </div>
   );
 }
@@ -21,31 +20,12 @@ function Carousel() {
   const items:any = ['1','2','3','4','5'];
   return (
     <SliderContainer>
-      <h2>test</h2>
       <StyledSlider {...settings}>
         {items.map((item:any, i:any) => {
           return <BorderBox>
             <img src={`https://placeimg.com/133/200/any?rand=${i}`} alt="" />
           </BorderBox>;
         })}
-        {/* <BorderBox>
-          <img src={`https://placeimg.com/133/200/any?rand=2`} alt="" />
-        </BorderBox>
-        <BorderBox>
-          <img src={`https://placeimg.com/133/200/any?rand=3`} alt="" />
-        </BorderBox>
-        <BorderBox>
-          <img src={`https://placeimg.com/133/200/any?rand=4`} alt="" />
-        </BorderBox>
-        <BorderBox>
-          <h3>4</h3>
-        </BorderBox>
-        <BorderBox>
-          <h3>5</h3>
-        </BorderBox>
-        <BorderBox>
-          <h3>6</h3>
-        </BorderBox> */}
       </StyledSlider>
     </SliderContainer>
   );
