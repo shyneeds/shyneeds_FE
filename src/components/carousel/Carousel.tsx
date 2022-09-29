@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import Styled from "styled-components";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+import { LAYOUT } from '../../constants/layout';
 
 function SamplePrevArrow(props: any) {
   const { className, style, onClick } = props;
@@ -34,7 +35,7 @@ function Carousel() {
 export default Carousel;
 
 const SliderContainer = Styled.div`
-  width: 1184px;
+  width: ${LAYOUT.SIZE.WIDTH};
   height : 440px;
   margin: 0 auto;
 `;
