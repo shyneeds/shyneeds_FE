@@ -1,11 +1,11 @@
 import React from "react";
-import { Counter } from "./features/counter/Counter";
-import Carousel from './components/carousel/Carousel';
+// import { Counter } from "./features/counter/Counter";
+import Main from "./pages/main/Main";
 
 function App() {
   return (
     <>
-      <Carousel/>
+      <Main />
       {/* <Counter /> */}
     </>
   );
