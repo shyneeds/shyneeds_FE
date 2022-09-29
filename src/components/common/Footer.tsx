@@ -34,7 +34,7 @@ const Footer = () => {
             <em>(주)더샤이니</em>
           </Account>
         </FooterMiddle>
-        <FooterBottom>
+        <div>
           <Info>
             <div>
               <p>상호명 : (주)더샤이니</p>
@@ -53,7 +53,7 @@ const Footer = () => {
             <p>고투게더는 통신판매중개자이며 통신판매의 당사자가 아닙니다. 따라서 상품, 거래정보 및 거래에 대하여 책임을 지지 않습니다.</p>
           </Cancell>
           <p>copyright ⓒ {year} 고투게더 All rights reserved.</p>
-        </FooterBottom>
+        </div>
       </FooterInner>
     </FooterWrap>
   );
@@ -121,9 +121,6 @@ const Account = styled.div`
   margin: 6px 0;
   font-weight: bold;  
   }
-`;
-const FooterBottom = styled.div`
-
 `;
 
 const Info = styled.div`
