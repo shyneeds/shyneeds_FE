@@ -18,6 +18,15 @@ const PersonalGoodsStylesD = styled.div`
 
 const PersonalGoodsStylesM = styled.div`
   width: 100%;
+  position: relative;
+
+  .wishBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #fff;
+    index: 1;
+  }
 `
 
 const GoodsImageStyles = styled.img`
