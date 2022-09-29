@@ -1,15 +1,19 @@
-import React from 'react';
+import React from "react";
+// import { Counter } from "./features/counter/Counter";
+import Carousel from './components/carousel/Carousel';
+import Header from './components/common/Header';
 import Footer from './components/Footer';
-// import { Counter } from './features/counter/Counter';
-
+import { MainPage } from './pages/main/MainPage';
 
 function App() {
   return (
-    // <Counter />
     <>
+      <Header/>
+      <Carousel/>
+      <MainPage />
       <Footer />
+      {/* <Counter /> */}
     </>
-
   );
 }
 
