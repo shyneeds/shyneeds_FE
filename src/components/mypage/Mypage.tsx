@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import Footer from './common/Footer';
-import Header from './common/Header';
+import Footer from '../common/Footer';
+import Header from '../common/Header';
 import styled from 'styled-components';
 
 const Mypage = () => {
