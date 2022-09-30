@@ -1,9 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import Header from "../../components/common/Header";
-import Carousel from "../../components/carousel/Carousel";
-import Footer from "../../components/common/Footer";
-import { PersonalSection } from "../.././components/personalSection/PersonalSection";
+import React from 'react'
+import styled from 'styled-components';
+import Header from '../../components/common/Header';
+import Carousel from '../../components/carousel/Carousel';
+import Footer from '../../components/common/Footer';
+import { PersonalSection } from '../../components/personalSection/PersonalSection';
+
 
 export default function Main() {
   return (
