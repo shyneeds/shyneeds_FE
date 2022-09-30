@@ -1,6 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
-import Styled from "styled-components";
+import styled from "styled-components";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import { LAYOUT } from '../../constants/layout';
@@ -34,13 +34,13 @@ function Carousel() {
 
 export default Carousel;
 
-const SliderContainer = Styled.div`
+const SliderContainer = styled.div`
   width: ${LAYOUT.SIZE.WIDTH};
   height : 440px;
   margin: 0 auto;
 `;
 
-const BorderBox = Styled.div`
+const BorderBox = styled.div`
   border: 1px solid red;
   height : 440px;
   text-align : center;
@@ -56,7 +56,7 @@ const settings = {
   pauseOnHover: true,
 };
 
-const StyledSlider = Styled(Slider)`
+const StyledSlider = styled(Slider)`
   .slick-next,
   .slick-prev {
     width: 30px;
