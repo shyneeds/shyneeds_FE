@@ -13,10 +13,10 @@ const Mypage = () => {
                 <h2>나의 여행</h2>
                 <Contents>
                     <ContentsList>
-                        <p className={ tab === 1? 'active' : undefined }>예약조회</p>
-                        <p>위시리스트</p>
-                        <p>큐레이션결과 (?)</p>
-                        <p>내가 작성한 글</p>
+                        <p className={ tab === 1? 'active' : undefined } onClick={()=>setTab(1)}>예약조회</p>
+                        <p className={ tab === 2? 'active' : undefined } onClick={()=>setTab(2)}>위시리스트</p>
+                        <p className={ tab === 3? 'active' : undefined } onClick={()=>setTab(3)}>큐레이션결과 (?)</p>
+                        <p className={ tab === 4? 'active' : undefined } onClick={()=>setTab(4)}>내가 작성한 글</p>
                         <p>회원정보수정</p>
                         <p>회원탈퇴</p>
                     </ContentsList>
@@ -39,6 +39,18 @@ const Mypage = () => {
                             tab === 1 &&
                             <Reservation />
                         }
+                        {   
+                            tab === 2 &&
+                            <WishList />
+                        }
+                        {   
+                            tab === 3 &&
+                            <Curation />
+                        }
+                        {   
+                            tab === 4 &&
+                            <Writing />
+                        }
                         </ContentsResult>
                         
                     </ContentsMain>
@@ -53,16 +65,39 @@ function Reservation () {
     return (
         <>
             <h2>예약조회</h2>
-            <div>예약내역이 없습니다</div>
+            <div>예약내역이 없습니다.</div>
         </>
     )
 }
-
+function WishList () {
+    return (
+        <>
+            <h2>위시리스트</h2>
+            <div>위시리스트가 없습니다.</div>
+        </>
+    )
+}
+function Curation () {
+    return (
+        <>
+            <h2>큐레이션결과</h2>
+            <div>큐레이션결과가 없습니다.</div>
+        </>
+    )
+}
+function Writing  () {
+    return (
+        <>
+            <h2>내가 작성한 글</h2>
+            <div>내가 작성한 글이 없습니다.</div>
+        </>
+    )
+}
 const MypageMain = styled.div`
   width: 1184px;
   margin: 30px auto;
   > h2{
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
   }
 `;
