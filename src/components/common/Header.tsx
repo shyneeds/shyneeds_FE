@@ -27,7 +27,7 @@ export default Header;
 
 
 const Container = styled.div`
-  width: 1920px;
+  width: 100%;
   height: 72px;
 `;
 

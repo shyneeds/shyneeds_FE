@@ -3,12 +3,8 @@ import styled from 'styled-components';
 import Header from '../../components/common/Header';
 import Carousel from '../../components/carousel/Carousel';
 import Footer from '../../components/common/Footer';
-import { PersonalSection } from "../.././components/personalSection/PersonalSection"
+import { PersonalSection } from '../../components/personalSection/PersonalSection';
 
-const MainPageStyles = styled.div`
-  width: 62vw;
-  margin: 0 auto;
-`
 
 export default function Main() {
   return (
@@ -20,5 +16,10 @@ export default function Main() {
       </MainPageStyles>
       <Footer />
     </>
-  )
+  );
 }
+
+const MainPageStyles = styled.div`
+  width: 62vw;
+  margin: 0 auto;
+`;
