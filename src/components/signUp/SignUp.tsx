@@ -5,7 +5,7 @@ import styled from "styled-components";
 let now = new Date();
 const year = now.getFullYear();
 
-function SignUp(this: any) {
+const SignUp= () => {
   const [selectedDate, setSelectedDate] = useState({
     year : (year+"" as any),
     month : ('01' as any),
