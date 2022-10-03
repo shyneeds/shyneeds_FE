@@ -22,7 +22,7 @@ export const PersonalGoodsList = () => {
 }
 
 const PersonalGoodsListStyles = styled.div`
-  margin-top: 1rem;
+  margin-top: 5rem;
   display: flex;
   justify-content: space-between;
   width: 100%;
