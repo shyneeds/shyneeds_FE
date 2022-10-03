@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { ReactComponent as TopButtonIcon } from "./Top_btn.svg";
+// import { ReactComponent as TopButtonIcon } from "./Top_btn.svg";
 import { useEffect, useState } from "react";
 
 const TopButton = () => {
@@ -20,8 +20,9 @@ const TopButton = () => {
 
   return (
     <>
-      {showTopBtn &&(
-        <StyledTopBtnIcon onClick={goToTop} />
+      {showTopBtn && (
+        <StyledTopBtnIcon src={process.env.PUBLIC_URL + "/icons/Top_btn.svg"} />
+        // <StyledTopBtnIcon onClick={goToTop} />
       )}
     </>
   );
@@ -29,11 +30,11 @@ const TopButton = () => {
 
 export default TopButton;
 
-const StyledTopBtnIcon = styled(TopButtonIcon)`
+const StyledTopBtnIcon = styled.img`
   position: fixed;
   width: 60px;
-  right : 3%;
-  bottom : 5%;
+  right: 3%;
+  bottom: 5%;
   z-index: 999;
   cursor: pointer;
 `;

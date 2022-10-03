@@ -2,10 +2,11 @@ import React,{useState,useEffect} from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styled from "styled-components";
 
-let now = new Date();
-const year = now.getFullYear();
 
 const SignUp= () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  
   const [selectedDate, setSelectedDate] = useState({
     year : (year+"" as any),
     month : ('01' as any),
@@ -31,6 +32,7 @@ const SignUp= () => {
           <NameStyle>이름</NameStyle>
           <InputStyle
             placeholder="이름"
+            style={{outline: errors.email ? "2px solid red" : "",}}
             {...register("name", { required: true, minLength: 2 })}
           />
         </InputBox>
@@ -40,11 +42,11 @@ const SignUp= () => {
             type="text"
             placeholder="이메일"
             style={{
-              outline: errors.Email ? "2px solid red" : "",
+              outline: errors.email ? "2px solid red" : "",
             }}
             {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
           />
-          {errors.Email && <p>이메일 확인</p>}
+          {errors.email && <p>이메일 확인</p>}
         </InputBox>
         <InputBox>
           <NameStyle>비밀번호</NameStyle>

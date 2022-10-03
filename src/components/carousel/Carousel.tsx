@@ -5,25 +5,13 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import { LAYOUT } from '../../constants/layout';
 
-function SamplePrevArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", background: "green" }}
-      onClick={onClick}
-    >
-    </div>
-  );
-}
-
 function Carousel() {
   const items:any = ['1','2','3','4','5'];
   return (
     <SliderContainer>
       <StyledSlider {...settings}>
         {items.map((item:any, i:any) => {
-          return <BorderBox>
+          return <BorderBox key={i}>
             <img src={`https://placeimg.com/133/200/any?rand=${i}`} alt="" />
           </BorderBox>;
         })}
