@@ -5,6 +5,7 @@ import { PersonalButton } from './PersonalButton';
 import { PersonalBrowser } from './PersonalBrowser';
 import { RecommendButton } from './PersonalRecommendButton';
 
+
 export const PersonalSection = () => {
   return (
     <PersonalSectionStyles>
