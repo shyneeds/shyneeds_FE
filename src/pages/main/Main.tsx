@@ -5,6 +5,7 @@ import Carousel from '../../components/carousel/Carousel';
 import Footer from '../../components/common/Footer';
 import { PersonalSection } from '../../components/personalSection/PersonalSection';
 import TopButton from '../../components/common/TopButton';
+import Review from '../../components/review/Review';
 
 
 export default function Main() {
@@ -14,6 +15,7 @@ export default function Main() {
       <Carousel />
       <MainPageStyles>
         <PersonalSection />
+        <Review />
       </MainPageStyles>
       <Footer />
       <TopButton/>
