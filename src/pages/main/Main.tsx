@@ -1,10 +1,10 @@
 import React from 'react'
-import styled from 'styled-components';
 import Header from '../../components/common/Header';
 import Carousel from '../../components/carousel/Carousel';
 import Footer from '../../components/common/Footer';
 import { PersonalSection } from '../../components/personalSection/PersonalSection';
 import TopButton from '../../components/common/TopButton';
+import { KakaoTalkBanner } from '../../components/banner/KakaoTalkBanner';
 
 
 export default function Main() {
@@ -12,16 +12,10 @@ export default function Main() {
     <>
       <Header />
       <Carousel />
-      <MainPageStyles>
-        <PersonalSection />
-      </MainPageStyles>
+      <PersonalSection />
       <Footer />
+      <KakaoTalkBanner />
       <TopButton/>
     </>
   );
 }
-
-const MainPageStyles = styled.div`
-  width: 62vw;
-  margin: 0 auto;
-`;
