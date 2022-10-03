@@ -3,6 +3,7 @@ import Main from "./pages/main/Main";
 import Error from "./pages/error/Error";
 import { Route, Routes, Navigate } from "react-router-dom";
 import SignUp from "./pages/signUp/SignUpPage";
+import Mypage from "./components/mypage/Mypage";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="*" element={<Error />} />
         <Route path="/" element={<Main />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/mypage" element={<Mypage/>}/>
       </Routes>
     </>
   );
