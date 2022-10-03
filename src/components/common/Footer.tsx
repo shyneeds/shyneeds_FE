@@ -1,18 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from "react-router-dom";
-import Mypage from '../mypage/Mypage';
 
 const Footer = () => {
-  const now = new Date();
-  const year = now.getFullYear();
+  let now = new Date();
+  let year = now.getFullYear();
 
   return (
     <FooterWrap>
       <FooterInner>
         <FooterTop>
           <Corp>
-            <li><Link to="/mypage">마이페이지(임시)</Link></li>
             <li>안심카드결제</li>
             <li>이용약관</li>
             <li>개인정보처리방침</li>
