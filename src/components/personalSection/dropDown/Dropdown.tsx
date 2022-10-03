@@ -15,9 +15,8 @@ export const Dropdown = ({ selected, setSelected }: any) => {
   return (
     <DropdownBox>
       <DropdownBtn onClick={(e) => 
-        setIsActive(!isActive)}
-      >
-        {selected ? selected : "날 선택해줘"}
+      setIsActive(!isActive)}>
+        {selected}
         <FiChevronDown />
       </DropdownBtn>
       {isActive && (
