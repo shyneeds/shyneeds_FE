@@ -20,4 +20,6 @@ export const PersonalSection = () => {
 const PersonalSectionStyles = styled.div`
   margin-top: 1rem;
   margin-bottom: 1rem;
+  width: 62vw;
+  margin: 0 auto;
 `
