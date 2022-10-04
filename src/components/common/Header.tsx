@@ -1,37 +1,60 @@
-import React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
+import { HeaderBanner } from '../banner/HeaderBanner';
 
 function Header() {
+  const [show, setShow] = useState(true);
+
   return (
     <Container>
+      <BannerWrapper>
+        {show ? <HeaderBanner onClose={setShow} /> : null}
+      </BannerWrapper>
       <HeaderWrapper>
-        <Logo>
-          <img src='https://cdn.imweb.me/thumbnail/20220626/f70356446610d.png' alt=''></img>
-        </Logo>
-        <SearchBox>
-          <img src={process.env.PUBLIC_URL + '/icons/search.png'} alt=''></img>
-          <input type='text' placeholder='여행 그룹이나 상품을 검색해보세요'>
-          </input>
-        </SearchBox>
-        <IconGroup>
-          <img src={process.env.PUBLIC_URL + '/icons/cart.png'} alt=''></img>
-          <img src={process.env.PUBLIC_URL + '/icons/login.png'} alt=''></img>
-          <img src={process.env.PUBLIC_URL + '/icons/member.png'} alt=''></img>
-        </IconGroup>
+        <HeaderNav>
+          <Logo>
+            <a href="/">
+              <img
+                src="https://cdn.imweb.me/thumbnail/20220626/f70356446610d.png"
+                alt=""
+              />
+            </a>
+          </Logo>
+          <SearchBox>
+            <img src={process.env.PUBLIC_URL + '/icons/search.png'} alt="" />
+            <input
+              type="text"
+              placeholder="여행 그룹이나 상품을 검색해보세요"
+            />
+          </SearchBox>
+          <IconGroup>
+            <img src={process.env.PUBLIC_URL + '/icons/cart.png'} alt="" />
+            <img src={process.env.PUBLIC_URL + '/icons/login.png'} alt="" />
+            <a href="signup">
+              <img src={process.env.PUBLIC_URL + '/icons/member.png'} alt="" />
+            </a>
+          </IconGroup>
+        </HeaderNav>
       </HeaderWrapper>
     </Container>
-  )
+  );
 }
 
 export default Header;
 
-
-const Container = styled.div`
-  width: 100%;
-  height: 72px;
+const Container = styled.header`
+  height: 100%;
 `;
 
-const HeaderWrapper = styled.header`
+const BannerWrapper = styled.div`
+  position: relative;
+  // display: none;
+`;
+
+// 위치값 필요할 경우 추가, 없어도 동작하는데 아무 영향 없음
+const HeaderWrapper = styled.div``;
+
+const HeaderNav = styled.nav`
   width: 1184px;
   height: 100%;
   margin: 0 auto;
@@ -71,6 +94,12 @@ const IconGroup = styled.div`
   justify-content: space-around;
 
   img {
+    width: 83px;
+    height: 40px;
+    margin: auto 0;
+  }
+
+  a {
     width: 83px;
     height: 40px;
     margin: auto 0;

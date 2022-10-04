@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import styled from "styled-components";
+import { useEffect } from 'react';
+import styled from 'styled-components';
 
 declare global {
   interface Window {
@@ -13,11 +13,11 @@ export const KakaoTalkBanner = () => {
     script.async = true;
     try {
       if (window.Kakao) {
-        window.Kakao.init(""); // 자바스크립트 API 키
+        window.Kakao.init(''); // 자바스크립트 API 키
       }
-// eslint-disable-next-line no-empty  
+      // eslint-disable-next-line no-empty
     } catch (e) {}
-// Kakao Channel 추가 버튼 생성
+    // Kakao Channel 추가 버튼 생성
     window.Kakao.Channel.createChatButton({
       container: '#kakao-talk-channel-chat-button',
       channelPublicId: '', // 개발자용 카카오웹URL 아이디
@@ -35,12 +35,12 @@ export const KakaoTalkBanner = () => {
     <KakaoIcon>
       <div id="kakao-talk-channel-chat-button"></div>
     </KakaoIcon>
-  )
-}
+  );
+};
 
 const KakaoIcon = styled.div`
   position: fixed;
   bottom: 5rem;
   left: 1rem;
   width: 6rem;
-` 
+`;
