@@ -70,28 +70,28 @@ function Reservation () {
   )
 }
 function WishList () {
-    return (
-        <>
-            <h2>위시리스트</h2>
-            <div>위시리스트가 없습니다.</div>
-        </>
-    )
+  return (
+    <>
+      <h2>위시리스트</h2>
+      <div>위시리스트가 없습니다.</div>
+    </>
+  )
 }
 function Curation () {
-    return (
-        <>
-            <h2>큐레이션결과</h2>
-            <div>큐레이션결과가 없습니다.</div>
-        </>
-    )
+  return (
+    <>
+      <h2>큐레이션결과</h2>
+      <div>큐레이션결과가 없습니다.</div>
+    </>
+  )
 }
 function Writing  () {
-    return (
-        <>
-            <h2>내가 작성한 글</h2>
-            <div>내가 작성한 글이 없습니다.</div>
-        </>
-    )
+  return (
+    <>
+      <h2>내가 작성한 글</h2>
+      <div>내가 작성한 글이 없습니다.</div>
+    </>
+  )
 }
 const MypageMain = styled.div`
   width: 1184px;
@@ -162,29 +162,29 @@ const UserImg = styled.div`
   }
 `;
 const UserPoint = styled.div`
-    position: relative;
-    text-align: center;
-    width: 30%;
-    > p{
-      margin: 0 0 10px 0;
-    }
-    > span{
-      font-size: 2.5rem;
-    }
-    > p, >span{
-        font-weight: bold;
-    }
-    &:before{
-        content: "";
-        display: block;
-        width: 1px;
-        height: 100px;
-        position: absolute;
-        background: rgb(229, 229, 229);
-        left: 0px;
-        top: 50%;
-        margin-top: -50px;
-    }
+  position: relative;
+  text-align: center;
+  width: 30%;
+  > p{
+    margin: 0 0 10px 0;
+  }
+  > span{
+    font-size: 2.5rem;
+  }
+  > p, >span{
+      font-weight: bold;
+  }
+  &:before{
+      content: "";
+      display: block;
+      width: 1px;
+      height: 100px;
+      position: absolute;
+      background: rgb(229, 229, 229);
+      left: 0px;
+      top: 50%;
+      margin-top: -50px;
+  }
 `;
 const ContentsResult = styled.div`
   padding: 70px 0;
