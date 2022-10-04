@@ -1,16 +1,16 @@
-import React from 'react'
 import Header from '../../components/common/Header';
 import Carousel from '../../components/carousel/Carousel';
 import Footer from '../../components/common/Footer';
 import { PersonalSection } from '../../components/personalSection/PersonalSection';
 import TopButton from '../../components/common/TopButton';
 import { KakaoTalkBanner } from '../../components/banner/KakaoTalkBanner';
-import { MainBanner } from '../../components/banner/MainBanner';
 import { useState } from "react";
 import Review from '../../components/review/Review';
+import { PopupBanner } from '../../components/banner/PopupBanner';
+
 
 export default function Main() {
-  const [ show, setShow ] = useState(true);
+  const [show, setShow] = useState(true);
 
   return (
     <>
@@ -19,9 +19,9 @@ export default function Main() {
       <PersonalSection />
       <Review />
       <Footer />
-      { show ? <MainBanner onClose={setShow} /> : null }
+      {show ? <PopupBanner onClose={setShow} /> : null}
       <KakaoTalkBanner />
-      <TopButton/>
+      <TopButton />
     </>
   );
 }
