@@ -11,6 +11,20 @@ const Footer = () => {
     <FooterWrap>
       <FooterInner>
         <FooterTop>
+          <Customer>
+            <p>고객센터</p>
+            <InfoNum>02 - 6105 - 7711</InfoNum>
+            <span>오전 9시 - 오후 6시</span>
+            <span>토 / 일요일 및 공휴일 휴무</span>
+          </Customer> 
+          <Account>
+            <p>입금계좌</p>
+            <InfoNum>267 - 910020 - 36604</InfoNum>
+            <span>KEB 하나은행</span>
+            <span>(주)더샤이니</span>
+          </Account>
+        </FooterTop>
+        <FooterMiddle>
           <Corp>
             <li><Link to="/mypage">마이페이지(임시)</Link></li>
             <li>안심카드결제</li>
@@ -19,25 +33,15 @@ const Footer = () => {
             <li>여행약관</li>
           </Corp>
           <SnsIcon>
-          <li><img src= {process.env.PUBLIC_URL + '/icons/insta.png'} alt='' style={{width:22}}/></li>
-          <li><img src= {process.env.PUBLIC_URL + '/icons/insta.png'} alt='' style={{width:22}}/></li>
-          <li><img src= {process.env.PUBLIC_URL + '/icons/insta.png'} alt='' style={{width:22}}/></li>
-          <li><img src= {process.env.PUBLIC_URL + '/icons/insta.png'} alt='' style={{width:22}}/></li>
-          <li><img src= {process.env.PUBLIC_URL + '/icons/insta.png'} alt='' style={{width:22}}/></li>
+            <li><Link to=''><img src= {process.env.PUBLIC_URL + '/icons/ic-facebook-20x20-500.svg'} alt='' /></Link></li>
+            <li><img src= {process.env.PUBLIC_URL + '/icons/ic-blog-20x20-500-2.svg'} alt='' /></li>
+            <li><img src= {process.env.PUBLIC_URL + '/icons/ic-instagram-20x20-500.svg'} alt='' /></li>
+            <li><img src= {process.env.PUBLIC_URL + '/icons/ic-youtube-20x20-500.svg'} alt='' /></li>
+            <li><img src= {process.env.PUBLIC_URL + '/icons/ic-band-20x20-500.svg'} alt='' /></li>
           </SnsIcon>
-        </FooterTop>
-        <FooterMiddle>
-          <Customer>
-            <p><em>고객센터</em>오전 9시 - 오후 6시 토/일요일 및 공휴일 휴무</p>
-            <span>02-6105-7711</span>
-          </Customer> 
-          <Account>
-            <p>입금계좌</p>
-            <span>KEB하나은행 267-910020-36604</span>
-            <em>(주)더샤이니</em>
-          </Account>
         </FooterMiddle>
-        <div>
+        <Logo><img src= {process.env.PUBLIC_URL + '/icons/logo-ci-the-shiny.svg'} alt='' style={{width: 200}}/></Logo>
+        <FooterBottom>
           <Info>
             <div>
               <p>상호명 : (주)더샤이니</p>
@@ -56,76 +60,90 @@ const Footer = () => {
             <p>고투게더는 통신판매중개자이며 통신판매의 당사자가 아닙니다. 따라서 상품, 거래정보 및 거래에 대하여 책임을 지지 않습니다.</p>
           </Cancell>
           <p>copyright ⓒ {year} 고투게더 All rights reserved.</p>
-        </div>
+        </FooterBottom>
       </FooterInner>
     </FooterWrap>
   );
 };
 
 const FooterWrap = styled.div`
-  padding: 50px 0;
+  padding: 30px 0 50px;
+  border-top: 1px solid #eeeeee; 
 `;
 const FooterInner = styled.div`
   width: 1184px;
   margin: 0 auto;
 `;
 const FooterTop = styled.div`
+  margin: 0 0 30px;
   &:after {
   content: '';
-  display: block;
-  clear: both;
+    display: block;
+    clear: both;
+  }
+  p{
+    margin: 0 0 20px;
+    color:#666;
+  }
+  span{
+    display: block;
+    color:#666
+  }
+  span:nth-child(n+1){
+    margin: 10px 0 0;
   }
 `;
-const Corp = styled.ul`
-  width: 60%;
+const InfoNum = styled.p`
+  font-size: 1.3rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+`;
+const Customer = styled.div`
+  width: 50%;
   float: left;
-  margin: 0 0 60px;
+`;
+const Account = styled.div`
+  width: 50%;
+  float: left;
+`;
+
+const Corp = styled.ul`
+  float: left;
   > li{
     float: left;
     margin: 0 30px 0 0;
+    color:#666666;
+  }
+  > li img{
+    width: 20px;
   }
 `;
 const SnsIcon = styled.ul`
-  width: 40%;
-  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: right;
   > li{
-    float: left;
-    margin: 0 10px 0 0;
+    margin: 0 20px 0 0;
   }
 `;
 const FooterMiddle = styled.div`
-  margin: 0 0 25px;
+  padding: 30px 0 0;
+  border-top: 1px solid #eeeeee; 
   &:after {
   content: '';
   display: block;
   clear: both;
   }
 `;
-const Customer = styled.div`
-  width: 60%;
-  float: left;
-  > span{
-  font-size: 1.5rem;
-  font-weight: bold;
-  }
-  > p{
-  margin: 0 0 15px;
-  }
-  > p > em {
-  font-weight: bold;
-  padding: 0 5px 0 0;
+const Logo = styled.div`
+  padding: 30px 0;
+`;
+const FooterBottom = styled.div`
+  p {
+    color: #666;
   }
 `;
-const Account = styled.div`
-  width: 40%;
-  float: left;
-  > span{
-  display: block;
-  margin: 6px 0;
-  font-weight: bold;  
-  }
-`;
-
 const Info = styled.div`
   margin: 0 0 20px;
   > div{
