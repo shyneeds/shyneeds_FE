@@ -4,70 +4,70 @@ import Header from '../common/Header';
 import styled from 'styled-components';
 
 const Mypage = () => {
-    const [tab, setTab] = useState(1);
+  const [tab, setTab] = useState(1);
 
-    return (
-        <div>
-            <Header />
-            <MypageMain>
-                <h2>나의 여행</h2>
-                <Contents>
-                    <ContentsList>
-                        <p className={ tab === 1? 'active' : undefined } onClick={()=>setTab(1)}>예약조회</p>
-                        <p className={ tab === 2? 'active' : undefined } onClick={()=>setTab(2)}>위시리스트</p>
-                        <p className={ tab === 3? 'active' : undefined } onClick={()=>setTab(3)}>큐레이션결과 (?)</p>
-                        <p className={ tab === 4? 'active' : undefined } onClick={()=>setTab(4)}>내가 작성한 글</p>
-                        <p>회원정보수정</p>
-                        <p>회원탈퇴</p>
-                    </ContentsList>
-                    <ContentsMain>
-                        <UserInfo>
-                            <UserImg>
-                                <img src= 'https://www.gotogether-s.com/common/img/default_profile.png' alt='' style={{width:100}}/>
-                                <div>
-                                    <h3>님 안녕하세요 ˙ᵕ˙</h3>
-                                    <p>누적 결제금액 : 원</p>
-                                </div>
-                            </UserImg>
-                            <UserPoint>
-                                <p>포인트</p>
-                                <span>0</span>
-                            </UserPoint>
-                        </UserInfo>
-                        <ContentsResult>
-                        {
-                            tab === 1 &&
-                            <Reservation />
-                        }
-                        {   
-                            tab === 2 &&
-                            <WishList />
-                        }
-                        {   
-                            tab === 3 &&
-                            <Curation />
-                        }
-                        {   
-                            tab === 4 &&
-                            <Writing />
-                        }
-                        </ContentsResult>
-                        
-                    </ContentsMain>
-                </Contents>
-            </MypageMain>
-            <Footer />
-        </div>
-    );
+  return (
+    <div>
+      <Header />
+      <MypageMain>
+        <h2>나의 여행</h2>
+        <Contents>
+          <ContentsList>
+            <p className={ tab === 1? 'active' : undefined } onClick={()=>setTab(1)}>예약조회</p>
+            <p className={ tab === 2? 'active' : undefined } onClick={()=>setTab(2)}>위시리스트</p>
+            <p className={ tab === 3? 'active' : undefined } onClick={()=>setTab(3)}>큐레이션결과 (?)</p>
+            <p className={ tab === 4? 'active' : undefined } onClick={()=>setTab(4)}>내가 작성한 글</p>
+            <p>회원정보수정</p>
+            <p>회원탈퇴</p>
+          </ContentsList>
+          <ContentsMain>
+            <UserInfo>
+              <UserImg>
+                <img src= 'https://www.gotogether-s.com/common/img/default_profile.png' alt='' style={{width:100}}/>
+                <div>
+                  <h3>님 안녕하세요 ˙ᵕ˙</h3>
+                  <p>누적 결제금액 : 원</p>
+                </div>
+              </UserImg>
+              <UserPoint>
+                <p>포인트</p>
+                <span>0</span>
+              </UserPoint>
+            </UserInfo>
+            <ContentsResult>
+            {
+              tab === 1 &&
+              <Reservation />
+            }
+            {   
+              tab === 2 &&
+              <WishList />
+            }
+            {   
+              tab === 3 &&
+              <Curation />
+            }
+            {   
+              tab === 4 &&
+              <Writing />
+            }
+            </ContentsResult>
+              
+          </ContentsMain>
+        </Contents>
+      </MypageMain>
+      <Footer />
+    </div>
+  );
 };
 
 function Reservation () {
-    return (
-        <>
-            <h2>예약조회</h2>
-            <div>예약내역이 없습니다.</div>
-        </>
-    )
+  return (
+    <>
+      <h2>예약조회</h2>
+      <div>예약내역이 없습니다.</div>
+    </>
+  )
 }
 function WishList () {
     return (
