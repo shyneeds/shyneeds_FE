@@ -13,41 +13,17 @@ const Mypage = () => {
         <h2>나의 여행</h2>
         <Contents>
           <ContentsList>
-            <p
-              className={tab === 1 ? 'active' : undefined}
-              onClick={() => setTab(1)}
-            >
-              예약조회
-            </p>
-            <p
-              className={tab === 2 ? 'active' : undefined}
-              onClick={() => setTab(2)}
-            >
-              위시리스트
-            </p>
-            <p
-              className={tab === 3 ? 'active' : undefined}
-              onClick={() => setTab(3)}
-            >
-              큐레이션결과 (?)
-            </p>
-            <p
-              className={tab === 4 ? 'active' : undefined}
-              onClick={() => setTab(4)}
-            >
-              내가 작성한 글
-            </p>
+            <p className={ tab === 1? 'active' : undefined } onClick={()=>setTab(1)}>예약조회</p>
+            <p className={ tab === 2? 'active' : undefined } onClick={()=>setTab(2)}>위시리스트</p>
+            <p className={ tab === 3? 'active' : undefined } onClick={()=>setTab(3)}>큐레이션결과 (?)</p>
+            <p className={ tab === 4? 'active' : undefined } onClick={()=>setTab(4)}>내가 작성한 글</p>
             <p>회원정보수정</p>
             <p>회원탈퇴</p>
           </ContentsList>
           <ContentsMain>
             <UserInfo>
               <UserImg>
-                <img
-                  src="https://www.gotogether-s.com/common/img/default_profile.png"
-                  alt=""
-                  style={{ width: 100 }}
-                />
+                <img src= 'https://www.gotogether-s.com/common/img/default_profile.png' alt='' style={{width:100}}/>
                 <div>
                   <h3>님 안녕하세요 ˙ᵕ˙</h3>
                   <p>누적 결제금액 : 원</p>
@@ -103,6 +79,7 @@ function Writing() {
       <div>내가 작성한 글이 없습니다.</div>
     </>
   );
+
 }
 const MypageMain = styled.div`
   width: 1184px;
