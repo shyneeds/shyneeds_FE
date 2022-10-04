@@ -56,15 +56,16 @@ const ReviewCont = styled.div`
   border: 1px solid #cccccc;
   overflow: hidden;
   > div{
-    padding: 18px;
+    padding: 22px;
   }
   > div > p{
-    margin: 0 0 10px;
+    margin: 0 0 16px;
+    font-size: 1.18rem;
     font-weight: bold;
   }
   > div > span{
     color: #666666;
-    font-size: .8rem;
+    font-size: 1rem;
     line-height: 22px;
   }
 `;
@@ -82,17 +83,22 @@ const settings = {
 const ReviewBest = styled(Slider)`
 .slick-next,
 .slick-prev {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   margin-left : 10px;
-  margin-right : 25px;
+  margin-right : 10px;
   z-index: 99999;
   top: 52%;
 }
 .slick-next::before,
 .slick-prev::before {
-  font-size: 50px;
-  color: red;
+  font-size: 0;
+}
+.slick-prev{
+  background : url('/icons/ic-chevron-left-40x40-050.svg') no-repeat;
+}
+.slick-next{
+  background : url('/icons/ic-chevron-right-40x40-050.svg') no-repeat;
 }
 `;
 const ReviewDate = styled.div`
@@ -106,7 +112,7 @@ const ReviewDate = styled.div`
     float: left;
     margin: 0 10px 0 0;
     color: #666666;
-    font-size: .85rem;
+    font-size: .925rem;
   }
 `;
 export default Review;
