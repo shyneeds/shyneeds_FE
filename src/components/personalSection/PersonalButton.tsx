@@ -2,6 +2,19 @@ import styled from 'styled-components';
 import { GrPowerCycle } from "react-icons/gr";
 import { FiChevronDown } from "react-icons/fi";
 
+export const PersonalButton = () => {
+  return (
+    <ButtonWrapper>
+      <WhiteButton>
+        다른 취향 보기 <GrPowerCycle />
+      </WhiteButton>
+      <BlackButton>
+        내 취향 여행 보기 <FiChevronDown />
+      </BlackButton>
+    </ButtonWrapper>
+  )
+}
+
 const ButtonWrapper = styled.div`
   text-align: center;
 `
@@ -34,16 +47,3 @@ const ButtonStyles = styled.button`
       background: #333;
     }
   `
-
-export const PersonalButton = () => {
-  return (
-    <ButtonWrapper>
-      <WhiteButton>
-        다른 취향 보기 <GrPowerCycle />
-      </WhiteButton>
-      <BlackButton>
-        내 취향 여행 보기 <FiChevronDown />
-      </BlackButton>
-    </ButtonWrapper>
-  )
-}

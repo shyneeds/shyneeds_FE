@@ -1,19 +1,14 @@
 import styled from 'styled-components';
-import { PersonalTitle } from './PersonalTitle';
+// import { PersonalTitle } from './PersonalTitle';
 import { PersonalGoodsList } from './PersonalGoodsList';
 import { PersonalButton } from './PersonalButton';
 import { PersonalBrowser } from './PersonalBrowser';
 import { RecommendButton } from './PersonalRecommendButton';
 
-const PersonalSectionStyles = styled.div`
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-`
-
 export const PersonalSection = () => {
   return (
     <PersonalSectionStyles>
-      <PersonalTitle />
+      {/* <PersonalTitle /> */}
       <PersonalBrowser />
       <PersonalButton />
       <PersonalGoodsList />
@@ -21,3 +16,10 @@ export const PersonalSection = () => {
     </PersonalSectionStyles>
   )
 }
+
+const PersonalSectionStyles = styled.div`
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  width: 62vw;
+  margin: 0 auto;
+`
