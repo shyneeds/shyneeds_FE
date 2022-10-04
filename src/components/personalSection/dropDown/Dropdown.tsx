@@ -6,11 +6,10 @@ export const Dropdown = ({ selected, setSelected }: any) => {
   const [isActive, setIsActive] = useState(false);
   const options = [
     "여성들과 함께", 
-    "남성들과 함께", 
-    "아이 동반하여", 
-    "반려동물과 함께", 
-    "누구든지 함께"
-  ]
+    "남성들과 함께",
+    "아이 동반하여",
+    "반려동물과 함께",
+    "누구든지 함께",  ]
   
   return (
     <DropdownBox>
@@ -22,8 +21,9 @@ export const Dropdown = ({ selected, setSelected }: any) => {
       </DropdownBtn>
       {isActive && (
         <DropdownContent>
-          {options.map((option) => (
+          {options.map((option, index) => (
             <DropdownItem
+              key={index}
               onClick={(e) => {
                 setSelected(option);
                 setIsActive(false);
