@@ -1,4 +1,3 @@
-import React from 'react';
 import Header from '../../components/common/Header';
 import Carousel from '../../components/carousel/Carousel';
 import Footer from '../../components/common/Footer';
