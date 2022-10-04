@@ -4,7 +4,7 @@ import Header from '../common/Header';
 import styled from 'styled-components';
 
 const Mypage = () => {
-    let [tab, setTab] = useState(1);
+    const [tab, setTab] = useState(1);
 
     return (
         <div>
