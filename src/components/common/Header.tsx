@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { HeaderBanner } from '../banner/HeaderBanner';
+import { NavLogIn, NavLogOut } from '../navBar/NavBar';
 
 function Header() {
   const [show, setShow] = useState(true);
+  const isLoggedIn = true;
 
   return (
     <Container>
       <BannerWrapper>
         {show ? <HeaderBanner onClose={setShow} /> : null}
       </BannerWrapper>
-      <HeaderWrapper>
+      <>
         <HeaderNav>
           <Logo>
             <a href="/">
@@ -21,21 +23,18 @@ function Header() {
             </a>
           </Logo>
           <SearchBox>
-            <img src={process.env.PUBLIC_URL + '/icons/search.png'} alt="" />
+            <img
+              src={process.env.PUBLIC_URL + '/icons/search.png'}
+              alt="search.png"
+            />
             <input
               type="text"
               placeholder="여행 그룹이나 상품을 검색해보세요"
             />
           </SearchBox>
-          <IconGroup>
-            <img src={process.env.PUBLIC_URL + '/icons/cart.png'} alt="" />
-            <img src={process.env.PUBLIC_URL + '/icons/login.png'} alt="" />
-            <a href="signup">
-              <img src={process.env.PUBLIC_URL + '/icons/member.png'} alt="" />
-            </a>
-          </IconGroup>
+          <IconGroup>{isLoggedIn ? <NavLogIn /> : <NavLogOut />}</IconGroup>
         </HeaderNav>
-      </HeaderWrapper>
+      </>
     </Container>
   );
 }
@@ -50,9 +49,6 @@ const BannerWrapper = styled.div`
   position: relative;
   // display: none;
 `;
-
-// 위치값 필요할 경우 추가, 없어도 동작하는데 아무 영향 없음
-const HeaderWrapper = styled.div``;
 
 const HeaderNav = styled.nav`
   width: 1184px;
@@ -87,21 +83,8 @@ const SearchBox = styled.div`
 `;
 
 const IconGroup = styled.div`
-  display: flex;
-  flex-direction: row;
   margin-left: auto;
-  width: 280px;
+  width: 27rem;
+  display: flex;
   justify-content: space-around;
-
-  img {
-    width: 83px;
-    height: 40px;
-    margin: auto 0;
-  }
-
-  a {
-    width: 83px;
-    height: 40px;
-    margin: auto 0;
-  }
 `;
