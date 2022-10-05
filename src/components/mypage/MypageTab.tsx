@@ -43,23 +43,25 @@ const Mypage = () => {
             </p>
           </ContentsList>
           <ContentsMain>
-            <UserInfo>
-              <UserImg>
-                <img
-                  src="https://www.gotogether-s.com/common/img/default_profile.png"
-                  alt=""
-                  style={{ width: 100 }}
-                />
-                <div>
-                  <h3>님 안녕하세요 ˙ᵕ˙</h3>
-                  <p>누적 결제금액 : 원</p>
-                </div>
-              </UserImg>
-              <UserPoint>
-                <p>포인트</p>
-                <span>0</span>
-              </UserPoint>
-            </UserInfo>
+            {tab !== 3 && (
+              <UserInfo>
+                <UserImg>
+                  <img
+                    src="https://www.gotogether-s.com/common/img/default_profile.png"
+                    alt=""
+                    style={{ width: 100 }}
+                  />
+                  <div>
+                    <h3>님 안녕하세요 ˙ᵕ˙</h3>
+                    <p>누적 결제금액 : 원</p>
+                  </div>
+                </UserImg>
+                <UserPoint>
+                  <p>포인트</p>
+                  <span>0</span>
+                </UserPoint>
+              </UserInfo>
+            )}
             <ContentsResult>
               {tab === 1 && <Reservation />}
               {tab === 2 && <Writing />}
@@ -125,6 +127,7 @@ const UserInfo = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  margin: 0 0 70px;
   padding: 50px 0 50px 40px;
   border: 1px solid #e9ecef;
 `;
@@ -169,14 +172,10 @@ const UserPoint = styled.div`
   }
 `;
 const ContentsResult = styled.div`
-  padding: 70px 0;
-  > h2 {
+  > div > h2 {
     font-size: 1.4rem;
     font-weight: bold;
   }
-  > div {
-    padding: 100px;
-    text-align: center;
-  }
 `;
+
 export default Mypage;
