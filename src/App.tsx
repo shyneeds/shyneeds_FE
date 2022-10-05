@@ -4,6 +4,7 @@ import Error from "./pages/error/Error";
 import { Route, Routes, Navigate } from "react-router-dom";
 import SignUp from "./pages/signUp/SignUpPage";
 import Mypage from "./components/mypage/Mypage";
+import Kakao from './pages/login/Kakao';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/mypage" element={<Mypage/>}/>
+        <Route path="/login" element={<Kakao/>}/>
       </Routes>
     </>
   );
