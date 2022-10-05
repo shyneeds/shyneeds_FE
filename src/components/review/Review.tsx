@@ -60,7 +60,7 @@ const ReviewCont = styled.div`
   }
   > div > p{
     margin: 0 0 16px;
-    font-size: 1.18rem;
+    font-size: 1.18rem;      
     font-weight: bold;
   }
   > div > span{
