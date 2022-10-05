@@ -1,5 +1,5 @@
-import { createGlobalStyle } from "styled-components";
-import reset from "styled-reset";
+import { createGlobalStyle } from 'styled-components';
+import reset from 'styled-reset';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -14,7 +14,7 @@ const GlobalStyle = createGlobalStyle`
   }
   body{
     background-color: #ffffff;
-    font-family: 'Pretendard-Regular', sans-serif;;
+    font-family: 'Pretendard-Regular', sans-serif;
   }
   a {
     color: inherit;
@@ -22,6 +22,7 @@ const GlobalStyle = createGlobalStyle`
   }
   input, button {
     background-color: transparent;
+    font-family: 'Pretendard-Regular', sans-serif;
     border: none;
     outline: none;
   }

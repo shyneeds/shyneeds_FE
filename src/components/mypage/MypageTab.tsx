@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import Footer from '../common/Footer';
 import Header from '../common/Header';
 import styled from 'styled-components';
+import Reservation from './Reservation';
+import Writing from './Writing';
+import Modify from './Modify';
+import Withdrawal from './Withdrawal';
 
 const Mypage = () => {
   const [tab, setTab] = useState(1);
@@ -13,32 +17,56 @@ const Mypage = () => {
         <h2>나의 여행</h2>
         <Contents>
           <ContentsList>
-            <p className={ tab === 1? 'active' : undefined } onClick={()=>setTab(1)}>예약조회</p>
-            <p className={ tab === 2? 'active' : undefined } onClick={()=>setTab(2)}>위시리스트</p>
-            <p className={ tab === 3? 'active' : undefined } onClick={()=>setTab(3)}>큐레이션결과 (?)</p>
-            <p className={ tab === 4? 'active' : undefined } onClick={()=>setTab(4)}>내가 작성한 글</p>
-            <p>회원정보수정</p>
-            <p>회원탈퇴</p>
+            <p
+              className={tab === 1 ? 'active' : undefined}
+              onClick={() => setTab(1)}
+            >
+              예약조회
+            </p>
+            <p
+              className={tab === 2 ? 'active' : undefined}
+              onClick={() => setTab(2)}
+            >
+              내가 작성한 글
+            </p>
+            <p
+              className={tab === 3 ? 'active' : undefined}
+              onClick={() => setTab(3)}
+            >
+              회원정보수정
+            </p>
+            <p
+              className={tab === 4 ? 'active' : undefined}
+              onClick={() => setTab(4)}
+            >
+              회원탈퇴
+            </p>
           </ContentsList>
           <ContentsMain>
-            <UserInfo>
-              <UserImg>
-                <img src= 'https://www.gotogether-s.com/common/img/default_profile.png' alt='' style={{width:100}}/>
-                <div>
-                  <h3>님 안녕하세요 ˙ᵕ˙</h3>
-                  <p>누적 결제금액 : 원</p>
-                </div>
-              </UserImg>
-              <UserPoint>
-                <p>포인트</p>
-                <span>0</span>
-              </UserPoint>
-            </UserInfo>
+            {tab !== 3 && (
+              <UserInfo>
+                <UserImg>
+                  <img
+                    src="https://www.gotogether-s.com/common/img/default_profile.png"
+                    alt=""
+                    style={{ width: 100 }}
+                  />
+                  <div>
+                    <h3>님 안녕하세요 ˙ᵕ˙</h3>
+                    <p>누적 결제금액 : 원</p>
+                  </div>
+                </UserImg>
+                <UserPoint>
+                  <p>포인트</p>
+                  <span>0</span>
+                </UserPoint>
+              </UserInfo>
+            )}
             <ContentsResult>
               {tab === 1 && <Reservation />}
-              {tab === 2 && <WishList />}
-              {tab === 3 && <Curation />}
-              {tab === 4 && <Writing />}
+              {tab === 2 && <Writing />}
+              {tab === 3 && <Modify />}
+              {tab === 4 && <Withdrawal />}
             </ContentsResult>
           </ContentsMain>
         </Contents>
@@ -48,39 +76,6 @@ const Mypage = () => {
   );
 };
 
-function Reservation() {
-  return (
-    <>
-      <h2>예약조회</h2>
-      <div>예약내역이 없습니다.</div>
-    </>
-  );
-}
-function WishList() {
-  return (
-    <>
-      <h2>위시리스트</h2>
-      <div>위시리스트가 없습니다.</div>
-    </>
-  );
-}
-function Curation() {
-  return (
-    <>
-      <h2>큐레이션결과</h2>
-      <div>큐레이션결과가 없습니다.</div>
-    </>
-  );
-}
-function Writing() {
-  return (
-    <>
-      <h2>내가 작성한 글</h2>
-      <div>내가 작성한 글이 없습니다.</div>
-    </>
-  );
-
-}
 const MypageMain = styled.div`
   width: 1184px;
   margin: 30px auto;
@@ -132,6 +127,7 @@ const UserInfo = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  margin: 0 0 70px;
   padding: 50px 0 50px 40px;
   border: 1px solid #e9ecef;
 `;
@@ -176,14 +172,10 @@ const UserPoint = styled.div`
   }
 `;
 const ContentsResult = styled.div`
-  padding: 70px 0;
-  > h2 {
+  > div > h2 {
     font-size: 1.4rem;
     font-weight: bold;
   }
-  > div {
-    padding: 100px;
-    text-align: center;
-  }
 `;
+
 export default Mypage;
