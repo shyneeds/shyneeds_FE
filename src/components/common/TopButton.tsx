@@ -21,8 +21,7 @@ const TopButton = () => {
   return (
     <>
       {showTopBtn && (
-        <StyledTopBtnIcon src={process.env.PUBLIC_URL + "/icons/Top_btn.svg"} />
-        // <StyledTopBtnIcon onClick={goToTop} />
+        <StyledTopBtnIcon onClick={goToTop} src={process.env.PUBLIC_URL + "/icons/Top_btn.svg"} />
       )}
     </>
   );
@@ -33,6 +32,7 @@ export default TopButton;
 const StyledTopBtnIcon = styled.img`
   position: fixed;
   width: 60px;
+  height : 60px;
   right: 3%;
   bottom: 5%;
   z-index: 999;

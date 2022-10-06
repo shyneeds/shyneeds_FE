@@ -1,13 +1,14 @@
 import styled from 'styled-components';
-import { AiOutlineArrowRight } from "react-icons/ai";
+import { AiOutlineArrowRight } from 'react-icons/ai';
 
 export const RecommendButton = () => {
   return (
     <RecommendButtonStyles>
-      여행그룹 추천 받기<AiOutlineArrowRight />
+      여행그룹 추천 받기
+      <AiOutlineArrowRight />
     </RecommendButtonStyles>
-  )
-}
+  );
+};
 
 const RecommendButtonStyles = styled.div`
   background-color: #e4e4e4;
@@ -22,4 +23,4 @@ const RecommendButtonStyles = styled.div`
   &:hover {
     cursor: pointer;
   }
-`
+`;
