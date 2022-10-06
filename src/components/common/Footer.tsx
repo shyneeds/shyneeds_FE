@@ -35,47 +35,59 @@ const Footer = () => {
           </Corp>
           <SnsIcon>
             <li>
-              <Link to="">
+              <Link to="http://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.gotogether-s.com%2F">
                 <img
                   src={
                     process.env.PUBLIC_URL + '/icons/ic-facebook-20x20-500.svg'
                   }
-                  alt=""
+                  alt="icon-facebook"
                 />
               </Link>
             </li>
             <li>
-              <img
-                src={process.env.PUBLIC_URL + '/icons/ic-blog-20x20-500-2.svg'}
-                alt=""
-              />
+              <Link to="http://share.naver.com/web/shareView.nhn?url=https%253A%252F%252Fwww.gotogether-s.com%252F&title=%EA%B3%A0%ED%88%AC%EA%B2%8C%EB%8D%94">
+                <img
+                  src={
+                    process.env.PUBLIC_URL + '/icons/ic-blog-20x20-500-2.svg'
+                  }
+                  alt="icon-blog"
+                />
+              </Link>
             </li>
             <li>
-              <img
-                src={
-                  process.env.PUBLIC_URL + '/icons/ic-instagram-20x20-500.svg'
-                }
-                alt=""
-              />
+              <Link to="">
+                <img
+                  src={
+                    process.env.PUBLIC_URL + '/icons/ic-instagram-20x20-500.svg'
+                  }
+                  alt="icon-instagram"
+                />
+              </Link>
             </li>
             <li>
-              <img
-                src={process.env.PUBLIC_URL + '/icons/ic-youtube-20x20-500.svg'}
-                alt=""
-              />
+              <Link to="https://youtu.be/Jm3TiJ5lFKQ?list=TLGGJtDTxTICk8AwNTEwMjAyMg">
+                <img
+                  src={
+                    process.env.PUBLIC_URL + '/icons/ic-youtube-20x20-500.svg'
+                  }
+                  alt="icon-youtube"
+                />
+              </Link>
             </li>
             <li>
-              <img
-                src={process.env.PUBLIC_URL + '/icons/ic-band-20x20-500.svg'}
-                alt=""
-              />
+              <Link to="https://band.us/plugin/share?body=%EA%B3%A0%ED%88%AC%EA%B2%8C%EB%8D%94%0Ahttps%3A%2F%2Fwww%2egotogether-s%2ecom%2F&route=https%3A%2F%2Fwww%2egotogether-s%2ecom%2F">
+                <img
+                  src={process.env.PUBLIC_URL + '/icons/ic-band-20x20-500.svg'}
+                  alt="icon-band"
+                />
+              </Link>
             </li>
           </SnsIcon>
         </FooterMiddle>
         <Logo>
           <img
             src={process.env.PUBLIC_URL + '/icons/logo-ci-the-shiny.svg'}
-            alt=""
+            alt="icon-ci-the-shiny"
             style={{ width: 200 }}
           />
         </Logo>
@@ -95,7 +107,7 @@ const Footer = () => {
               <p>이메일: gotogether@shinytravels.com</p>
             </div>
           </Info>
-          <Cancell>
+          <Cancel>
             <p>
               고투게더 서비스 내 결제 발생 시 고객상담, 취소, 환불 등의 거래에
               대하여 책임을 집니다.
@@ -104,7 +116,7 @@ const Footer = () => {
               고투게더는 통신판매중개자이며 통신판매의 당사자가 아닙니다. 따라서
               상품, 거래정보 및 거래에 대하여 책임을 지지 않습니다.
             </p>
-          </Cancell>
+          </Cancel>
           <p>copyright ⓒ {year} 고투게더 All rights reserved.</p>
         </FooterBottom>
       </FooterInner>
@@ -208,7 +220,7 @@ const Info = styled.div`
     border-right: 0;
   }
 `;
-const Cancell = styled.div`
+const Cancel = styled.div`
   margin: 0 0 20px;
   > p {
     margin: 0 0 6px;
