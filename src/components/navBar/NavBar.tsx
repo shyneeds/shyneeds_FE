@@ -9,7 +9,7 @@ export const NavLogIn = () => {
         <BiCart size="1.7rem" />
         <p>관심상품</p>
       </NavStyle>
-      <NavStyle href="/">
+      <NavStyle href="login">
         <BiLogIn size="1.7rem" />
         <p>로그인</p>
       </NavStyle>
