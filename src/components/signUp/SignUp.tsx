@@ -101,11 +101,13 @@ const SignUp= () => {
           </BirthSelect>
           </BirthdayBox>
         </InputBox>
-        <GednerBox>
+        <InputBox>
           <NameStyle>성별</NameStyle>
-          <GenderButton onClick={()=>setValue('gender','male')}>남성</GenderButton>
-          <GenderButton onClick={()=>setValue('gender','female')}>여성</GenderButton>
-        </GednerBox>
+          <GednerBox>
+            <GenderButton onClick={()=>setValue('gender','male')}>남성</GenderButton>
+            <GenderButton onClick={()=>setValue('gender','female')}>여성</GenderButton>
+          </GednerBox>
+        </InputBox>
         <input type={"submit"} style={{ backgroundColor: "#a1eafb" }} />
       </Form>
     </WrapContainer>
@@ -131,12 +133,14 @@ const BirthdayBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 `;
 
 const GednerBox = styled.div`
   width: 100%;
   margin: 0 auto;
-  gap : 10px;
+  display : flex;
+  justify-content: space-between;
 `
 
 const Form = styled.form`
@@ -182,7 +186,6 @@ const GenderButton = styled.button`
   border: 1px solid #CCCCCC;
   border-radius: 8px;
   cursor: pointer;
-  color: red;
   transition: box-shadow 400ms ease;
   &:hover {
     box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
