@@ -12,7 +12,7 @@ function Carousel() {
       <StyledSlider {...settings}>
         {items.map((item:any, i:any) => {
           return <BorderBox key={i}>
-            <img src={`https://placeimg.com/133/200/any?rand=${i}`} alt="" />
+            <img src={`https://placeimg.com/1000/440/any?rand=${i}`} alt="" />
           </BorderBox>;
         })}
       </StyledSlider>
