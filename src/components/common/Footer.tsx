@@ -108,7 +108,7 @@ const Footer = () => {
               <p>이메일: gotogether@shinytravels.com</p>
             </div>
           </Info>
-          <Cancell>
+          <Cancel>
             <p>
               고투게더 서비스 내 결제 발생 시 고객상담, 취소, 환불 등의 거래에
               대하여 책임을 집니다.
@@ -117,7 +117,7 @@ const Footer = () => {
               고투게더는 통신판매중개자이며 통신판매의 당사자가 아닙니다. 따라서
               상품, 거래정보 및 거래에 대하여 책임을 지지 않습니다.
             </p>
-          </Cancell>
+          </Cancel>
           <p>copyright ⓒ {year} 고투게더 All rights reserved.</p>
         </FooterBottom>
       </FooterInner>
@@ -221,7 +221,7 @@ const Info = styled.div`
     border-right: 0;
   }
 `;
-const Cancell = styled.div`
+const Cancel = styled.div`
   margin: 0 0 20px;
   > p {
     margin: 0 0 6px;
