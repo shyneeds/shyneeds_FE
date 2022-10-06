@@ -43,6 +43,7 @@ export default Header;
 
 const Container = styled.header`
   height: 100%;
+  border-bottom: 0.7px solid #ddd;
 `;
 
 const BannerWrapper = styled.div`
