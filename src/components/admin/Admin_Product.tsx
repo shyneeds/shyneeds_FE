@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
-interface Data {
+export interface Data {
   title: string;
   categoryIds: number[];
   subCategoryIds: number[];
