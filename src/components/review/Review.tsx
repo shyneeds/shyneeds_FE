@@ -1,21 +1,20 @@
 import React from 'react';
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import reviewdata from './reviewDate';
 import styled from 'styled-components';
 
 const Review = () => {
-  const reviewList =() => {
-    console.log(reviewdata)
-  }
+  const reviewList = () => {
+    console.log(reviewdata);
+  };
   return (
     <ReviewWrap>
       <h2>여행후기 베스트</h2>
       <ReviewBest {...settings}>
-        {
-        reviewdata.map(function(review){
-          return(
+        {reviewdata.map(function (review) {
+          return (
             <ReviewCont key={review.id}>
               <img src={review.img} alt="" />
               <div>
@@ -27,9 +26,8 @@ const Review = () => {
                 </ReviewDate>
               </div>
             </ReviewCont>
-          )
-        })
-        }
+          );
+        })}
       </ReviewBest>
     </ReviewWrap>
   );
@@ -38,13 +36,13 @@ const Review = () => {
 const ReviewWrap = styled.div`
   width: 1184px;
   margin: 80px auto;
-  > h2{
+  > h2 {
     margin: 0 0 20px;
     font-size: 1.2rem;
     font-weight: bold;
     letter-spacing: -1px;
   }
-  .slick-slider{
+  .slick-slider {
     margin: 0 -10px;
   }
   .slick-slide {
@@ -55,15 +53,15 @@ const ReviewCont = styled.div`
   border-radius: 10px;
   border: 1px solid #cccccc;
   overflow: hidden;
-  > div{
+  > div {
     padding: 22px;
   }
-  > div > p{
+  > div > p {
     margin: 0 0 16px;
     font-size: 1.18rem;      
     font-weight: bold;
   }
-  > div > span{
+  > div > span {
     color: #666666;
     font-size: 1rem;
     line-height: 22px;
@@ -81,38 +79,38 @@ const settings = {
 };
 
 const ReviewBest = styled(Slider)`
-.slick-next,
-.slick-prev {
-  width: 40px;
-  height: 40px;
-  margin-left : 10px;
-  margin-right : 10px;
-  z-index: 99999;
-  top: 52%;
-}
-.slick-next::before,
-.slick-prev::before {
-  font-size: 0;
-}
-.slick-prev{
-  background : url('/icons/ic-chevron-left-40x40-050.svg') no-repeat;
-}
-.slick-next{
-  background : url('/icons/ic-chevron-right-40x40-050.svg') no-repeat;
-}
+  .slick-next,
+  .slick-prev {
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+    z-index: 99999;
+    top: 52%;
+  }
+  .slick-next::before,
+  .slick-prev::before {
+    font-size: 0;
+  }
+  .slick-prev {
+    background: url('/icons/ic-chevron-left-40x40-050.svg') no-repeat;
+  }
+  .slick-next {
+    background: url('/icons/ic-chevron-right-40x40-050.svg') no-repeat;
+  }
 `;
 const ReviewDate = styled.div`
   margin: 20px 0 0;
-  &:after{
+  &:after {
     content: '';
     display: block;
     clear: both;
   }
-  > p{
+  > p {
     float: left;
     margin: 0 10px 0 0;
     color: #666666;
-    font-size: .925rem;
+    font-size: 0.925rem;
   }
 `;
 export default Review;

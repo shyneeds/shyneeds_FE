@@ -1,8 +1,14 @@
 import styled from 'styled-components';
 import { IoMdClose } from 'react-icons/io';
+import { useState } from 'react';
 
-export const PopupBanner = (props: any) => {
-  const { onClose } = props;
+export const CloseBtn = () => {
+  return <IoMdClose size="1.5rem" className="close-button" />;
+};
+
+export const PopupBanner = () => {
+  const [show, setShow] = useState(true);
+  const onClick = () => setShow(!show);
 
   return (
     <PopupBannerContainer>
@@ -12,13 +18,9 @@ export const PopupBanner = (props: any) => {
           alt="main_banner"
         />
       </a>
-      <IoMdClose
-        size="1.5rem"
-        className="close-button"
-        onClick={() => {
-          onClose(false);
-        }}
-      ></IoMdClose>
+      <div>
+        <button onClick={onClick}>{show ? <CloseBtn /> : null}</button>
+      </div>
     </PopupBannerContainer>
   );
 };
@@ -36,6 +38,7 @@ const PopupBannerContainer = styled.div`
     top: 0.8rem;
     right: 0.7rem;
   }
+
   &:hover {
     cursor: pointer;
   }
