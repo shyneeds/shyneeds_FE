@@ -1,3 +1,4 @@
+import { NONAME } from 'dns';
 import React, { useState, useEffect, useRef } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import styled from 'styled-components';
@@ -25,13 +26,15 @@ const SignUp = () => {
   const { ref, ...rest } = register('image');
   const uploadImage = (e: any) => {
     setMyImage(URL.createObjectURL(e.target.files[0]));
-    console.log('test');
+    setValue('image', e.target.files[0]);
   };
   const imgRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     //only use for Test
     console.log(selectedDate);
+    console.log(passwordRef.current?.value);
   }, [selectedDate]);
 
   return (
@@ -46,13 +49,10 @@ const SignUp = () => {
             }
             onClick={() => imgRef.current?.click()}
           />
+
           <input
             style={{ display: 'none' }}
-            {...rest}
-            ref={(e) => {
-              ref(e);
-              imgRef.current = e;
-            }}
+            ref={imgRef}
             onChange={uploadImage}
             type="file"
             accept="image/*"
@@ -107,7 +107,11 @@ const SignUp = () => {
           <InputStyle
             placeholder="이름"
             style={{ outline: errors.email ? '2px solid red' : '' }}
-            {...register('name', { required: true, minLength: 2 })}
+            {...register('name', {
+              required: true,
+              minLength: 2,
+              valueAsNumber: false,
+            })}
           />
           {errors.name && <ErrorMessage>이름을 입력해주세요.</ErrorMessage>}
         </InputBox>
