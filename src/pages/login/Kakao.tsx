@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import Footer from '../../components/common/Footer';
+import Header from '../../components/common/Header';
 
 function Kakao () {
 
@@ -13,10 +15,15 @@ function Kakao () {
   }
 
   return (
-    
+    <div>
+      <Header />
       <Wrap>
-        
+        <Kakao_Login onClick={kakaoLogin}>
+          <h1>간편 로그인</h1>
+          <img src={process.env.PUBLIC_URL + '/icons/kakaologin_btn.png'} alt=''></img>
+        </Kakao_Login>
         <Email_Area>
+          <h1>이메일 로그인</h1>
           <p>이메일</p>
           <input type='text' placeholder='이메일'></input>
         </Email_Area>
@@ -27,90 +34,31 @@ function Kakao () {
         <LogIn_Area>
           <button>로그인</button>
           </LogIn_Area>
-        <Kakao_Login onClick={kakaoLogin}>
-          <img src={process.env.PUBLIC_URL + '/icons/kakao-btn.png'} alt=''></img>
-        </Kakao_Login>
+        
         <P_Group>
-          <p>아이디</p>
-          <div></div>
-          <p>비밀번호</p>
-          <p>찾기</p>
-          <hr></hr>
+          <span><a href=''>아이디</a> / <a>비밀번호 찾기</a></span>
         </P_Group>
         <Member>
-          <img src={process.env.PUBLIC_URL + '/icons/member-btn.png'} alt=''></img>
+          <img src={process.env.PUBLIC_URL + '/icons/member_btn.png'} alt=''></img>
         </Member>
         <Button>
-          <button>비회원 예약 조회</button>
+          <img src={process.env.PUBLIC_URL + '/icons/unmember_btn.png'} alt=''></img>
         </Button>
-        
       </Wrap>
-    
+      <Footer />
+    </div>
   )
 }
 
 export default Kakao;
 
-// const Line = styled.body`
-//   border: 1px solid blue;
-//   /* width: 100vW; */
-// `;
-
 const Wrap = styled.div`
-  width: 70%;
+  width: 35%;
   margin: auto;
-  padding-top: 60px;
-  border: 1px solid red;
-`;
-
-const Email_Area = styled.section`
-  width: 65%;
-  font-size: 1.2rem;
-  font-weight: bolder;
-  margin: auto;
-  
-  input {
-    border: 1px solid #ccc;
-    width: 100%;
-    height: 50px;
-    border-radius: 5px;
-    margin-top: 18px;
-    padding-left: 15px;
-  }
-`;
-
-const Pw_Area = styled.section`
-  width: 65%;
-  font-size: 1.2rem;
-  font-weight: bolder;
-  margin: 30px auto;
-  
-  input {
-    border: 1px solid #ccc;
-    width: 100%;
-    height: 50px;
-    border-radius: 5px;
-    margin-top: 18px;
-    padding-left: 15px;
-  }
-`;
-
-const LogIn_Area = styled.section`
-  width: 65%;
-  margin: 50px auto;
-
-  button {
-    width: 100%;
-    height: 50px;
-    border: 2px solid #000;
-    border-radius: 5px;
-    font-size: 1.1rem;
-    font-weight: bolder;
-  }
+  padding: 5rem 3rem;
 `;
 
 const Kakao_Login = styled.div`
-  width: 65%;
   font-size: 1.5rem;
   font-weight: bolder;
   margin: auto;
@@ -121,35 +69,69 @@ const Kakao_Login = styled.div`
   }
 `;
 
+const Email_Area = styled.section`
+  font-size: 1.2rem;
+  font-weight: bolder;
+  margin: auto;
+  
+  h1 {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 23px;
+  }
+  
+  input {
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 60px;
+    border-radius: 5px;
+    margin-top: 18px;
+    padding-left: 15px;
+  }
+`;
+
+const Pw_Area = styled.section`
+  font-size: 1.2rem;
+  font-weight: bolder;
+  margin: 30px auto;
+  
+  input {
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 60px;
+    border-radius: 5px;
+    margin-top: 18px;
+    padding-left: 15px;
+  }
+`;
+
+const LogIn_Area = styled.section`
+  margin: 10px auto;
+
+  button {
+    width: 100%;
+    height: 60px;
+    border: 2px solid #000;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bolder;
+  }
+`;
+
 const P_Group = styled.div`
-  width: 70%;
+  /* width: 70%; */
   font-size: 0.8rem;
-  margin-left: 35%;
-  padding: 0 0 0 25px;
+  margin: 0 auto;
+  text-align: center;
 
-  p {
-    display: inline-block;
-    margin-left: 5px;
-  }
-
-  div {
-    display: inline-block;
-    width: 1px;
-    height: 11px;
-    border-left: 1px solid #000;
-    margin-bottom: -1px;
-    margin-left: 4px;
-    transform: rotate(15deg);
-  }
-
-  hr {
-    width: 134px;
-    margin-left: 4px;
+  span {
+    border-bottom: 1px solid #000;
+    padding: 2px 0;
   }
 `;
 
 const Member = styled.section`
-  width: 65%;
+  /* width: 65%; */
   font-size: 1.5rem;
   font-weight: bolder;
   margin: auto;
@@ -161,16 +143,15 @@ const Member = styled.section`
 `;
 
 const Button = styled.section`
-  width: 65%;
-  height: 50px;
+  /* width: 65%; */
   background-color: #ccc;
   border-radius: 5px;
   margin: auto;
   margin-top: 2rem;
-  margin-bottom: 10rem;
+  margin-bottom: 8rem;
   
   button {
-    width: 100%;
+    /* width: 100%; */
     font-size: 1.2rem;
     padding-top: 15px;
   }
