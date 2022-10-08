@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { HeaderBanner } from '../banner/HeaderBanner';
-import { NavLogIn, NavLogOut } from '../navBar/NavBar';
+import { LogInView, LogOutView } from '../userMenu/UserMenu';
 
 function Header() {
   const [show, setShow] = useState(true);
@@ -32,7 +32,7 @@ function Header() {
               placeholder="여행 그룹이나 상품을 검색해보세요"
             />
           </SearchBox>
-          <IconGroup>{isLoggedIn ? <NavLogIn /> : <NavLogOut />}</IconGroup>
+          <IconGroup>{isLoggedIn ? <LogInView /> : <LogOutView />}</IconGroup>
         </HeaderNav>
       </>
     </Container>
