@@ -2,7 +2,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styled from 'styled-components';
-import { productData } from '../product/productData';
+import { productData } from '../productCard/productData';
 import { LAYOUT } from '../../constants/layout';
 import { IoMdHeartEmpty } from 'react-icons/io';
 
