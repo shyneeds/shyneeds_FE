@@ -85,7 +85,7 @@ const SearchBox = styled.div`
 
 const IconGroup = styled.div`
   margin-left: auto;
-  width: 27rem;
+  width: 22rem;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 `;
