@@ -43,6 +43,7 @@ export default Header;
 
 const Container = styled.header`
   height: 100%;
+  border-bottom: 0.7px solid #ddd;
 `;
 
 const BannerWrapper = styled.div`
@@ -84,7 +85,7 @@ const SearchBox = styled.div`
 
 const IconGroup = styled.div`
   margin-left: auto;
-  width: 27rem;
+  width: 22rem;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 `;

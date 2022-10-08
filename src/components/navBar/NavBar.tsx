@@ -42,10 +42,7 @@ export const NavLogOut = () => {
 };
 
 const NavStyle = styled.a`
-  width: 8rem;
-  margin: 10px 10px;
   display: flex;
-  justify-content: space-around;
   align-items: center;
 
   &:hover {
