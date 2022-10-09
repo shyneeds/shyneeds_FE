@@ -36,12 +36,15 @@ export const GroupCarousel = () => {
 };
 
 const CarouselContainer = styled(Slider)`
+  border-radius: 10px;
+  overflow: hidden;
   border-right: 2px solid #cccccc;
   border-left: 1px solid #ccc;
   .slick-prev:before,
   .slick-next:before {
     display: none;
   }
+
   &:hover {
     .slick-next,
     .slick-prev {
@@ -72,8 +75,7 @@ const CarouselContainer = styled(Slider)`
 const SliderWrap = styled.div`
   background-color: #f6f6f6;
   border-top: 2px solid #ccc;
-  // border-right: 1px solid #ccc;
-  // border-left: 1px solid #ccc;
+  overflow: hidden;
 `;
 
 const GroupWrap = styled.div`
