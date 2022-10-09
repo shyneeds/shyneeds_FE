@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { PersonalGoodsList } from './PersonalGoodsList';
 import { PersonalButton } from './PersonalButton';
 import { PersonalBrowser } from './PersonalBrowser';
-import { RecommendButton } from './PersonalRecommendButton';
 
 export const PersonalSection = () => {
   return (
@@ -12,14 +11,13 @@ export const PersonalSection = () => {
       <PersonalBrowser />
       <PersonalButton />
       <PersonalGoodsList />
-      <RecommendButton />
     </PersonalSectionStyles>
-  )
-}
+  );
+};
 
 const PersonalSectionStyles = styled.div`
   margin-top: 1rem;
   margin-bottom: 1rem;
   width: 62vw;
   margin: 0 auto;
-`
+`;

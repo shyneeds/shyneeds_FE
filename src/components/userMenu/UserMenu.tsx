@@ -2,7 +2,7 @@ import { BiCart, BiLogIn, BiLogOut, BiUser } from 'react-icons/bi';
 import styled from 'styled-components';
 
 // 로그아웃 상태
-export const NavLogIn = () => {
+export const LogInView = () => {
   return (
     <>
       <NavStyle href="/">
@@ -22,7 +22,7 @@ export const NavLogIn = () => {
 };
 
 // 로그인 상태
-export const NavLogOut = () => {
+export const LogOutView = () => {
   return (
     <>
       <NavStyle href="/">
@@ -42,10 +42,7 @@ export const NavLogOut = () => {
 };
 
 const NavStyle = styled.a`
-  width: 8rem;
-  margin: 10px 10px;
   display: flex;
-  justify-content: space-around;
   align-items: center;
 
   &:hover {
