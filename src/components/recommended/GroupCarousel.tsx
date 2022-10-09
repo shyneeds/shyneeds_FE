@@ -38,7 +38,7 @@ export const GroupCarousel = () => {
 const CarouselContainer = styled(Slider)`
   border-radius: 10px;
   overflow: hidden;
-  border-right: 2px solid #cccccc;
+  border-right: 2px solid #ccc;
   border-left: 1px solid #ccc;
   .slick-prev:before,
   .slick-next:before {
