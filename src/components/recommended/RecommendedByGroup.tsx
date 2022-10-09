@@ -26,7 +26,6 @@ const Background = styled.div`
   align-items: center;
   background-color: #e8f5ff;
   position: relative;
-  z-index: -1;
 
   > h1 {
     font-size: 24px;

@@ -102,7 +102,7 @@ const GroupWrap = styled.div`
 const GroupImage = styled.div`
   width: 40%;
   border-radius: 10px;
-  border: 1px solid #cccccc;
+  border: 1px solid #ccc;
   overflow: hidden;
 
   > img {
