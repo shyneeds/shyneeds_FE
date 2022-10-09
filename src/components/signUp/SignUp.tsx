@@ -1,46 +1,58 @@
-import { NONAME } from 'dns';
 import React, { useState, useEffect, useRef } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import axios from 'axios';
+import { API_URL } from '../../constants/API_URL';
 
 const SignUp = () => {
   const now = new Date();
   const year = now.getFullYear();
+  const month = now.getMonth() + 1 + '';
+  const day = now.getDate() + '';
   const [selectedDate, setSelectedDate] = useState({
     year: (year + '') as any,
-    month: '01' as any,
-    day: '01',
+    month: (month + '') as any,
+    day: (day + '') as any,
   });
   const [myImage, setMyImage] = useState<string>();
   const [tab, setTab] = useState<number>();
   const {
     register,
     handleSubmit,
-    watch,
     getValues,
     setValue,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (formData: any) => {
+    delete formData.password_repeat;
+    console.log(formData);
+    axios({
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+      url: API_URL.POST.SIGNUP,
+      method: 'post',
+      data: formData,
+    })
+      .then((response) => {
+        console.log({ response });
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  };
 
-  const { ref, ...rest } = register('image');
   const uploadImage = (e: any) => {
     setMyImage(URL.createObjectURL(e.target.files[0]));
-    setValue('image', e.target.files[0]);
+    // setValue('image', e.target.files[0]); 삭제 예정
   };
   const imgRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
-
-  useEffect(() => {
-    //only use for Test
-    console.log(selectedDate);
-    console.log(passwordRef.current?.value);
-  }, [selectedDate]);
-
   return (
     <WrapContainer>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <InputImgBox>
+        {/* <InputImgBox>
           <ImgButton
             src={
               imgRef.current
@@ -57,7 +69,7 @@ const SignUp = () => {
             type="file"
             accept="image/*"
           />
-        </InputImgBox>
+        </InputImgBox> */}
         <NameStyle>이메일</NameStyle>
         <InputBox>
           <InputStyle
@@ -94,10 +106,13 @@ const SignUp = () => {
             style={{
               outline: errors.password_repeat ? '2px solid red' : '',
             }}
+            // ref={passwordRef}
             {...register('password_repeat', {
               validate: (value: string) => getValues('password') === value,
             })}
           />
+          {/* {watch(passwordRef.current?.value)} */}
+          {passwordRef.current?.value !== getValues('password')}
           {errors.password_repeat && (
             <ErrorMessage>비밀번호를 확인해 주세요.</ErrorMessage>
           )}
@@ -165,7 +180,8 @@ const SignUp = () => {
           <NameStyle>성별</NameStyle>
           <GednerBox>
             <GenderButton
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 setTab(0), setValue('gender', 'male');
               }}
               className={tab === 0 ? 'active' : undefined}
@@ -173,7 +189,8 @@ const SignUp = () => {
               남성
             </GenderButton>
             <GenderButton
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 setTab(1), setValue('gender', 'female');
               }}
               className={tab === 1 ? 'active' : undefined}
