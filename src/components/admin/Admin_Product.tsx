@@ -17,6 +17,8 @@ export interface Data {
   soldoutFlg: boolean;
   dispFlg: boolean;
   searchKeyword: string[];
+  mainImage: string;
+  updatedAt: string;
 }
 
 const registerInfo: Data = {
@@ -35,6 +37,9 @@ const registerInfo: Data = {
   soldoutFlg: false,
   dispFlg: true,
   searchKeyword: ['여자끼리'],
+  mainImage:
+    'https://shyneeds.s3.ap-northeast-2.amazonaws.com/package/그리스/main/greece_thumb_41297cd9-4e6d-4ba7-b9dd-f6042f8ca765.jpeg',
+  updatedAt: '2022-10-04T11:12:58.000+00:00',
 };
 
 export default function Admin_Product() {
