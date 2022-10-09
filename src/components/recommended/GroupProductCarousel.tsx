@@ -8,7 +8,7 @@ import 'slick-carousel/slick/slick-theme.css';
 
 const settings = {
   slidesToShow: 4,
-  slidesToScroll: 1,
+  slidesToScroll: 4,
   arrows: false,
 };
 
@@ -68,7 +68,7 @@ const CardContainer = styled.div`
 
 const ProductWrap = styled.div`
   border-radius: 10px;
-  border: 1px solid #cccccc;
+  border: 1px solid #ccc;
   position: relative;
   height: 100%;
 
