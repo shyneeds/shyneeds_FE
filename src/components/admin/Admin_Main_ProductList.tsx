@@ -6,9 +6,8 @@ type userData = {
   data: Data;
 };
 
-export default function Admin_ProductList({ data }: userData) {
+export const ProductList = ({ data }: userData) => {
   const { updatedAt, title, summary, price, searchKeyword, mainImage } = data;
-  const updatedAtKR: any = new Date(updatedAt);
   return (
     <List>
       <input type="checkbox"></input>
@@ -22,7 +21,7 @@ export default function Admin_ProductList({ data }: userData) {
       <UpdatedAt>{updatedAt}</UpdatedAt>
     </List>
   );
-}
+};
 
 const List = styled.div`
   display: flex;
