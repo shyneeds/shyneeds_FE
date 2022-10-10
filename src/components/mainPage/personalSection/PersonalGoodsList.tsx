@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { PersonalGoods } from './PersonalGoods';
-import { Default, Mobile } from "../../assets/mediaQuery";
+import { Default, Mobile } from '../../../assets/mediaQuery';
 
 export const PersonalGoodsList = () => {
   return (
@@ -18,8 +18,8 @@ export const PersonalGoodsList = () => {
         </PersonalGoodsListStyles>
       </Mobile>
     </>
-  )
-}
+  );
+};
 
 const PersonalGoodsListStyles = styled.div`
   margin-top: 5rem;
@@ -28,4 +28,4 @@ const PersonalGoodsListStyles = styled.div`
   width: 100%;
   height: 25rem;
   // background-color: #999;
-`
+`;

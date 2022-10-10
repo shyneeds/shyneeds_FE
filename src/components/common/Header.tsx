@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { HeaderBanner } from '../banner/HeaderBanner';
-import { LogInView, LogOutView } from '../userMenu/UserMenu';
+import { HeaderBanner } from '../mainPage/banner/HeaderBanner';
+import { LogInView, LogOutView } from '../mainPage/userMenu/UserMenu';
 
 function Header() {
   const [show, setShow] = useState(true);
