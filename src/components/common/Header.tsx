@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { HeaderBanner } from '../banner/HeaderBanner';
-import { NavLogIn, NavLogOut } from '../navBar/NavBar';
+import { HeaderBanner } from '../mainPage/banner/HeaderBanner';
+import { LogInView, LogOutView } from '../mainPage/userMenu/UserMenu';
 
 function Header() {
   const [show, setShow] = useState(true);
@@ -32,7 +32,7 @@ function Header() {
               placeholder="여행 그룹이나 상품을 검색해보세요"
             />
           </SearchBox>
-          <IconGroup>{isLoggedIn ? <NavLogIn /> : <NavLogOut />}</IconGroup>
+          <IconGroup>{isLoggedIn ? <LogInView /> : <LogOutView />}</IconGroup>
         </HeaderNav>
       </>
     </Container>
@@ -43,6 +43,7 @@ export default Header;
 
 const Container = styled.header`
   height: 100%;
+  border-bottom: 0.7px solid #ddd;
 `;
 
 const BannerWrapper = styled.div`
@@ -84,7 +85,7 @@ const SearchBox = styled.div`
 
 const IconGroup = styled.div`
   margin-left: auto;
-  width: 27rem;
+  width: 22rem;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 `;

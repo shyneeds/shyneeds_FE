@@ -1,25 +1,25 @@
 import Header from '../../components/common/Header';
-import Carousel from '../../components/carousel/Carousel';
-import Footer from '../../components/common/Footer';
-import { PersonalSection } from '../../components/personalSection/PersonalSection';
-import TopButton from '../../components/common/TopButton';
-import { KakaoTalkBanner } from '../../components/banner/KakaoTalkBanner';
+import { MainBanner } from '../../components/mainPage/banner/MainBanner/MainBanner';
+import { SideBar } from '../../components/mainPage/sideBar/SideBar';
+import { PersonalSection } from '../../components/mainPage/personalSection/PersonalSection';
+import { RecommendedByGroup } from '../../components/mainPage/recommended/RecommendedByGroup';
+import { RecommendedByRegion } from '../../components/mainPage/recommended/RecommendedByRegion';
+import { RecommendedByTheme } from '../../components/mainPage/recommended/RecommendedByTheme';
 import Review from '../../components/review/Review';
-import { RecommendedBanner } from '../../components/recommended/RecommendedBanner';
-// import { RecommendedByGroup } from '../../components/recommended/RecommendedByGroup';
+import Footer from '../../components/common/Footer';
 
 export default function Main() {
   return (
     <>
       <Header />
-      <Carousel />
+      <MainBanner />
+      <SideBar />
       <PersonalSection />
-      <RecommendedBanner />
+      <RecommendedByGroup />
+      <RecommendedByRegion />
+      <RecommendedByTheme />
       <Review />
       <Footer />
-      <KakaoTalkBanner />
-      <TopButton />
-      {/* <RecommendedByGroup /> */}
     </>
   );
 }
