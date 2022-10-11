@@ -1,11 +1,13 @@
 import styled from 'styled-components';
-import { LAYOUT } from '../../constants/layout';
+import { LAYOUT } from '../../../constants/layout';
 import { ProductCarousel } from '../productCard/ProductCarousel';
 
-export const RecommendedByRegion = () => {
+export const RecommendedByTheme = () => {
   return (
     <RecommendedListContainer>
-      <RecommendedListTitle>어디로 떠나세요?</RecommendedListTitle>
+      <RecommendedListTitle>
+        특별한 테마 여행을 떠나볼까요?
+      </RecommendedListTitle>
       <ProductCarousel />
     </RecommendedListContainer>
   );

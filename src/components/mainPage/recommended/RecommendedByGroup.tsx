@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { LAYOUT } from '../../constants/layout';
+import { LAYOUT } from '../../../constants/layout';
 import { GroupCarousel } from './GroupCarousel';
 import { GroupProductCarousel } from './GroupProductCarousel';
 

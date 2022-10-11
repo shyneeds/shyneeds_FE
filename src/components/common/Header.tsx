@@ -4,6 +4,8 @@ import { HeaderBanner } from '../banner/HeaderBanner';
 import { LogInView, LogOutView } from '../userMenu/UserMenu';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { authenticated } from '../../features/kakaoLogin/kakaoLoginSlice';
+import { HeaderBanner } from '../mainPage/banner/HeaderBanner';
+import { LogInView, LogOutView } from '../mainPage/userMenu/UserMenu';
 
 function Header() {
   const [show, setShow] = useState(true);
