@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Carousel from '../../carousel/Carousel';
+import Carousel from '../../../carousel/Carousel';
 
 export const MainBanner = () => {
   return (

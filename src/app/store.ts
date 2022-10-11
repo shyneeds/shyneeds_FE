@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counterSlice';
 import adminLoginSliceReducer from '../features/adminLogin/adminLoginSlice';
+import kakaoLoginSliceReducer from '../features/kakaoLogin/kakaoLoginSlice';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
-    adminLogin: adminLoginSliceReducer
+    adminLogin: adminLoginSliceReducer,
+    kakaoLogin : kakaoLoginSliceReducer
   },
 });
 
