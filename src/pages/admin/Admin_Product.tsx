@@ -1,25 +1,9 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { postAdminProductData } from '../../components/admin/Admin_Type';
 
-interface Data {
-  title: string;
-  categoryIds: number[];
-  subCategoryIds: number[];
-  thirdCategoryIds: number[];
-  price: string;
-  summary: string;
-  requiredOptionName: string;
-  requiredOptionValues: string;
-  optionalName: string;
-  optionalValues: string;
-  flightInfo: string;
-  soldoutFlg: boolean;
-  dispFlg: boolean;
-  searchKeyword: string[];
-}
-
-const registerInfo: Data = {
+const registerInfo: postAdminProductData = {
   title: '그리스2',
   categoryIds: [1, 2, 3],
   subCategoryIds: [4, 7, 13, 15],
