@@ -20,7 +20,7 @@ function Kakao () {
       <Wrap>
         <Kakao_Login onClick={kakaoLogin}>
           <h1>간편 로그인</h1>
-          <img src={process.env.PUBLIC_URL + '/icons/kakaologin_btn.png'} alt=''></img>
+          <img src={process.env.PUBLIC_URL + '/icons/ic-kakao-btn.svg'} alt=''></img>
         </Kakao_Login>
         <Email_Area>
           <h1>이메일 로그인</h1>
@@ -39,10 +39,10 @@ function Kakao () {
           <span><a href=''>아이디</a> / <a>비밀번호 찾기</a></span>
         </P_Group>
         <Member>
-          <img src={process.env.PUBLIC_URL + '/icons/member_btn.png'} alt=''></img>
+          <img src={process.env.PUBLIC_URL + '/icons/ic-member-btn.svg'} alt=''></img>
         </Member>
         <Button>
-          <img src={process.env.PUBLIC_URL + '/icons/unmember_btn.png'} alt=''></img>
+          <img src={process.env.PUBLIC_URL + '/icons/ic-unmember-btn.svg'} alt=''></img>
         </Button>
       </Wrap>
       <Footer />
