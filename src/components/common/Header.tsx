@@ -2,10 +2,12 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { HeaderBanner } from '../banner/HeaderBanner';
 import { LogInView, LogOutView } from '../userMenu/UserMenu';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { authenticated } from '../../features/kakaoLogin/kakaoLoginSlice';
 
 function Header() {
   const [show, setShow] = useState(true);
-  const isLoggedIn = true;
+  const userAuthenticated = useAppSelector(authenticated);
 
   return (
     <Container>
@@ -32,7 +34,7 @@ function Header() {
               placeholder="여행 그룹이나 상품을 검색해보세요"
             />
           </SearchBox>
-          <IconGroup>{isLoggedIn ? <LogInView /> : <LogOutView />}</IconGroup>
+          <IconGroup>{userAuthenticated ? <LogOutView /> : <LogInView />}</IconGroup>
         </HeaderNav>
       </>
     </Container>
