@@ -10,17 +10,18 @@ export default function Admin_Main() {
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const pageNumber: number = Math.floor(datas.length / value) + 1;
+
   useEffect(() => {
-    axios
-      .get('http://13.125.151.45:8080/api/package/admin')
-      .then((res) => setDatas(res.data.data));
+    axios({
+      method: 'get',
+      url: 'http://13.125.151.45:8080/api/package/admin',
+      headers: {
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjEwMEBnbWFpbC5jb20iLCJhdXRoIjoiQURNSU4iLCJleHAiOjE4MjMxNTg5MTF9.XHWNGrugeIW1gYvVme_lDfcRQ6g0qriLqOfMTi592RY',
+      },
+    }).then((res) => setDatas(res.data.data));
   }, []);
 
-  const addProduct = () => {
-    console.log('test');
-    console.log(datas.length);
-    console.log(pageNumber);
-  };
   return (
     <Wrap>
       <Header>
