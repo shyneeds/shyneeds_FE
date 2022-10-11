@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { getData } from './Admin_Type';
+import { getAdminProductData } from './Admin_Type';
 
 type userData = {
-  data: getData;
+  data: getAdminProductData;
 };
 
 export const ProductList = ({ data }: userData) => {
