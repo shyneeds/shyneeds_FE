@@ -10,6 +10,7 @@ import LoginResult from './components/testLogin/LoginResult';
 import MyPage from './pages/myPage/MyPage';
 import Kakao from './pages/login/Kakao';
 import Community from './pages/community/Community';
+import Offers from './pages/offers/Offers';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/testLogin" element={<TestLoginPage />} />
         <Route path="/testLoginResult" element={<LoginResult />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/offers" element={<Offers />} />
       </Routes>
     </>
   );
