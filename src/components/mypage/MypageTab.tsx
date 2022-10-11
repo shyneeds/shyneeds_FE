@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import Footer from '../common/Footer';
-import Header from '../common/Header';
 import styled from 'styled-components';
 import Reservation from './Reservation';
 import Writing from './Writing';
@@ -8,11 +6,10 @@ import Modify from './Modify';
 import Withdrawal from './Withdrawal';
 
 const Mypage = () => {
-  const [tab, setTab] = useState(1);
+  const [tab, setTab] = useState<number>(1);
 
   return (
     <div>
-      <Header />
       <MypageMain>
         <h2>나의 여행</h2>
         <Contents>
@@ -43,7 +40,7 @@ const Mypage = () => {
             </p>
           </ContentsList>
           <ContentsMain>
-            {tab !== 3 && (
+            {tab === 1 || tab === 2 ? (
               <UserInfo>
                 <UserImg>
                   <img
@@ -61,7 +58,7 @@ const Mypage = () => {
                   <span>0</span>
                 </UserPoint>
               </UserInfo>
-            )}
+            ) : null}
             <ContentsResult>
               {tab === 1 && <Reservation />}
               {tab === 2 && <Writing />}
@@ -71,7 +68,6 @@ const Mypage = () => {
           </ContentsMain>
         </Contents>
       </MypageMain>
-      <Footer />
     </div>
   );
 };
