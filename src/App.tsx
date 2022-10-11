@@ -10,13 +10,14 @@ import LoginResult from './components/testLogin/LoginResult';
 import MyPage from './pages/myPage/MyPage';
 import Kakao from './pages/login/Kakao';
 import Community from './pages/community/Community';
+import LoginRequest from './components/testLogin/LoginRequest';
 import Offers from './pages/offers/Offers';
 
 function App() {
   return (
     <>
       <Routes>
-        {/* <Route path="*" element={<Error />} /> */}
+        <Route path="*" element={<Error />} />
         <Route path="/" element={<Main />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/admin" element={<Admin_Main />} />
@@ -26,6 +27,7 @@ function App() {
         <Route path="/testLogin" element={<TestLoginPage />} />
         <Route path="/testLoginResult" element={<LoginResult />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/testLoginRequest" element={<LoginRequest/>} />
         <Route path="/offers" element={<Offers />} />
       </Routes>
     </>
