@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { postData } from '../../components/admin/Admin_Type';
+import { postAdminProductData } from '../../components/admin/Admin_Type';
 
-const registerInfo: postData = {
+const registerInfo: postAdminProductData = {
   title: '그리스2',
   categoryIds: [1, 2, 3],
   subCategoryIds: [4, 7, 13, 15],
