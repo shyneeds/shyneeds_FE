@@ -1,4 +1,4 @@
-export interface getData {
+export interface getAdminProductData {
   title: string;
   price: string;
   summary: string;
@@ -7,7 +7,7 @@ export interface getData {
   updatedAt: string;
 }
 
-export interface postData {
+export interface postAdminProductData {
   title: string;
   categoryIds: number[];
   subCategoryIds: number[];
