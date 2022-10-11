@@ -1,17 +1,6 @@
 /* Dummy Data */
 
-export interface IProductData {
-  id: number;
-  img: string;
-  tab_img: string;
-  title: string;
-  tag: string;
-  content: string;
-  price: string;
-  url: string;
-}
-
-export const productData: IProductData[] = [
+export const productData = [
   {
     id: 0,
     img: 'https://static.hubzum.zumst.com/hubzum/2018/06/25/14/d6c40f900561471d9970f5dbf22f2cc9.jpg',

@@ -5,21 +5,17 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
-import { getProductData } from './getProductData';
-import { useEffect } from 'react';
 
 const settings = {
   slidesToShow: 4,
   slidesToScroll: 1,
 };
 
-getProductData();
-
 export const ProductCarousel = () => {
   return (
     <CarouselContainer {...settings}>
       {productData.map((productData) => (
-        <Link to={productData.url} key={productData.id}>
+        <Link to={'detail/' + productData.id} key={productData.id}>
           <ProductWrap>
             <img src={productData.img} alt="product_image" />
             <ProductText>
