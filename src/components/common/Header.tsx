@@ -4,6 +4,7 @@ import { HeaderBanner } from '../mainPage/banner/HeaderBanner';
 import { LogInView, LogOutView } from '../mainPage/userMenu/UserMenu';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { authenticated } from '../../features/kakaoLogin/kakaoLoginSlice';
+import { Link } from 'react-router-dom';
 
 function Header() {
   const [show, setShow] = useState(true);
@@ -17,12 +18,12 @@ function Header() {
       <>
         <HeaderNav>
           <Logo>
-            <a href="/">
+            <Link to="/">
               <img
                 src="https://cdn.imweb.me/thumbnail/20220626/f70356446610d.png"
                 alt=""
               />
-            </a>
+            </Link>
           </Logo>
           <SearchBox>
             <img
