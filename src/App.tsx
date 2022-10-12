@@ -27,7 +27,7 @@ function App() {
         <Route path="/testLogin" element={<TestLoginPage />} />
         <Route path="/testLoginResult" element={<LoginResult />} />
         <Route path="/community" element={<Community />} />
-        <Route path="/testLoginRequest" element={<LoginRequest/>} />
+        <Route path="/testLoginRequest" element={<LoginRequest />} />
         <Route path="/offers" element={<Offers />} />
       </Routes>
     </>
