@@ -27,16 +27,16 @@ export default function Offers_Header() {
     }).then((res) => setDatas(res.data.data));
   }, []);
 
-  console.log(datas);
-
   return (
     <>
       <ProductWrap>
-        <Product_Img src={datas?.mainImage}></Product_Img>
+        <Product_Img
+          src={process.env.PUBLIC_URL + '/icons/3-sub-banner-1920x960.png'}
+        ></Product_Img>
         <InfoWrap>
           <Info>
             <Product_Name>여자끼리 파타고니아</Product_Name>
-            <Product_Price>{datas?.price}</Product_Price>
+            <Product_Price>{datas?.price}원</Product_Price>
             <Product_Summary>{datas?.summary}</Product_Summary>
             <Product_Area>그리스</Product_Area>
             <Product_Feature>포함투어 10개</Product_Feature>
@@ -47,16 +47,22 @@ export default function Offers_Header() {
             </Product_Option>
             <PriceWrap>
               <Product_Num>
-                <p>인원</p>
+                <People_Num_Text>인원</People_Num_Text>
                 <People_Num>
                   <Num_Plus onClick={() => dispatch(minusNum())}>-</Num_Plus>
                   <Num_Value>{productNum}</Num_Value>
                   <Num_Minus onClick={() => dispatch(plusNum())}>+</Num_Minus>
                 </People_Num>
               </Product_Num>
+              <PriceWrap_Line></PriceWrap_Line>
               <Product_Total_Price>
                 <Price_Text>총 상품 금액</Price_Text>
-                <Total_Price>{Number(datas?.price)}</Total_Price>
+                <Total_Price>
+                  {(Number(datas?.price.replace(/,/g, '')) * productNum)
+                    .toString()
+                    .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                  원
+                </Total_Price>
               </Product_Total_Price>
             </PriceWrap>
             <ButtonWrap>
@@ -85,13 +91,11 @@ export default function Offers_Header() {
 const ProductWrap = styled.section`
   position: relative;
   width: 100%;
-  height: 600px;
+  height: 900px;
 `;
 
 const Product_Img = styled.img`
   position: absolute;
-  // width: 500px;
-  // height: 500px;
 `;
 const InfoWrap = styled.div`
   display: flex;
@@ -99,38 +103,40 @@ const InfoWrap = styled.div`
   justify-content: center;
   align-items: center;
   position: absolute;
-  width: 30%;
   right: 50px;
+  width: 30%;
+  height: 80%;
   top: 50%;
   transform: translate(0, -50%);
-  height: 500px;
-  // z-index: 1;
   background: rgba(255, 255, 255, 0.77);
 `;
 const Info = styled.div`
-  width: 80%;
-  height: 80%;
+  width: 85%;
+  height: 85%;
 `;
 const Product_Name = styled.p`
   font-family: 'Pretendard';
   font-style: normal;
-  font-weight: 500;
-  font-size: 30px;
+  font-weight: 600;
+  font-size: 25px;
   line-height: 24px;
 `;
 const Product_Price = styled.p`
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 500;
-  font-size: 30px;
+  font-size: 25px;
   line-height: 24px;
+  margin-top: 20px;
 `;
 const Product_Summary = styled.p`
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 500;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 15px;
+  line-height: 34px;
+  width: 70%;
+  margin-top: 20px;
 `;
 const Product_Area = styled.p`
   font-family: 'Pretendard';
@@ -138,6 +144,7 @@ const Product_Area = styled.p`
   font-weight: 500;
   font-size: 20px;
   line-height: 34px;
+  margin-top: 20px;
 `;
 const Product_Feature = styled.p``;
 const Product_Airplane = styled.p``;
@@ -153,6 +160,7 @@ const Product_Option = styled.select`
   background: #f9f9f9;
   border: 1px solid #cccccc;
   padding: 0.3em 0.7em 0.2em 0.4em;
+  margin-top: 20px;
 
   box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
 
@@ -175,23 +183,35 @@ const PriceWrap = styled.section`
   margin-top: 10px;
   background: #f9f9f9;
   border: 1px solid #cccccc;
-  p {
-    font-family: 'Pretendard';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 24px;
-  }
 `;
 const Product_Num = styled.div`
   height: 50%;
   display: flex;
+  position: relative;
+  align-items: center;
+`;
+const People_Num_Text = styled.p`
+  position: absolute;
+  left: 20px;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 20px;
 `;
 const People_Num = styled.div`
-  width: 100px;
-  height: 40px;
+  position: absolute;
+  right: 20px;
+  width: 90px;
+  height: 35px;
   display: flex;
+  align-items: center;
+  text-align: center;
   border: 1px solid #333333;
+`;
+const Num_Minus = styled.button`
+  width: 30%;
+  cursor: pointer;
 `;
 const Num_Plus = styled.button`
   width: 30%;
@@ -200,17 +220,35 @@ const Num_Plus = styled.button`
 const Num_Value = styled.p`
   width: 40%;
 `;
-const Num_Minus = styled.button`
-  width: 30%;
-  cursor: pointer;
+const PriceWrap_Line = styled.div`
+  height: 1px;
+  background: #aaaaaa;
 `;
-
 const Product_Total_Price = styled.div`
+  position: relative;
   display: flex;
+  align-items: center;
   height: 50%;
 `;
-const Price_Text = styled.p``;
-const Total_Price = styled.p``;
+const Price_Text = styled.p`
+  position: absolute;
+  left: 20px;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 20px;
+`;
+const Total_Price = styled.p`
+  position: absolute;
+  right: 20px;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  color: #4286f4;
+`;
 const ButtonWrap = styled.section`
   display: flex;
   justify-content: space-around;
@@ -247,6 +285,7 @@ const Button_Cart = styled.button`
   }
 `;
 const OfferWrap = styled.section`
+  margin-top: 200px;
   display: flex;
   width: 100%;
   justify-content: center;
