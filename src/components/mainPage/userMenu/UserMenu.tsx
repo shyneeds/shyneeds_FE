@@ -1,22 +1,23 @@
 import { BiCart, BiLogIn, BiLogOut, BiUser } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 // 로그아웃 상태
 export const LogInView = () => {
   return (
     <>
-      <NavStyle href="/">
+      <StyleLink to="/">
         <BiCart size="1.7rem" />
         <p>관심상품</p>
-      </NavStyle>
-      <NavStyle href="login">
+      </StyleLink>
+      <StyleLink to="login">
         <BiLogIn size="1.7rem" />
         <p>로그인</p>
-      </NavStyle>
-      <NavStyle href="signup">
+      </StyleLink>
+      <StyleLink to="signup">
         <BiUser size="1.7rem" />
         <p>회원가입</p>
-      </NavStyle>
+      </StyleLink>
     </>
   );
 };
@@ -25,23 +26,23 @@ export const LogInView = () => {
 export const LogOutView = () => {
   return (
     <>
-      <NavStyle href="/">
+      <StyleLink to="/">
         <BiCart size="1.7rem" />
         <p>관심상품</p>
-      </NavStyle>
-      <NavStyle href="/">
+      </StyleLink>
+      <StyleLink to="/">
         <BiLogOut size="1.7rem" />
         <p>로그아웃</p>
-      </NavStyle>
-      <NavStyle href="/mypage">
+      </StyleLink>
+      <StyleLink to="/mypage">
         <BiUser size="1.7rem" />
         <p>마이 페이지</p>
-      </NavStyle>
+      </StyleLink>
     </>
   );
 };
 
-const NavStyle = styled.a`
+const StyleLink = styled(Link)`
   display: flex;
   align-items: center;
 

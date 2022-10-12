@@ -1,17 +1,18 @@
 import styled from 'styled-components';
 import { IoMdClose } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 
 export const HeaderBanner = (props: any) => {
   const { onClose } = props;
 
   return (
     <HeaderBannerContainer>
-      <a href="https://www.gotogether-s.com/notice">
+      <Link to="https://www.gotogether-s.com/notice">
         <img
           src="https://cdn.imweb.me/upload/S202107158604372051740/8cc615a7ed144.png"
           alt="head_banner"
         />
-      </a>
+      </Link>
       <CloseButton>
         <IoMdClose
           size="2rem"
