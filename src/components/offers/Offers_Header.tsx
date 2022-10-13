@@ -11,6 +11,7 @@ import {
   reservationProductNum,
 } from '../../features/userReservation/userReservationSlice';
 import { useNavigate } from 'react-router';
+
 export default function Offers_Header() {
   const [datas, setDatas] = useState<getOfferData | null>(null);
   const [option, setOption] = useState<number | null>(0);
@@ -106,7 +107,7 @@ export default function Offers_Header() {
               >
                 <p>예약하기</p>
               </Button_Reservation>
-              <Button_Cart>
+              <Button_Cart onClick={() => navigate('/cart')}>
                 <p>장바구니</p>
               </Button_Cart>
             </ButtonWrap>
