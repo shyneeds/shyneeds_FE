@@ -13,6 +13,7 @@ import {
 import { useNavigate } from 'react-router';
 export default function Offers_Header() {
   const [datas, setDatas] = useState<getOfferData | null>(null);
+  const [option, setOption] = useState<number | null>(0);
   const [clicked, setClicked] = useState<boolean | null>(false);
   const productNum = useAppSelector(reservationProductNum);
   const navigate = useNavigate();
@@ -59,13 +60,19 @@ export default function Offers_Header() {
             <Product_Area>그리스</Product_Area>
             <Product_Feature>포함투어 10개</Product_Feature>
             <Product_Airplane>{datas?.flightInfo}</Product_Airplane>
+            <Product_Option onChange={(e) => setOption(Number(e.target.value))}>
+              <p>필수</p>
+              <option value="100000">100000원</option>
+              <option value="200000">200000원</option>
+            </Product_Option>
             <Product_Option>
-              <option value="5">5개</option>
-              <option value="10">10개</option>
+              <p>필수</p>
+              <option value="50000">50000원</option>
+              <option value="300000">300000원</option>
             </Product_Option>
             <PriceWrap>
               <Product_Num>
-                <People_Num_Text>인원</People_Num_Text>
+                <People_Num_Text>{option}</People_Num_Text>
                 <People_Num>
                   <Num_Plus onClick={() => dispatch(minusNum())}>-</Num_Plus>
                   <Num_Value>{productNum}</Num_Value>
@@ -198,7 +205,7 @@ const Product_Option = styled.select`
   background: #f9f9f9;
   border: 1px solid #cccccc;
   padding: 0.3em 0.7em 0.2em 0.4em;
-  margin-top: 20px;
+  margin-top: 10px;
 
   box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
 
