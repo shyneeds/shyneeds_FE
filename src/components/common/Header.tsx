@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { HeaderBanner } from '../mainPage/banner/HeaderBanner';
 import { LogInView, LogOutView } from '../mainPage/userMenu/UserMenu';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import { authenticated } from '../../features/kakaoLogin/kakaoLoginSlice';
 import { Link } from 'react-router-dom';
 
