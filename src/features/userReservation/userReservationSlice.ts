@@ -9,7 +9,7 @@ export interface userReservationInfo {
       productId: number;
       productImg: string;
       productName: string;
-      productPrice: string;
+      productPrice: number;
       peopleNum: number;
       userOption: string[];
     }
@@ -23,7 +23,7 @@ const initialState: userReservationInfo = {
       productId: 0,
       productImg: '',
       productName: '',
-      productPrice: '',
+      productPrice: 0,
       peopleNum: 0,
       userOption: [],
     },
@@ -38,7 +38,9 @@ export const userReservationSlice = createSlice({
     // Use the PayloadAction type to declare the contents of `action.payload`
     productId: (state, action: PayloadAction<string>) => {
       state.productInfo[0].productName = action.payload;
-      console.log(state.productInfo[0].productName);
+    },
+    productPrice: (state, action: PayloadAction<number>) => {
+      state.productInfo[0].productPrice = action.payload;
     },
     plusNum: (state) => {
       state.productInfo[state.num].peopleNum += 1;
@@ -50,9 +52,12 @@ export const userReservationSlice = createSlice({
   },
 });
 
-export const { productId, plusNum, minusNum } = userReservationSlice.actions;
+export const { productId, productPrice, plusNum, minusNum } =
+  userReservationSlice.actions;
 export const reservationProductId = (state: RootState) =>
   state.userReservation.productInfo[0].productName;
+export const reservationProductPrice = (state: RootState) =>
+  state.userReservation.productInfo[0].productPrice;
 export const reservationProductNum = (state: RootState) =>
   state.userReservation.productInfo[0].peopleNum;
 export default userReservationSlice.reducer;
