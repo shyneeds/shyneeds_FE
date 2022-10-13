@@ -5,6 +5,7 @@ import { getOfferData } from './Offers_Type';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   productId,
+  productPrice,
   minusNum,
   plusNum,
   reservationProductNum,
@@ -69,6 +70,13 @@ export default function Offers_Header() {
               <Button_Reservation
                 onClick={() => {
                   datas ? dispatch(productId(datas?.mainImage)) : '';
+                  datas
+                    ? dispatch(
+                        productPrice(
+                          Number(datas?.price.replace(/,/g, '')) * productNum
+                        )
+                      )
+                    : '';
                   navigate('/reservation');
                 }}
               >
@@ -95,7 +103,8 @@ const ProductWrap = styled.section`
 `;
 
 const Product_Img = styled.img`
-  position: absolute;
+  width: 100%;
+  heigth: 100%;
 `;
 const InfoWrap = styled.div`
   display: flex;
