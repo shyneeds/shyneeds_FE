@@ -13,10 +13,10 @@ import {
 import { useNavigate } from 'react-router';
 export default function Offers_Header() {
   const [datas, setDatas] = useState<getOfferData | null>(null);
+  const [clicked, setClicked] = useState<boolean | null>(false);
   const productNum = useAppSelector(reservationProductNum);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     axios({
       method: 'get',
@@ -25,7 +25,9 @@ export default function Offers_Header() {
         Authorization:
           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjEwMEBnbWFpbC5jb20iLCJhdXRoIjoiQURNSU4iLCJleHAiOjE4MjMxNTg5MTF9.XHWNGrugeIW1gYvVme_lDfcRQ6g0qriLqOfMTi592RY',
       },
-    }).then((res) => setDatas(res.data.data));
+    }).then((res) => {
+      setDatas(res.data.data);
+    });
   }, []);
 
   return (
@@ -36,6 +38,21 @@ export default function Offers_Header() {
         ></Product_Img>
         <InfoWrap>
           <Info>
+            <Product_Share
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: datas?.title,
+                    text: datas?.summary,
+                    url: 'http://localhost:3000/offers',
+                  });
+                } else {
+                  alert('공유하기가 지원되지 않는 환경 입니다.');
+                }
+              }}
+            >
+              <img src={process.env.PUBLIC_URL + '/icons/share-icon.png'} />
+            </Product_Share>
             <Product_Name>여자끼리 파타고니아</Product_Name>
             <Product_Price>{datas?.price}원</Product_Price>
             <Product_Summary>{datas?.summary}</Product_Summary>
@@ -89,9 +106,16 @@ export default function Offers_Header() {
           </Info>
         </InfoWrap>
       </ProductWrap>
-      <OfferWrap>
+      <OfferImgWrap className={clicked ? 'clicked' : 'unclicked'}>
         <Offer_Img src={datas?.descriptionImage[0]}></Offer_Img>
-      </OfferWrap>
+      </OfferImgWrap>
+      <OfferBtnWrap>
+        <Offer_Btn
+          onClick={() => (clicked ? setClicked(false) : setClicked(true))}
+        >
+          상세정보 펼처보기
+        </Offer_Btn>
+      </OfferBtnWrap>
     </>
   );
 }
@@ -120,8 +144,13 @@ const InfoWrap = styled.div`
   background: rgba(255, 255, 255, 0.77);
 `;
 const Info = styled.div`
-  width: 85%;
-  height: 85%;
+  width: 80%;
+  height: 80%;
+`;
+const Product_Share = styled.button`
+  position: absolute;
+  right: 20px;
+  cursor: pointer;
 `;
 const Product_Name = styled.p`
   font-family: 'Pretendard';
@@ -293,12 +322,37 @@ const Button_Cart = styled.button`
     color: white;
   }
 `;
-const OfferWrap = styled.section`
+const OfferImgWrap = styled.section`
   margin-top: 200px;
   display: flex;
   width: 100%;
   justify-content: center;
+  &.unclicked {
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+  &.clicked {
+    height: 100%;
+    transition: max-height 0.3s ease-out;
+  }
 `;
 const Offer_Img = styled.img`
-  width: 60%;
+  width: 50%;
+`;
+const OfferBtnWrap = styled.section`
+  margin-top: 10px;
+  margin-bottom: 50px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`;
+const Offer_Btn = styled.button`
+  background: #ffffff;
+
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  width: 420px;
+  height: 56px;
+  cursor: pointer;
 `;
