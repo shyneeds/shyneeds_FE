@@ -1,18 +1,16 @@
 import React from 'react'
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { userToken,loginToken } from '../../features/kakaoLogin/kakaoLoginSlice';
+import { userLogin,loginToken } from '../../features/kakaoLogin/kakaoLoginSlice';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { API_URL } from '../../constants/API_URL';
-import { useCookies } from 'react-cookie';
 
 const LoginRequest = () => {
-  const [cookies, setCookie] = useCookies(['accessToken']);
   const storeUserToken = useAppSelector(loginToken);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const sendToken = async()=>{1
+  const sendToken = async()=>{
     await axios({
       url : API_URL.POST.KAKAO_LOGIN,
       method : "POST",
@@ -24,8 +22,7 @@ const LoginRequest = () => {
     })
       .then((res)=>{
         console.log(res)
-        dispatch(userToken(res.data.data.accessToken))
-        setCookie('accessToken',res.data.data.accessToken)
+        dispatch(userLogin(res.data.data.accessToken))
         navigate('/')
       })
   }
