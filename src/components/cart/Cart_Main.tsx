@@ -2,9 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { reservationProductId } from '../../features/userReservation/userReservationSlice';
+import { useNavigate } from 'react-router';
 
 export default function Cart_Main() {
   const productId = useAppSelector(reservationProductId);
+  const navigate = useNavigate();
+
   return (
     <>
       <Wrap>
@@ -43,7 +46,7 @@ export default function Cart_Main() {
             </Cart_Total_Price>
           </Cart_Price_Wrap>
           <Cart_Price_Btn_Wrap>
-            <Cart_Reservation_Btn>
+            <Cart_Reservation_Btn onClick={() => navigate('/reservation')}>
               <p>예약하기</p>
             </Cart_Reservation_Btn>
           </Cart_Price_Btn_Wrap>
