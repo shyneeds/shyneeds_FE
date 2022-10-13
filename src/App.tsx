@@ -8,7 +8,7 @@ import Admin_Product from './pages/admin/Admin_Product';
 import TestLoginPage from './pages/testLogin/TestLoginPage';
 import LoginResult from './components/testLogin/LoginResult';
 import MyPage from './pages/myPage/MyPage';
-import Kakao from './pages/login/Kakao';
+import LoginPage from './pages/login/LoginPage';
 import Community from './pages/community/Community';
 import LoginRequest from './components/testLogin/LoginRequest';
 import Offers from './pages/offers/Offers';
@@ -24,7 +24,7 @@ function App() {
         <Route path="/admin" element={<Admin_Main />} />
         <Route path="/admin/product" element={<Admin_Product />} />
         <Route path="/mypage" element={<MyPage />} />
-        <Route path="/login" element={<Kakao />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/testLogin" element={<TestLoginPage />} />
         <Route path="/testLoginResult" element={<LoginResult />} />
         <Route path="/community" element={<Community />} />
