@@ -1,29 +1,60 @@
 import styled from 'styled-components';
-import { productData } from '../../../utils/productData';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
 import { BiChevronRight } from 'react-icons/bi';
+import axios from 'axios';
+import { API_URL } from '../../../constants/API_URL';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import {
+  getGroupProductData,
+  groupData,
+} from '../../../features/main/groupSlice';
+import { useEffect } from 'react';
+import { ResponseType } from '../../../utils/ResponseType';
 
 const settings = {
   slidesToShow: 4,
   slidesToScroll: 1,
 };
 
-export const GroupCarousel = () => {
+export const GroupTabCarousel = () => {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector(groupData);
+  const getGroupData: any = () => {
+    axios
+      .post<ResponseType>(API_URL.POST.MAIN, {
+        categoryList: ['그룹별상품'],
+      })
+      .then((res) => {
+        const mainData = res.data.data;
+        const groupData = mainData.mainCategoryPackageList.그룹별상품;
+        console.log('완료', groupData);
+        dispatch(getGroupProductData(groupData));
+        return groupData;
+      })
+      .catch(() => {
+        console.log('error');
+      });
+  };
+
+  useEffect(() => {
+    getGroupData();
+  }, []);
+
   return (
     <CarouselContainer {...settings}>
-      {productData.map((groupData) => (
-        <SliderWrap key={groupData.id}>
+      {products.map((data: any) => (
+        <SliderWrap key={data.id}>
           <GroupWrap>
             <GroupImage>
-              <img src={groupData.tab_img} alt="group_tab_image" />
+              <img src={data.imageUrl} alt="group_tab_image" />
             </GroupImage>
             <GroupText>
-              <GroupTitle>{groupData.tag}</GroupTitle>
-              <GroupContent>{groupData.content}</GroupContent>
-              <StyledLink to={'admin'}>
+              <GroupTitle>{data.title}</GroupTitle>
+              <GroupContent>{data.summary}</GroupContent>
+              <StyledLink to={'offers'}>
                 <p>상품 보기</p>
                 <BiChevronRight size="20px" />
               </StyledLink>
@@ -36,6 +67,7 @@ export const GroupCarousel = () => {
 };
 
 const CarouselContainer = styled(Slider)`
+  height: 108px;
   border-right: 2px solid #cccccc;
   border-left: 1px solid #ccc;
   .slick-prev:before,
@@ -72,8 +104,6 @@ const CarouselContainer = styled(Slider)`
 const SliderWrap = styled.div`
   background-color: #f6f6f6;
   border-top: 2px solid #ccc;
-  // border-right: 1px solid #ccc;
-  // border-left: 1px solid #ccc;
 `;
 
 const GroupWrap = styled.div`
@@ -98,7 +128,8 @@ const GroupWrap = styled.div`
 `;
 
 const GroupImage = styled.div`
-  width: 40%;
+  height: 68px;
+  width: 68px;
   border-radius: 10px;
   border: 1px solid #cccccc;
   overflow: hidden;
