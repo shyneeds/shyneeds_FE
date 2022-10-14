@@ -1,30 +1,52 @@
 import styled from 'styled-components';
 import { IoMdHeartEmpty } from 'react-icons/io';
-import { productData } from './productData';
+import { productData } from '../../../utils/productData';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
+// import { getRegionData, getReligionData } from '../../../utils/getMainData';
+import axios from 'axios';
+import { API_URL } from '../../../constants/API_URL';
+// console.log(getRegionData());
 
 const settings = {
   slidesToShow: 4,
   slidesToScroll: 1,
 };
 
+const data = () => {
+  axios
+    .post(API_URL.POST.MAIN, {
+      categoryList: ['지역별상품'],
+    })
+    .then((res) => {
+      // const mainData = res.data.data;
+      // const categoryData = mainData.mainCategoryPackageList;
+      // const regionData = new Array(categoryData.지역별상품);
+      // console.log(regionData);
+      console.log(res.data);
+      return res.data;
+    })
+    .catch(() => {
+      console.log('error');
+    });
+};
+
 export const ProductCarousel = () => {
   return (
     <CarouselContainer {...settings}>
-      {productData.map((productData) => (
-        <Link to={'detail/' + productData.id} key={productData.id}>
+      {data.map((data) => (
+        <Link to={'detail/' + data.id} key={data.id}>
           <ProductWrap>
-            <img src={productData.img} alt="product_image" />
+            <img src={data.imageUrl} alt="product_image" />
             <ProductText>
-              <Title>{productData.title}</Title>
-              <Content>{productData.content}</Content>
-              <Price>{productData.price} 원</Price>
+              <Title>{data.title}</Title>
+              <Content>{data.summary}</Content>
+              <Price>{data.price} 원</Price>
             </ProductText>
             <ProductTag>
-              <TagTitle>{productData.tag}</TagTitle>
+              <TagTitle>{data.tag}</TagTitle>
             </ProductTag>
             <IoMdHeartEmpty size="20px" className="wish-icon" />
           </ProductWrap>
