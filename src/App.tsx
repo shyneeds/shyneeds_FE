@@ -13,6 +13,7 @@ import Community from './pages/community/Community';
 import LoginRequest from './components/testLogin/LoginRequest';
 import Offers from './pages/offers/Offers';
 import Reservation_Main from './components/reservation/Reservation_Main';
+import Cart from './pages/cart/Cart';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/testLoginRequest" element={<LoginRequest />} />
         <Route path="/offers" element={<Offers />} />
         <Route path="/reservation" element={<Reservation_Main />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </>
   );
