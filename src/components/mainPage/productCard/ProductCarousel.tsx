@@ -5,10 +5,12 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
-// import { getRegionData, getReligionData } from '../../../utils/getMainData';
 import axios from 'axios';
 import { API_URL } from '../../../constants/API_URL';
-// console.log(getRegionData());
+import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { responseTest, testData1 } from '../../../features/test/test';
+import { useEffect } from 'react';
 
 const settings = {
   slidesToShow: 4,
@@ -34,9 +36,34 @@ const data = () => {
 };
 
 export const ProductCarousel = () => {
+  const dispatch = useAppDispatch();
+  const testData = useAppSelector(testData1);
+  const data: any = () => {
+    axios
+      .post(API_URL.POST.MAIN, {
+        categoryList: ['지역별상품'],
+      })
+      .then((res) => {
+        const mainData = res.data.data;
+        const categoryData = mainData.mainCategoryPackageList;
+        const regionData = categoryData.지역별상품;
+        // console.log(regionData);
+        // console.log(res.data);
+        console.log('완료');
+        dispatch(responseTest(regionData));
+        return res;
+      })
+      .catch(() => {
+        console.log('error');
+      });
+  };
+  useEffect(() => {
+    data();
+  }, []);
+
   return (
     <CarouselContainer {...settings}>
-      {data.map((data) => (
+      {testData.map((data: any) => (
         <Link to={'detail/' + data.id} key={data.id}>
           <ProductWrap>
             <img src={data.imageUrl} alt="product_image" />

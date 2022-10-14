@@ -1,20 +1,21 @@
 import { BiCart, BiLogIn, BiLogOut, BiUser } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useAppDispatch } from '../../../app/hooks';
+import { userLogout } from '../../../features/kakaoLogin/kakaoLoginSlice';
 
-// 로그아웃 상태
 export const LogInView = () => {
   return (
     <>
-      <StyleLink to="/">
+      <StyleLink to="/cart">
         <BiCart size="1.7rem" />
         <p>관심상품</p>
       </StyleLink>
-      <StyleLink to="login">
+      <StyleLink to="/login">
         <BiLogIn size="1.7rem" />
         <p>로그인</p>
       </StyleLink>
-      <StyleLink to="signup">
+      <StyleLink to="/signup">
         <BiUser size="1.7rem" />
         <p>회원가입</p>
       </StyleLink>
@@ -24,13 +25,14 @@ export const LogInView = () => {
 
 // 로그인 상태
 export const LogOutView = () => {
+  const dispatch = useAppDispatch();
   return (
     <>
-      <StyleLink to="/">
+      <StyleLink to="/cart">
         <BiCart size="1.7rem" />
         <p>관심상품</p>
       </StyleLink>
-      <StyleLink to="/">
+      <StyleLink onClick={() => dispatch(userLogout(false))} to="/">
         <BiLogOut size="1.7rem" />
         <p>로그아웃</p>
       </StyleLink>

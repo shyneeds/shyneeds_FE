@@ -8,10 +8,12 @@ import Admin_Product from './pages/admin/Admin_Product';
 import TestLoginPage from './pages/testLogin/TestLoginPage';
 import LoginResult from './components/testLogin/LoginResult';
 import MyPage from './pages/myPage/MyPage';
-import Kakao from './pages/login/Kakao';
+import LoginPage from './pages/login/LoginPage';
 import Community from './pages/community/Community';
 import LoginRequest from './components/testLogin/LoginRequest';
 import Offers from './pages/offers/Offers';
+import Reservation_Main from './components/reservation/Reservation_Main';
+import Cart from './pages/cart/Cart';
 
 function App() {
   return (
@@ -23,12 +25,14 @@ function App() {
         <Route path="/admin" element={<Admin_Main />} />
         <Route path="/admin/product" element={<Admin_Product />} />
         <Route path="/mypage" element={<MyPage />} />
-        <Route path="/login" element={<Kakao />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/testLogin" element={<TestLoginPage />} />
         <Route path="/testLoginResult" element={<LoginResult />} />
         <Route path="/community" element={<Community />} />
         <Route path="/testLoginRequest" element={<LoginRequest />} />
         <Route path="/offers" element={<Offers />} />
+        <Route path="/reservation" element={<Reservation_Main />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </>
   );
