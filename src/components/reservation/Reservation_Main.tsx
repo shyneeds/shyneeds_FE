@@ -38,15 +38,41 @@ export default function Reservation_Main() {
             </Reservation_Product_Wrap>
           </Reservation_Product>
           <Reservation_User>
-            <Reservation_User_Text>예약자 정보</Reservation_User_Text>
+            <Reservation_Product_Text>예약자 정보</Reservation_Product_Text>
             <Reservation_User_Wrap>
               <Reservation_User_Name></Reservation_User_Name>
               <Reservation_User_PhoneNumber></Reservation_User_PhoneNumber>
               <Reservation_User_Email></Reservation_User_Email>
             </Reservation_User_Wrap>
           </Reservation_User>
-          <Reservation_Summary></Reservation_Summary>
-          <Reservation_Payment></Reservation_Payment>
+          <Reservation_Summary>
+            <Reservation_Product_Text>주문 요약</Reservation_Product_Text>
+            <Reservation_Summary_PriceWrap>
+              <Reservation_Summary_Price_Text>
+                상품가격
+              </Reservation_Summary_Price_Text>
+              <Reservation_Summary_Price_Num>
+                200000000원
+              </Reservation_Summary_Price_Num>
+            </Reservation_Summary_PriceWrap>
+            <Reservation_Summary_TotalWrap>
+              <Reservation_Summary_Total_Text>
+                총 예약금액
+              </Reservation_Summary_Total_Text>
+              <Reservation_Summary_Total_Num>
+                200000000원
+              </Reservation_Summary_Total_Num>
+            </Reservation_Summary_TotalWrap>
+          </Reservation_Summary>
+          <Reservation_Payment>
+            <Reservation_Product_Text>결제 수단</Reservation_Product_Text>
+            <Reservation_Payment_Wrap>
+              <Reservation_Payment_Btn type="checkbox" />
+              <Reservation_Payment_Text>무통장입금</Reservation_Payment_Text>
+              <Reservation_Payment_Bank></Reservation_Payment_Bank>
+              <Reservation_Payment_Name></Reservation_Payment_Name>
+            </Reservation_Payment_Wrap>
+          </Reservation_Payment>
           <Reservation_Agree></Reservation_Agree>
           <Reservation_Button>
             <p>결제하기</p>
@@ -56,6 +82,15 @@ export default function Reservation_Main() {
     </Wrap>
   );
 }
+
+const Reservation_Product_Text = styled.p`
+  width: 100%;
+  height: 30%;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 25px;
+`;
 
 const Wrap = styled.section`
   width: 100vw;
@@ -96,14 +131,6 @@ const Reservation_Product = styled.section`
   left: 30px;
   padding: 25px;
   background: white;
-`;
-const Reservation_Product_Text = styled.p`
-  width: 100%;
-  height: 30%;
-  font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 800;
-  font-size: 25px;
 `;
 const Reservation_Product_Wrap = styled.section`
   display: flex;
@@ -153,14 +180,6 @@ const Reservation_User = styled.section`
   background: white;
   padding: 25px;
 `;
-const Reservation_User_Text = styled.p`
-  width: 100%;
-  height: 30%;
-  font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 800;
-  font-size: 25px;
-`;
 const Reservation_User_Wrap = styled.section``;
 const Reservation_User_Name = styled.p``;
 const Reservation_User_PhoneNumber = styled.p``;
@@ -172,7 +191,21 @@ const Reservation_Summary = styled.section`
   height: 30%;
   right: 30px;
   background: white;
+  padding: 25px;
 `;
+const Reservation_Summary_PriceWrap = styled.section`
+  height: 35%;
+  display: flex;
+`;
+const Reservation_Summary_Price_Text = styled.p``;
+const Reservation_Summary_Price_Num = styled.p``;
+
+const Reservation_Summary_TotalWrap = styled.section`
+  height: 35%;
+  display: flex;
+`;
+const Reservation_Summary_Total_Text = styled.p``;
+const Reservation_Summary_Total_Num = styled.p``;
 const Reservation_Payment = styled.section`
   position: absolute;
   width: 30%;
@@ -180,6 +213,38 @@ const Reservation_Payment = styled.section`
   right: 30px;
   top: 35%;
   background: white;
+  padding: 25px;
+`;
+const Reservation_Payment_Wrap = styled.section`
+  position: relative;
+  height: 70%;
+`;
+const Reservation_Payment_Btn = styled.input`
+  position: absolute;
+  width: 15px;
+  height: 15px;
+`;
+const Reservation_Payment_Text = styled.p`
+  position: absolute;
+
+  left: 30px;
+  width: 100px;
+  height: 15px;
+`;
+const Reservation_Payment_Bank = styled.select`
+  position: absolute;
+
+  top: 40px;
+  width: 100%;
+  height: 30px;
+  border: 1px solid #cccccc;
+`;
+const Reservation_Payment_Name = styled.input`
+  position: absolute;
+  top: 80px;
+  width: 100%;
+  height: 30px;
+  border: 1px solid #cccccc;
 `;
 const Reservation_Agree = styled.section`
   position: absolute;
@@ -204,8 +269,4 @@ const Reservation_Button = styled.button`
     font-size: 20px;
     line-height: 30px;
   }
-`;
-
-const ProductImg = styled.img`
-  // width: 720px;
 `;
