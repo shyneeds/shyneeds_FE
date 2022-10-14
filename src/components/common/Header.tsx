@@ -12,9 +12,9 @@ function Header() {
 
   return (
     <Container>
-      <BannerWrapper>
+      {/* <BannerWrapper>
         {show ? <HeaderBanner onClose={setShow} /> : null}
-      </BannerWrapper>
+      </BannerWrapper> */}
       <>
         <HeaderNav>
           <Logo>

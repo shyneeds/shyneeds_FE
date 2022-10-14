@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { IoMdHeartEmpty } from 'react-icons/io';
-import { productData } from '../productCard/productData';
+import { productData } from '../../../utils/productData';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -19,7 +19,7 @@ export const GroupProductCarousel = () => {
         <Link to={productData.url} key={productData.id}>
           <CardContainer>
             <ProductWrap key={productData.id}>
-              <ProductImg src={productData.img} alt="product_image" />
+              <ProductImg src={productData.imageUrl} alt="product_image" />
               <ProductText>
                 <Title>{productData.title}</Title>
                 <Content>{productData.content}</Content>

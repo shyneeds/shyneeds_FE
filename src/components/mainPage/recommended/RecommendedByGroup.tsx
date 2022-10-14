@@ -19,7 +19,7 @@ export const RecommendedByGroup = () => {
 };
 
 const Background = styled.div`
-  width: 1920px;
+  width: 100%;
   height: 732px;
   display: flex;
   justify-content: center;
