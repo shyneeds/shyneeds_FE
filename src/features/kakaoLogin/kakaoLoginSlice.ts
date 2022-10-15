@@ -23,19 +23,19 @@ import { REDIRECT_URL } from '../../constants/KAKAO_AUTH_URL';
 export interface LoginState {
   kakaoToken: string;
   userToken: string;
-  refreshToken : string,
+  refreshToken: string;
   expireTime: number;
   authenticated: boolean;
-  userId : number;
+  userId: number;
 }
 
 const initialState: LoginState = {
   kakaoToken: '',
   userToken: '',
-  refreshToken : '',
+  refreshToken: '',
   expireTime: 0,
   authenticated: false,
-  userId : 0,
+  userId: 0,
 };
 
 export const KakaoLoginSlice = createSlice({
@@ -49,15 +49,15 @@ export const KakaoLoginSlice = createSlice({
       state.kakaoToken = action.payload;
       console.log(state.kakaoToken);
     },
-    userLogin: (state, {payload}) => {
-      const { accessToken, userId , refreshToken} = payload;
-      state.userToken = accessToken // 백엔드에서 발급받은 토큰
-      state.refreshToken = refreshToken
-      state.userId = userId
+    userLogin: (state, { payload }) => {
+      const { accessToken, userId, refreshToken } = payload;
+      state.userToken = accessToken; // 백엔드에서 발급받은 토큰
+      state.refreshToken = refreshToken;
+      state.userId = userId;
       // state.expireTime = new Date().getTime() + TOKEN_TIME_OUT; // 만료시간 설정
       state.authenticated = true; // 로그인 상태 확인
       sessionStorage.setItem('accessToken', state.userToken); // 세션에 저장
-      console.log(payload)
+      console.log(payload);
     },
     userLogout: (state, action: PayloadAction<boolean>) => {
       state.authenticated = false;
