@@ -21,6 +21,7 @@ const SignUp = () => {
     handleSubmit,
     getValues,
     setValue,
+    watch,
     formState: { errors },
   } = useForm();
   const onSubmit = (formData: any) => {
@@ -49,6 +50,16 @@ const SignUp = () => {
   };
   const imgRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (watch('phoneNumber').length === 13) {
+      setValue('phoneNumber' , watch('phoneNumber').replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3') )
+    }
+    if (watch('phoneNumber') >= 13) {
+      setValue('phoneNumber', watch('phoneNumber').replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+    }
+  }, [getValues('phoneNumber')]);
+
   return (
     <WrapContainer>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -120,7 +131,7 @@ const SignUp = () => {
         <InputBox>
           <NameStyle>이름</NameStyle>
           <InputStyle
-            placeholder="이름"
+            placeholder="이름을 적어주세요"
             style={{ outline: errors.email ? '2px solid red' : '' }}
             {...register('name', {
               required: true,
@@ -129,6 +140,18 @@ const SignUp = () => {
             })}
           />
           {errors.name && <ErrorMessage>이름을 입력해주세요.</ErrorMessage>}
+        </InputBox>
+        <InputBox>
+          <NameStyle>연락처</NameStyle>
+          <InputStyle
+            placeholder="연락처를 적어주세요"
+            style={{ outline: errors.phoneNumber ? '2px solid red' : '' }}
+            {...register('phoneNumber', {
+              required: true,
+              pattern : /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/,
+            })}
+          />
+          {errors.phoneNumber && <ErrorMessage>번호를 입력해주세요.</ErrorMessage>}
         </InputBox>
         <InputBox>
           <NameStyle>생년월일</NameStyle>
@@ -223,6 +246,7 @@ const WrapContainer = styled.div`
   margin: 0 auto;
   align-items: center;
   margin-top: 50px;
+  margin-bottom: 100px;
 `;
 
 const InputBox = styled.div`

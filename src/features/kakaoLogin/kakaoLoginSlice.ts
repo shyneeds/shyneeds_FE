@@ -63,6 +63,9 @@ export const KakaoLoginSlice = createSlice({
       state.authenticated = false;
       sessionStorage.removeItem('accessToken');
     },
+    isLogin: (state,action : PayloadAction<boolean>)=>{
+      state.authenticated = true;
+    }
   },
   // extraReducers: {
   //   [(KakaoLoginAsync.pending as any)]: (state, action) => {
@@ -78,7 +81,7 @@ export const KakaoLoginSlice = createSlice({
   // },
 });
 
-export const { kakaoToken, userLogin, userLogout } = KakaoLoginSlice.actions;
+export const { kakaoToken, userLogin, userLogout,isLogin } = KakaoLoginSlice.actions;
 export const loginToken = (state: RootState) => state.kakaoLogin.kakaoToken;
 export const authenticated = (state: RootState) =>
   state.kakaoLogin.authenticated;
