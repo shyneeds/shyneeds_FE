@@ -1,6 +1,9 @@
-import React from 'react'
+import React from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { userLogin,loginToken } from '../../features/kakaoLogin/kakaoLoginSlice';
+import {
+  userLogin,
+  loginToken,
+} from '../../features/kakaoLogin/kakaoLoginSlice';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -10,33 +13,29 @@ const LoginRequest = () => {
   const storeUserToken = useAppSelector(loginToken);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const sendToken = async()=>{
+  const sendToken = async () => {
     await axios({
-      url : API_URL.POST.KAKAO_LOGIN,
-      method : "POST",
+      url: API_URL.POST.KAKAO_LOGIN,
+      method: 'POST',
       headers: {
         'Content-type': 'application/x-www-form-urlencoded',
-        'Authorization' : storeUserToken
-    }
-      
-    })
-      .then((res)=>{
-        console.log(res)
-        dispatch(userLogin(res.data.data.accessToken))
-        navigate('/')
-      })
-  }
-    useEffect(()=>{
-      sendToken();
-    },[])
+        Authorization: storeUserToken,
+      },
+    }).then((res) => {
+      console.log(res);
+      dispatch(userLogin(res.data.data));
+      navigate('/');
+    });
+  };
+  useEffect(() => {
+    sendToken();
+  }, []);
 
   return (
     <>
-    <div>
-      통신 테스트
-    </div>
+      <div>통신 테스트</div>
     </>
-  )
-}
+  );
+};
 
-export default LoginRequest
+export default LoginRequest;
