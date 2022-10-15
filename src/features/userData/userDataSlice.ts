@@ -6,8 +6,9 @@ export interface userDataList {
     {
       email: string;
       name: string;
-      birthday: number;
+      birthday: string;
       gender: string;
+      profileImage: string;
     }
   ];
 }
@@ -17,8 +18,9 @@ const initialState: userDataList = {
     {
       email: '',
       name: '',
-      birthday: 0,
+      birthday: '',
       gender: '',
+      profileImage: '',
     },
   ],
 };
@@ -29,6 +31,7 @@ export const userDataSlice = createSlice({
   reducers: {
     email: (state, action: PayloadAction<string>) => {
       state.userInfo[0].email = action.payload;
+      // console.log('이메일:' + state.userInfo[0].email);
     },
     name: (state, action: PayloadAction<string>) => {
       state.userInfo[0].name = action.payload;
@@ -41,5 +44,4 @@ export const userDataEmail = (state: RootState) =>
   state.userData.userInfo[0].email;
 export const userDataName = (state: RootState) =>
   state.userData.userInfo[0].name;
-
 export default userDataSlice.reducer;
