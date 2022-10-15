@@ -57,14 +57,22 @@ export const KakaoLoginSlice = createSlice({
       // state.expireTime = new Date().getTime() + TOKEN_TIME_OUT; // 만료시간 설정
       state.authenticated = true; // 로그인 상태 확인
       sessionStorage.setItem('accessToken', state.userToken); // 세션에 저장
+      sessionStorage.setItem('refreshToken', state.refreshToken); // 세션에 저장
+      sessionStorage.setItem('userId', state.userId+""); // 세션에 저장
       console.log(payload);
     },
     userLogout: (state, action: PayloadAction<boolean>) => {
       state.authenticated = false;
       sessionStorage.removeItem('accessToken');
+      sessionStorage.removeItem('refreshToken');
+      sessionStorage.removeItem('userId');
     },
-    isLogin: (state,action : PayloadAction<boolean>)=>{
+    isLogin: (state, {payload})=>{
       state.authenticated = true;
+      const { accessToken, userId, refreshToken } = payload;
+      state.userToken = accessToken; // 백엔드에서 발급받은 토큰
+      state.refreshToken = refreshToken;
+      state.userId = userId;
     }
   },
   // extraReducers: {
