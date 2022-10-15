@@ -1,13 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Reservation from './Reservation';
 import Writing from './Writing';
 import Modify from './Modify';
 import Withdrawal from './Withdrawal';
 import HelloBox from './HelloBox';
+import axios from 'axios';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
+import { email, name } from '../../features/userData/userDataSlice';
 
 const Mypage = () => {
   const [tab, setTab] = useState<number>(1);
+
+  const [datas, setDatas] = useState<any>([]);
+  const token = useAppSelector(userToken);
+  const userIdValue = useAppSelector(userId);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `http://13.125.151.45:8080/api/my/user/${userIdValue}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      console.log(res);
+      setDatas(res.data.data);
+      dispatch(email(datas.userInfo.email));
+      dispatch(name(datas.userInfo.name));
+    });
+  }, []);
+  console.log(datas);
+  // console.log(datas.userInfo.email);
 
   return (
     <div>
