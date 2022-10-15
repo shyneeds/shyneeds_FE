@@ -14,6 +14,7 @@ import Offers from './pages/offers/Offers';
 import Reservation_Main from './components/reservation/Reservation_Main';
 import { useAppDispatch } from './app/hooks';
 import { isLogin } from './features/kakaoLogin/kakaoLoginSlice';
+import Cart from './pages/cart/Cart';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -36,6 +37,7 @@ function App() {
         <Route path="/LoginRequest" element={<LoginRequest />} />
         <Route path="/offers" element={<Offers />} />
         <Route path="/reservation" element={<Reservation_Main />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </>
   );

@@ -7,7 +7,7 @@ import { userLogout } from '../../../features/kakaoLogin/kakaoLoginSlice';
 export const LogInView = () => {
   return (
     <>
-      <StyleLink to="/">
+      <StyleLink to="/cart">
         <BiCart size="1.7rem" />
         <p>관심상품</p>
       </StyleLink>
@@ -28,7 +28,7 @@ export const LogOutView = () => {
   const dispatch = useAppDispatch();
   return (
     <>
-      <StyleLink to="/">
+      <StyleLink to="/cart">
         <BiCart size="1.7rem" />
         <p>관심상품</p>
       </StyleLink>
