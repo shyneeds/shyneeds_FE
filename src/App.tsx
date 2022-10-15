@@ -12,10 +12,17 @@ import Community from './pages/community/Community';
 import LoginRequest from './components/login/LoginRequest';
 import Offers from './pages/offers/Offers';
 import Reservation_Main from './components/reservation/Reservation_Main';
+import { useAppDispatch } from './app/hooks';
+import { isLogin } from './features/kakaoLogin/kakaoLoginSlice';
 
 function App() {
+  const dispatch = useAppDispatch();
+  const loggedInfo = ()=>{
+    sessionStorage.getItem('accessToken') && dispatch(isLogin(true))
+  }
   return (
     <>
+      {loggedInfo()}
       <Routes>
         <Route path="*" element={<Error />} />
         <Route path="/" element={<Main />} />
