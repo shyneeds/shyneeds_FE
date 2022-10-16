@@ -1,24 +1,23 @@
 import { useState } from 'react';
-import styled from 'styled-components';
-import { HeaderBanner } from './HeaderBanner';
-import { LogInView, LogOutView } from '../../mainPage/userMenu/UserMenu';
-import { useAppSelector } from '../../../app/hooks';
-import { authenticated } from '../../../features/kakaoLogin/kakaoLoginSlice';
 import { Link } from 'react-router-dom';
-import { Navbar } from './Navbar';
+import styled from 'styled-components';
+import { useAppSelector } from '../../../app/hooks';
 import { LAYOUT } from '../../../constants/layout';
+import { authenticated } from '../../../features/kakaoLogin/kakaoLoginSlice';
+import { HeaderBanner } from './HeaderBanner';
+import { Navbar } from './Navbar';
+import { LogInView, LogOutView } from './UserMenu';
 
-function Header() {
-  const [show, setShow] = useState(true);
+const Header = () => {
+  const [isClose, setIsClose] = useState(true);
   const userAuthenticated = useAppSelector(authenticated);
 
   return (
-    <Container>
-      <BannerWrapper>
-        {show && <HeaderBanner onClose={setShow} />}
-      </BannerWrapper>
-      <>
-        <HeaderNav>
+    <>
+      <>{isClose && <HeaderBanner onClose={setIsClose} />}</>
+
+      <Container>
+        <Wrapper>
           <Logo>
             <Link to="/">
               <img
@@ -27,7 +26,7 @@ function Header() {
               />
             </Link>
           </Logo>
-          <SearchBox>
+          <InputBox>
             <img
               src={process.env.PUBLIC_URL + '/icons/search.png'}
               alt="search.png"
@@ -36,61 +35,61 @@ function Header() {
               type="text"
               placeholder="여행 그룹이나 상품을 검색해보세요"
             />
-          </SearchBox>
-          <IconGroup>
+          </InputBox>
+          <UserMenu>
             {userAuthenticated ? <LogOutView /> : <LogInView />}
-          </IconGroup>
-        </HeaderNav>
-        <Navbar />
-      </>
-    </Container>
+          </UserMenu>
+        </Wrapper>
+      </Container>
+      <Navbar />
+    </>
   );
-}
+};
 
 export default Header;
 
-const Container = styled.header`
-  height: 100%;
+const Container = styled.div`
+  width: 1920px;
+  // position: fixed;
 `;
 
-const BannerWrapper = styled.div`
-  position: relative;
-  // display: none;
-`;
-
-const HeaderNav = styled.nav`
+const Wrapper = styled.div`
   width: ${LAYOUT.SIZE.WIDTH};
-  height: 100%;
-  margin: 0 auto;
   display: flex;
+  align-items: center;
+  margin: 0 auto;
 `;
 
 const Logo = styled.div`
-  width: 150px;
-  height: 29px;
-  margin: 25px 10px 25px 0;
+  width: 147px;
+  height: 24px;
+  margin-right: 20px;
 `;
 
-const SearchBox = styled.div`
+const InputBox = styled.div`
   width: 326px;
   height: 48px;
   background-color: #f5f5f5;
-  line-height: 48px;
-  margin: auto 0;
   display: flex;
+  align-items: center;
+  margin: 12px;
+  padding: 12px;
 
   img {
     width: 24px;
     height: 24px;
-    margin: auto 5px;
+    margin-left: 4px;
+    margin-right: 8px;
   }
 
   input {
-    width: 100%;
+    width: 220px;
+    height: 24px;
+    padding: 12px 0;
   }
 `;
 
-const IconGroup = styled.div`
+const UserMenu = styled.div`
   margin-left: auto;
   width: 22rem;
   display: flex;

@@ -41,6 +41,7 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   height: 760px;
+  z-index: -1;
 `;
 
 const Wrapper = styled.div`

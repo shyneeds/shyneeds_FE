@@ -21,16 +21,16 @@ export const Navbar = () => {
     setThemeOpen(!themeOpen);
   };
   return (
-    <>
+    <Container>
       <Wrapper>
         <Nav>
           <Ul>
             <Li onMouseEnter={GroupToggle} onMouseLeave={GroupToggle}>
               <Link to="">
                 그룹별 여행
-                <SubWrapper>
-                  <SubNav>
-                    {groupOpen && (
+                {groupOpen && (
+                  <SubWrapper>
+                    <SubNav>
                       <SubUl>
                         <SubLi>
                           <Link to="">5070끼리</Link>
@@ -51,17 +51,17 @@ export const Navbar = () => {
                           <Link to="">누구든지</Link>
                         </SubLi>
                       </SubUl>
-                    )}
-                  </SubNav>
-                </SubWrapper>
+                    </SubNav>
+                  </SubWrapper>
+                )}
               </Link>
             </Li>
             <Li onMouseEnter={RegionToggle} onMouseLeave={RegionToggle}>
               <Link to="">
                 지역별 여행
-                <SubWrapper>
-                  <SubNav>
-                    {regionOpen && (
+                {regionOpen && (
+                  <SubWrapper>
+                    <SubNav>
                       <SubUl>
                         <SubLi>
                           <Link to="">동남아/태평양</Link>
@@ -82,17 +82,17 @@ export const Navbar = () => {
                           <Link to="">대만/중국/일본</Link>
                         </SubLi>
                       </SubUl>
-                    )}
-                  </SubNav>
-                </SubWrapper>
+                    </SubNav>
+                  </SubWrapper>
+                )}
               </Link>
             </Li>
             <Li onMouseEnter={ThemeToggle} onMouseLeave={ThemeToggle}>
               <Link to="">
                 테마별 여행
-                <SubWrapper>
-                  <SubNav>
-                    {themeOpen && (
+                {themeOpen && (
+                  <SubWrapper>
+                    <SubNav>
                       <SubUl>
                         <SubLi>
                           <Link to="">문화탐방</Link>
@@ -113,9 +113,9 @@ export const Navbar = () => {
                           <Link to="">볼론투어</Link>
                         </SubLi>
                       </SubUl>
-                    )}
-                  </SubNav>
-                </SubWrapper>
+                    </SubNav>
+                  </SubWrapper>
+                )}
               </Link>
             </Li>
             <Li>
@@ -124,15 +124,18 @@ export const Navbar = () => {
           </Ul>
         </Nav>
       </Wrapper>
-      {isOpen && <BG></BG>}
-    </>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  width: 100%;
+  position: relative;
+`;
 
 const Wrapper = styled.div`
   height: 56px;
   border-bottom: 0.7px solid #ddd;
-  position: relative;
 `;
 
 const Nav = styled.nav`
@@ -160,9 +163,12 @@ const Li = styled.li`
 `;
 
 const SubWrapper = styled.div`
+  width: 100%;
   position: absolute;
   top: 56px;
+  left: 0;
   border-bottom: 0.7px solid #ddd;
+  background-color: #fff;
 `;
 
 const SubNav = styled.nav`
@@ -175,7 +181,7 @@ const SubUl = styled.ul`
   height: 100%;
   display: flex;
   align-items: center;
-  gap: 6.2rem;
+  gap: 5rem;
 `;
 
 const SubLi = styled.li`
@@ -187,9 +193,4 @@ const SubLi = styled.li`
     margin-top: 1.45rem;
     color: #4286f4;
   }
-`;
-
-const BG = styled.div`
-  height: 64px;
-  background-color: #fff;
 `;
