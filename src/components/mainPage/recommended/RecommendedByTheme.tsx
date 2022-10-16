@@ -23,21 +23,19 @@ const settings = {
 export const RecommendedByTheme = () => {
   const dispatch = useAppDispatch();
   const products = useAppSelector(themeData);
-  const getThemeData: any = () => {
-    axios
-      .post<ResponseType>(API_URL.POST.MAIN, {
+  const getThemeData: any = async () => {
+    try {
+      const res = await axios.post<ResponseType>(API_URL.POST.MAIN, {
         categoryList: ['테마별상품'],
-      })
-      .then((res) => {
-        const mainData = res.data.data;
-        const themeData = mainData.mainCategoryPackageList.테마별상품;
-        console.log('완료', themeData);
-        dispatch(getThemeProductData(themeData));
-        return themeData;
-      })
-      .catch(() => {
-        console.log('error');
       });
+      const mainData = res.data.data;
+      const themeData = mainData.mainCategoryPackageList.테마별상품;
+      console.log('완료', themeData);
+      dispatch(getThemeProductData(themeData));
+      return themeData;
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
