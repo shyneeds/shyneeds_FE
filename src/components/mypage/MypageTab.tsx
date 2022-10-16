@@ -4,6 +4,7 @@ import Reservation from './Reservation';
 import Writing from './Writing';
 import Modify from './Modify';
 import Withdrawal from './Withdrawal';
+import HelloBox from './HelloBox';
 
 const Mypage = () => {
   const [tab, setTab] = useState<number>(1);
@@ -42,21 +43,7 @@ const Mypage = () => {
           <ContentsMain>
             {tab === 1 || tab === 2 ? (
               <UserInfo>
-                <UserImg>
-                  <img
-                    src="https://www.gotogether-s.com/common/img/default_profile.png"
-                    alt=""
-                    style={{ width: 100 }}
-                  />
-                  <div>
-                    <h3>님 안녕하세요 ˙ᵕ˙</h3>
-                    <p>누적 결제금액 : 원</p>
-                  </div>
-                </UserImg>
-                <UserPoint>
-                  <p>포인트</p>
-                  <span>0</span>
-                </UserPoint>
+                <HelloBox />
               </UserInfo>
             ) : null}
             <ContentsResult>
@@ -120,53 +107,11 @@ const ContentsMain = styled.div`
   float: right;
 `;
 const UserInfo = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
   margin: 0 0 70px;
   padding: 50px 0 50px 40px;
   border: 1px solid #e9ecef;
 `;
-const UserImg = styled.div`
-  display: flex;
-  align-items: center;
-  width: 70%;
 
-  > img {
-    margin: 0 20px 0 0;
-  }
-  > div > h3 {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin: 0 0 10px 0;
-  }
-`;
-const UserPoint = styled.div`
-  position: relative;
-  text-align: center;
-  width: 30%;
-  > p {
-    margin: 0 0 10px 0;
-  }
-  > span {
-    font-size: 2.5rem;
-  }
-  > p,
-  > span {
-    font-weight: bold;
-  }
-  &:before {
-    content: '';
-    display: block;
-    width: 1px;
-    height: 100px;
-    position: absolute;
-    background: rgb(229, 229, 229);
-    left: 0px;
-    top: 50%;
-    margin-top: -50px;
-  }
-`;
 const ContentsResult = styled.div`
   > div > h2 {
     font-size: 1.4rem;

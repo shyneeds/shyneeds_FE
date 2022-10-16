@@ -5,6 +5,8 @@ import userReservationSliceReducer from '../features/userReservation/userReserva
 import regionProductReducer from '../features/main/regionSlice';
 import themeProductReducer from '../features/main/themeSlice';
 import groupProductReducer from '../features/main/groupSlice';
+import userDataSliceReducer from '../features/userData/userDataSlice';
+
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
@@ -13,6 +15,7 @@ export const store = configureStore({
     regionData: regionProductReducer,
     themeData: themeProductReducer,
     groupData: groupProductReducer,
+    userData: userDataSliceReducer,
   },
 });
 

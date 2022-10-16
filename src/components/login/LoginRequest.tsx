@@ -23,7 +23,7 @@ const LoginRequest = () => {
       },
     }).then((res) => {
       console.log(res);
-      dispatch(userLogin(res.data.data.accessToken));
+      dispatch(userLogin(res.data.data));
       navigate('/');
     });
   };
