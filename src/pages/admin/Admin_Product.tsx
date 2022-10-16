@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { postAdminProductData } from '../../components/admin/Admin_Type';
+import { url } from 'inspector';
 
 const registerInfo: postAdminProductData = {
   title: '그리스2',
@@ -25,51 +26,68 @@ export default function Admin_Product() {
   const [title, setTitle] = useState<string>('');
   const [summary, setSummary] = useState<string>('');
   const [price, setPrice] = useState<string>('0');
-  let file1: any = useRef();
-  let file2: any = useRef();
+  const [mainImage, setMainImage] = useState<any>();
+  const [detailImage, setDetailImage] = useState<any>();
+  const [mainImageUrl, setMainImageUrl] = useState<any>('');
+  const [detailImageUrl, setDetailImageUrl] = useState<any>('');
 
-  const onChangeImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [inputMainImage, setInputMainImage] = useState<boolean>(false);
+  const [inputDetailImage, setInputDetailImage] = useState<boolean>(false);
+
+  const onChangeMainImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const reader = new FileReader();
     e.preventDefault();
 
     if (e.target.files) {
-      file1 = e.target.files[0];
-      console.log(file1);
+      setMainImage(e.target.files[0]);
+      setInputMainImage(true);
+      reader.readAsDataURL(e.target.files[0]);
     }
+    reader.onloadend = () => {
+      const resultImage = reader.result;
+      setMainImageUrl(resultImage);
+    };
   };
-  const onChangeImg2 = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeDetailImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const reader = new FileReader();
+
     e.preventDefault();
 
     if (e.target.files) {
-      file2 = e.target.files[0];
-      console.log(file2);
+      setDetailImage(e.target.files[0]);
+      setInputDetailImage(true);
+      reader.readAsDataURL(e.target.files[0]);
     }
+    reader.onloadend = () => {
+      const resultImage = reader.result;
+      setDetailImageUrl(resultImage);
+    };
   };
+  // const onSubmit = (e: any) => {
+  //   const formData = new FormData();
 
-  const onSubmit = (e: any) => {
-    const formData = new FormData();
+  //   e.preventDefault();
 
-    e.preventDefault();
+  //   formData.append('description', file1);
+  //   formData.append('main', file2);
+  //   formData.append('registerInfo', JSON.stringify(registerInfo));
 
-    formData.append('description', file1);
-    formData.append('main', file2);
-    formData.append('registerInfo', JSON.stringify(registerInfo));
-
-    axios({
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Access-Control-Allow-Origin': '*',
-      },
-      url: 'http://13.125.151.45:8080/api/package/admin/register',
-      method: 'post',
-      data: formData,
-    })
-      .then((response) => {
-        console.log({ response });
-      })
-      .catch((error) => {
-        console.log({ error });
-      });
-  };
+  //   axios({
+  //     headers: {
+  //       'Content-Type': 'multipart/form-data',
+  //       'Access-Control-Allow-Origin': '*',
+  //     },
+  //     url: 'http://13.125.151.45:8080/api/package/admin/register',
+  //     method: 'post',
+  //     data: formData,
+  //   })
+  //     .then((response) => {
+  //       console.log({ response });
+  //     })
+  //     .catch((error) => {
+  //       console.log({ error });
+  //     });
+  // };
 
   return (
     <Wrap>
@@ -82,7 +100,9 @@ export default function Admin_Product() {
           <button>저장</button>
         </Main_Header>
         <Admin_Main>
-          <Admin_Main_Preview></Admin_Main_Preview>
+          <Admin_Main_Preview>
+            <img src={inputDetailImage ? detailImageUrl : null}></img>
+          </Admin_Main_Preview>
           <Admin_Main_Option>
             <Admin_Main_Option_Text>상품설정</Admin_Main_Option_Text>
             <Admin_Main_Option_Wrap>
@@ -108,15 +128,39 @@ export default function Admin_Product() {
                 <p>이미지 추가</p>
                 <Admin_Main_Option_Image_Wrap>
                   <Images_Wrap>
-                    <img
-                      src={process.env.PUBLIC_URL + '/icons/add-img.png'}
-                    ></img>
+                    <input
+                      type="file"
+                      id="main-image"
+                      hidden
+                      onChange={onChangeMainImage}
+                    />
+                    <label htmlFor="main-image">
+                      <img
+                        src={
+                          inputMainImage
+                            ? mainImageUrl
+                            : process.env.PUBLIC_URL + '/icons/add-img.png'
+                        }
+                      />
+                    </label>
                     <p>대표이미지 추가</p>
                   </Images_Wrap>
                   <Images_Wrap>
-                    <img
-                      src={process.env.PUBLIC_URL + '/icons/add-img.png'}
-                    ></img>
+                    <input
+                      type="file"
+                      id="detail-image"
+                      hidden
+                      onChange={onChangeDetailImage}
+                    />
+                    <label htmlFor="detail-image">
+                      <img
+                        src={
+                          inputDetailImage
+                            ? detailImageUrl
+                            : process.env.PUBLIC_URL + '/icons/add-img.png'
+                        }
+                      />
+                    </label>
                     <p>상세이미지 추가</p>
                   </Images_Wrap>
                 </Admin_Main_Option_Image_Wrap>
@@ -146,6 +190,7 @@ export default function Admin_Product() {
 const Wrap = styled.section`
   width: 100vw;
   height: 100vh;
+  overflow-x: hidden;
 `;
 const Header = styled.section`
   background: black;
@@ -191,18 +236,22 @@ const Main_Header = styled.div`
 `;
 const Admin_Main = styled.section`
   width: 100%;
-  height: 93%;
   display: flex;
   flex-direction: row;
 `;
 const Admin_Main_Preview = styled.section`
+  display: flex;
+  justify-content: center;
   width: 80%;
-  height: 100%;
-  border-right: 1px solid rgba(33, 33, 33, 0.15);
+  border-right: 1px solid #eeeeee;
+  img {
+    overflow-y: auto;
+    width: 30%;
+  }
 `;
 const Admin_Main_Option = styled.section`
   width: 20%;
-  height: 100%;
+  height: 900px;
   padding: 20px;
 `;
 const Admin_Main_Option_Text = styled.p`
@@ -293,15 +342,23 @@ const Images_Wrap = styled.section`
   height: 100px;
   top: 20px;
   left: 20px;
-  cursor: pointer;
-  img {
+  p {
+    bottom: 10px;
+  }
+  input {
+    width: 70%;
+    height: 70%;
+  }
+  label {
     position: absolute;
     width: 70%;
     height: 70%;
     left: 10px;
-  }
-  p {
-    bottom: 10px;
+    img {
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
   }
 `;
 const Admin_Main_Option_Options = styled.section`
