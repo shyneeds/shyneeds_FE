@@ -137,6 +137,7 @@ const ProductWrap = styled.section`
 const Product_Img = styled.img`
   width: 100%;
   heigth: 100%;
+  object-fit: cover;
 `;
 const InfoWrap = styled.div`
   display: flex;
