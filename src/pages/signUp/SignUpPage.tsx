@@ -1,16 +1,16 @@
-import React from 'react'
-import SignUp from '../../components/signUp/SignUp'
-import Header from '../../components/common/Header';
+import React from 'react';
+import Header from '../../components/common/header/Header';
+import SignUp from '../../components/signUp/SignUp';
 import Footer from '../../components/common/Footer';
 
 function SignUpPage() {
   return (
     <>
-    <Header/>
-    <SignUp/>
-    <Footer/>
+      <Header />
+      <SignUp />
+      <Footer />
     </>
-  )
+  );
 }
 
-export default SignUpPage
+export default SignUpPage;

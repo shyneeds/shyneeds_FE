@@ -1,25 +1,28 @@
-import React,{useEffect} from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Footer from '../../components/common/Footer';
-import Header from '../../components/common/Header';
+import Header from '../common/header/Header';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { API_URL } from '../../constants/API_URL';
 import { KAKAO_AUTH_URL } from '../../constants/KAKAO_AUTH_URL';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { userLogin,loginToken } from '../../features/kakaoLogin/kakaoLoginSlice';
+import {
+  userLogin,
+  loginToken,
+} from '../../features/kakaoLogin/kakaoLoginSlice';
 import axios from 'axios';
-const {Kakao} = window
+const { Kakao } = window;
 
 function Login() {
   const [cookies, setCookie] = useCookies(['accessToken']);
-  useEffect(()=>{
-    if(!Kakao.isInitialized()){
+  useEffect(() => {
+    if (!Kakao.isInitialized()) {
       Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
     }
-  },[])
+  }, []);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const {
@@ -27,9 +30,9 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  
+
   const onSubmit = (formData: any) => {
-    console.log(formData)
+    console.log(formData);
     axios({
       headers: {
         'Content-Type': 'application/json',
@@ -41,60 +44,60 @@ function Login() {
     })
       .then((response) => {
         console.log({ response });
-        dispatch(userLogin(response.data.data))
+        dispatch(userLogin(response.data.data));
         // setCookie('accessToken',response.data.data.accessToken)
-        navigate('/')
+        navigate('/');
       })
       .catch((error) => {
         console.log({ error });
       });
-  }
+  };
 
   return (
     <>
       <Header />
       <Wrap>
-        <Kakao_Login >
+        <Kakao_Login>
           <h1>간편 로그인</h1>
           <a href={KAKAO_AUTH_URL}>
-          <img
-            src={process.env.PUBLIC_URL + '/icons/ic-kakao-btn.svg'}
-            alt=""
-          />
+            <img
+              src={process.env.PUBLIC_URL + '/icons/ic-kakao-btn.svg'}
+              alt=""
+            />
           </a>
         </Kakao_Login>
         <form onSubmit={handleSubmit(onSubmit)}>
-        <Email_Area>
-          <h1>이메일 로그인</h1>
-          <p>이메일</p>
-          <InputStyle
-            type="text"
-            placeholder="이메일"
-            style={{
-              outline: errors.email ? '2px solid red' : '',
-            }}
-            {...register('email', { required: true, pattern: /^\S+@\S+$/i })}
-          />
-          {errors.email && <ErrorMessage>이메일이 일치하지 않습니다.</ErrorMessage>}
-        </Email_Area>
-        <Pw_Area>
-          <p>비밀번호</p>
-          <InputStyle
-            type="password"
-            placeholder="비밀번호"
-            {...register('password', {
-              required: true
-            })}
-          />
-          {errors.password && (
-            <ErrorMessage>
-              비밀번호가 일치하지 않습니다.
-            </ErrorMessage>
-          )}
-        </Pw_Area>
-        <LogIn_Area>
-          <button>로그인</button>
-        </LogIn_Area>
+          <Email_Area>
+            <h1>이메일 로그인</h1>
+            <p>이메일</p>
+            <InputStyle
+              type="text"
+              placeholder="이메일"
+              style={{
+                outline: errors.email ? '2px solid red' : '',
+              }}
+              {...register('email', { required: true, pattern: /^\S+@\S+$/i })}
+            />
+            {errors.email && (
+              <ErrorMessage>이메일이 일치하지 않습니다.</ErrorMessage>
+            )}
+          </Email_Area>
+          <Pw_Area>
+            <p>비밀번호</p>
+            <InputStyle
+              type="password"
+              placeholder="비밀번호"
+              {...register('password', {
+                required: true,
+              })}
+            />
+            {errors.password && (
+              <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
+            )}
+          </Pw_Area>
+          <LogIn_Area>
+            <button>로그인</button>
+          </LogIn_Area>
         </form>
         <P_Group>
           <a href="">아이디/비밀번호 찾기</a>
@@ -290,7 +293,6 @@ const BookingCheck = styled.section`
   }
 `;
 
-
 const InputStyle = styled.input`
   height: 50px;
   width: 320px;
@@ -298,7 +300,7 @@ const InputStyle = styled.input`
   font-weight: 500px;
   border-radius: 8px;
   padding-left: 20px;
-  margin-top : 10px;
+  margin-top: 10px;
   margin-bottom: 20px;
   border: 1px solid #cccccc;
   &:focus {
@@ -312,6 +314,6 @@ const ErrorMessage = styled.p`
   line-height: 14px;
   color: #ea4335;
   margin-top: -10px;
-  padding-left : 135px;
+  padding-left: 135px;
   padding-bottom: 20px;
 `;
