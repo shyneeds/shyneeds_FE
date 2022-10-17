@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { LAYOUT } from '../../../constants/layout';
-import { GroupCarousel } from './GroupCarousel';
+import { GroupTabCarousel } from './GroupTabCarousel';
 import { GroupProductCarousel } from './GroupProductCarousel';
 
 export const RecommendedByGroup = () => {
@@ -8,7 +8,7 @@ export const RecommendedByGroup = () => {
     <Background>
       <h1>추천 그룹 여행</h1>
       <Container>
-        <GroupCarousel />
+        <GroupTabCarousel />
         <ProductContainer>
           <h2>이런 그룹 여행은 어떠세요?</h2>
           <GroupProductCarousel />
@@ -19,7 +19,7 @@ export const RecommendedByGroup = () => {
 };
 
 const Background = styled.div`
-  width: 1920px;
+  width: 100%;
   height: 732px;
   display: flex;
   justify-content: center;
