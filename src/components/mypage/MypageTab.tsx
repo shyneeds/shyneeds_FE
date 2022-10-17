@@ -12,8 +12,9 @@ import { email, name } from '../../features/userData/userDataSlice';
 
 const Mypage = () => {
   const [tab, setTab] = useState<number>(1);
+  // const [datas, setDatas] = useState<any>([]);
+  // const [booking, setBooking] = useState<any>([]);
 
-  const [datas, setDatas] = useState<any>([]);
   const token = useAppSelector(userToken);
   const userIdValue = useAppSelector(userId);
   const dispatch = useAppDispatch();
@@ -26,14 +27,28 @@ const Mypage = () => {
         Authorization: `Bearer ${token}`,
       },
     }).then((res) => {
-      console.log(res);
-      setDatas(res.data.data);
-      dispatch(email(datas.userInfo.email));
-      dispatch(name(datas.userInfo.name));
+      console.log(res.data.data.userInfo.name);
+      // setDatas(res.data.data);
+      // dispatch(email(datas.userInfo.email));
+
+      dispatch(name(res.data.data.userInfo.name));
     });
   }, []);
-  console.log(datas);
-  // console.log(datas.userInfo.email);
+  // useEffect(() => {
+  //   axios({
+  //     method: 'get',
+  //     url: `http://13.125.151.45:8080/api/reservation/user/${userIdValue}`,
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   }).then((res) => {
+  //     console.log(res);
+  //     setBooking(res);
+  //     // dispatch(email(datas.userInfo.email));
+  //     // dispatch(name(datas.userInfo.name));
+  //   });
+  // }, []);
+  // console.log(booking);
 
   return (
     <div>
