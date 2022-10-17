@@ -30,7 +30,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/admin" element={<Admin_Main />} />
         <Route path="/admin/product" element={<Admin_Product />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/mypage" element={<MyPage popup={false} />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/LoginResult" element={<LoginResult />} />
         <Route path="/community" element={<Community />} />

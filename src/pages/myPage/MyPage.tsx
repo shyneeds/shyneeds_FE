@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/header/Header';
-import MypageTab from '../../components/mypage/MypageTab';
+import MypageTab, { PropsType } from '../../components/mypage/MypageTab';
 import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
 import { email } from '../../features/userData/userDataSlice';
 
-const MyPage = () => {
+const MyPage = ({ popup }: { popup: PropsType['popup'] }) => {
   const [datas, setDatas] = useState<any>([]);
   const Token = useAppSelector(userToken);
   const UserId = useAppSelector(userId);
@@ -37,7 +37,7 @@ const MyPage = () => {
   return (
     <div>
       <Header />
-      <MypageTab />
+      <MypageTab popup={popup} />
       <Footer />
     </div>
   );
