@@ -13,6 +13,10 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   body{
+    margin: 0 auto;
+    overflow-x: hidden;
+    max-width: 1920px;
+    min-width: 1240px;
     background-color: #ffffff;
     font-family: 'Pretendard-Regular', sans-serif;
   }
