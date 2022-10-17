@@ -32,9 +32,9 @@ function App() {
         <Route path="/admin/product" element={<Admin_Product />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/LoginResult" element={<LoginResult />} />
+        <Route path="/loginResult" element={<LoginResult />} />
         <Route path="/community" element={<Community />} />
-        <Route path="/LoginRequest" element={<LoginRequest />} />
+        <Route path="/loginRequest" element={<LoginRequest />} />
         <Route path="/offers" element={<Offers />} />
         <Route path="/reservation" element={<Reservation_Main />} />
         <Route path="/cart" element={<Cart />} />

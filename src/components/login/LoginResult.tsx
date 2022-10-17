@@ -29,7 +29,7 @@ const LoginResult = () => {
     }).then((res) => {
       console.log(res);
       dispatch(kakaoToken(res.data.access_token));
-      navigate('/testLoginRequest');
+      navigate('/LoginRequest');
     });
   };
   useEffect(() => {
