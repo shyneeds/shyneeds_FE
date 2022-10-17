@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import { KakaoTalkBanner } from './KakaoTalkBanner';
-import { RecentStorage } from './RecentStorage';
+import { WatchedProducts } from './WatchedProducts';
 import { TopBtn } from './TopBtn';
 
 export const SideBar = () => {
   return (
     <BarContainer>
-      <RecentStorage />
+      <WatchedProducts />
       <KakaoTalkBanner />
       <TopBtn />
     </BarContainer>
@@ -16,10 +16,9 @@ export const SideBar = () => {
 const BarContainer = styled.div`
   position: fixed;
   top: 30rem;
-  right: 7rem;
-  background-color: #999;
+  right: 3rem;
   width: 100px;
-  z-index: 99999;
+  z-index: 9999999999;
   display: flex;
   align-items: center;
   justify-content: center;
