@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Reservation from './Reservation';
 import Writing from './Writing';
@@ -10,8 +10,14 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
 import { email, name } from '../../features/userData/userDataSlice';
 
-const Mypage = () => {
+export interface PropsType {
+  popup: boolean;
+}
+
+const Mypage = (props: PropsType) => {
   const [tab, setTab] = useState<number>(1);
+  const [popup, setPopup] = useState<PropsType['popup']>(false);
+  // const [popup, setPopup] = useState<boolean>(false);
   // const [datas, setDatas] = useState<any>([]);
   // const [booking, setBooking] = useState<any>([]);
 
@@ -76,7 +82,7 @@ const Mypage = () => {
             </p>
             <p
               className={tab === 4 ? 'active' : undefined}
-              onClick={() => setTab(4)}
+              onClick={() => setPopup(true)}
             >
               회원탈퇴
             </p>
@@ -91,7 +97,9 @@ const Mypage = () => {
               {tab === 1 && <Reservation />}
               {tab === 2 && <Writing />}
               {tab === 3 && <Modify />}
-              {tab === 4 && <Withdrawal />}
+              {/* {tab === 4 && <Withdrawal />} */}
+              {/* {popup === true && <Withdrawal (props:propsType)setPopup={setPopup}/>} */}
+              {popup === true && <Withdrawal {...popup} />}
             </ContentsResult>
           </ContentsMain>
         </Contents>
