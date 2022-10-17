@@ -2,25 +2,20 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { postAdminProductData } from '../../components/admin/Admin_Type';
-import { url } from 'inspector';
+import Modal from '../../components/modal/Modal';
 
-const registerInfo: postAdminProductData = {
-  title: '그리스2',
-  categoryIds: [1, 2, 3],
-  subCategoryIds: [4, 7, 13, 15],
-  thirdCategoryIds: [14],
-  price: '1,000,000',
-  summary:
-    '9월 대한항공 전세기 직항 이용\n 산토리니 특급 2박, 특급호텔 총 7박\n 모든 것이 포함된 풀패키지 여행',
-  requiredOptionName: '출발일',
-  requiredOptionValues: '2022.12.02(금)출발~2022.12.29(목)도착',
-  optionalName: '싱글차지',
-  optionalValues: '1인 싱글룸 사용시 추가',
-  flightInfo: '대한항공 전세기 직항',
-  soldoutFlg: false,
-  dispFlg: true,
-  searchKeyword: ['여자끼리'],
-};
+// const registerInfo: postAdminProductData = {
+//   title: '호주2',
+//   categoryIds: [1, 2, 3],
+//   subCategoryIds: [2, 4, 12, 13, 15],
+//   thirdCategoryIds: [11, 14],
+//   price: '2,390,000',
+//   summary:
+//     '아시아와 유럽을 잇는 나라 터키 일주 16일\n 아름다운 케코바 섬 보트투어 까지\n 좀 더 촘촘히, 모든 것이 포함된 풀패키지 여행',
+//   soldoutFlg: false,
+//   dispFlg: true,
+//   searchKeyword: ['호주'],
+// };
 
 export default function Admin_Product() {
   const [title, setTitle] = useState<string>('');
@@ -33,6 +28,7 @@ export default function Admin_Product() {
 
   const [inputMainImage, setInputMainImage] = useState<boolean>(false);
   const [inputDetailImage, setInputDetailImage] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const onChangeMainImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
@@ -166,7 +162,18 @@ export default function Admin_Product() {
                 </Admin_Main_Option_Image_Wrap>
               </Admin_Main_Option_Image>
               <Admin_Main_Option_Options>
-                <p>옵션</p>
+                <OptionText>옵션</OptionText>
+                <OptionButton onClick={() => setIsOpen(true)}>
+                  옵션 추가히기
+                </OptionButton>
+                {isOpen && (
+                  <Modal
+                    open={isOpen}
+                    onClose={() => {
+                      setIsOpen(false);
+                    }}
+                  />
+                )}
                 <Admin_Main_Option_Options_Wrap></Admin_Main_Option_Options_Wrap>
               </Admin_Main_Option_Options>
               <Admin_Main_Option_Category>
@@ -364,17 +371,29 @@ const Images_Wrap = styled.section`
 const Admin_Main_Option_Options = styled.section`
   position: relative;
   width: 100%;
-  height: 15%;
+  height: 20%;
   padding: 10px;
-  p {
-    position: absolute;
-    font-family: 'Pretendard';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    line-height: 14px;
-    color: #666666;
-  }
+`;
+const OptionText = styled.p`
+  position: absolute;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  color: #666666;
+`;
+const OptionButton = styled.button`
+  position: absolute;
+  top: 50px;
+  // left: 50px;
+  background: #4286f4;
+  border-radius: 8px;
+  width: 250px;
+  height: 60px;
+  color: white;
+  cursor: pointer;
+  z-index: 1;
 `;
 const Admin_Main_Option_Options_Wrap = styled.section`
   position: absolute;
