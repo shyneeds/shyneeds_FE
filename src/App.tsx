@@ -18,9 +18,9 @@ import Cart from './pages/cart/Cart';
 
 function App() {
   const dispatch = useAppDispatch();
-  const loggedInfo = ()=>{
-    sessionStorage.getItem('accessToken') && dispatch(isLogin(sessionStorage))
-  }
+  const loggedInfo = () => {
+    sessionStorage.getItem('accessToken') && dispatch(isLogin(sessionStorage));
+  };
   return (
     <>
       {loggedInfo()}
