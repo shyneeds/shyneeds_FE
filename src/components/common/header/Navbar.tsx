@@ -434,7 +434,7 @@ const SubUl_second = styled.ul`
 
 const SubLi_first = styled.li`
   color: #222222;
-
+  
   &::after {
     &:hover {
       border-bottom: 2px solid #000000;
@@ -442,7 +442,7 @@ const SubLi_first = styled.li`
       padding-bottom: 0.2rem;
       color: #000000;
       width: 50%;
-    }
+}
   }
 `;
 

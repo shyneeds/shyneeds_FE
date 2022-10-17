@@ -112,6 +112,7 @@ const ProductWrap = styled.div`
     transition: all 0.15s ease-in;
     cursor: pointer;
   }
+  
   .wish-icon {
     position: absolute;
     top: 10px;
