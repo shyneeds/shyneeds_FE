@@ -6,6 +6,8 @@ import regionProductReducer from '../features/main/regionSlice';
 import themeProductReducer from '../features/main/themeSlice';
 import groupProductReducer from '../features/main/groupSlice';
 import userDataSliceReducer from '../features/userData/userDataSlice';
+import pageReducer from '../features/page/page'
+
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +18,7 @@ export const store = configureStore({
     themeData: themeProductReducer,
     groupData: groupProductReducer,
     userData: userDataSliceReducer,
+    page : pageReducer
   },
 });
 
