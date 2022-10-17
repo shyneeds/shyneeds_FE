@@ -65,7 +65,7 @@ export const Navbar = () => {
               <Link to="">
                 지역별 여행
                 {regionOpen && (
-                  <SubWrapper_region>
+                  <SubWrapper>
                     <SubNav_second>
                       <SubUl_first>
                         <SubBox>
@@ -200,7 +200,7 @@ export const Navbar = () => {
                         </SubBox>
                       </SubUl_first>
                     </SubNav_second>
-                  </SubWrapper_region>
+                  </SubWrapper>
                 )}
               </Link>
             </TopLi>
@@ -226,7 +226,9 @@ export const Navbar = () => {
 
                         <SubBox>
                           <SubLi_first>
-                            <Link to="">골프여행</Link>
+                            <Link to="">
+                              <p>골프여행</p>
+                            </Link>
                           </SubLi_first>
 
                           <SubBox_second>
@@ -394,17 +396,7 @@ const SubWrapper = styled.div`
   background-color: #fff;
 `;
 
-const SubWrapper_region = styled.div`
-  width: 100%;
-  height: 214px;
-  position: absolute;
-  top: 56px;
-  left: -2.5rem;
-  border-bottom: 0.7px solid #ddd;
-  background-color: #fff;
-`;
-
-const SubWrapper_theme = styled(SubWrapper_region)`
+const SubWrapper_theme = styled(SubWrapper)`
   height: 316px;
 `;
 
@@ -417,45 +409,40 @@ const SubNav = styled.nav`
 const SubNav_second = styled.div`
   max-width: ${LAYOUT.SIZE.WIDTH};
   margin: 0 auto;
-  padding: 40px;
 `;
 
 const SubBox = styled.div`
-  height: 134px;
+  width: 450px;
 `;
 
-const SubBox_second = styled.div`
-  width: 100%;
-  position: absolute;
-  top: 0px;
-  left: 570px;
-`;
+const SubBox_second = styled.div``;
 
 const SubUl_first = styled.ul`
   height: 100%;
   display: flex;
-  align-items: center;
+  padding: 20px 0;
   gap: 7rem;
 `;
 
 const SubUl_first_theme = styled(SubUl_first)`
-  gap: 9rem;
+  gap: 4rem;
 `;
 
 const SubUl_second = styled.ul`
-  padding: 4px;
-  position: absolute;
-  top: 72px;
+  padding: 4px 0 4px 0;
 `;
 
 const SubLi_first = styled.li`
   color: #222222;
 
-  &:hover {
-    border-bottom: 2px solid #222222;
-    font-weight: border;
-    padding-bottom: 0.2rem;
-    color: #000000;
+  &::after {
+    &:hover {
+      border-bottom: 2px solid #000000;
+      font-weight: bolder;
+      padding-bottom: 0.2rem;
+      color: #000000;
+      width: 50%;
+    }
   }
 `;
 
@@ -463,7 +450,8 @@ const SubLi_second = styled.li`
   display: flex;
   font-size: 14px;
   color: #666666;
-  padding: 8px 0;
+  padding: 0 0 4px 0;
+  margin-top: 16px;
 
   &:hover {
     color: #000000;
