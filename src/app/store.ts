@@ -4,6 +4,7 @@ import kakaoLoginSliceReducer from '../features/kakaoLogin/kakaoLoginSlice';
 import userReservationSliceReducer from '../features/userReservation/userReservationSlice';
 import userDataSliceReducer from '../features/userData/userDataSlice';
 import testSliceReducer from '../features/test/test';
+import pageReducer from '../features/page/page'
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     userReservation: userReservationSliceReducer,
     userData: userDataSliceReducer,
     testResponse: testSliceReducer,
+    page : pageReducer
   },
 });
 
