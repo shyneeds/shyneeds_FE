@@ -49,7 +49,7 @@ const Header = () => {
 export default Header;
 
 const Container = styled.div`
-  width: 1920px;
+  // width: 1920px;
   // position: fixed;
 `;
 
