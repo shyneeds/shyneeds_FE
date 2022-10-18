@@ -14,6 +14,7 @@ const GlobalStyle = createGlobalStyle`
   }
   body{
     margin: 0 auto;
+    overflow-x: hidden;
     max-width: 1920px;
     min-width: 1240px;
     background-color: #ffffff;

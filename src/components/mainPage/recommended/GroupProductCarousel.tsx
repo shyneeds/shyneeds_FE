@@ -31,7 +31,6 @@ export const GroupProductCarousel = () => {
       .then((res) => {
         const mainData = res.data.data;
         const groupData = mainData.mainCategoryPackageList.그룹별상품;
-        console.log('완료', groupData);
         dispatch(getGroupProductData(groupData));
         return groupData;
       })
@@ -101,11 +100,16 @@ const ProductWrap = styled.div`
   border-radius: 10px;
   border: 1px solid #ccc;
   position: relative;
+  overflow: hidden;
+  margin: 5px 0;
+  transition: all 0.2s ease-in-out;
 
   &:hover {
     cursor: pointer;
-    top: -5px;
-    box-shadow: 0 12px 16px 5px #f0f0f0;
+    box-shadow: 1px 2px 5px 3px #f0f0f0;
+    transform: translate3d(0px, -3px, 0px);
+    transition: all 0.15s ease-in;
+    cursor: pointer;
   }
 
   .wish-icon {

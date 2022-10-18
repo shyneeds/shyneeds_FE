@@ -30,7 +30,6 @@ export const RecommendedByTheme = () => {
       });
       const mainData = res.data.data;
       const themeData = mainData.mainCategoryPackageList.테마별상품;
-      console.log('완료', themeData);
       dispatch(getThemeProductData(themeData));
       return themeData;
     } catch (e) {

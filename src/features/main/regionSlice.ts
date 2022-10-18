@@ -17,7 +17,7 @@ export const regionProductSlice = createSlice({
     // Use the PayloadAction type to declare the contents of `action.payload`
     getRegionProductData: (state, action: PayloadAction<any>) => {
       state.getRegionProduct = action.payload;
-      console.log(action.payload);
+      // console.log(action.payload);
     },
   },
 });
