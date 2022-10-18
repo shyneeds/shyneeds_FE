@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppSelector } from '../../../app/hooks';
@@ -9,12 +10,42 @@ import { Navbar } from './Navbar';
 import { LogInView, LogOutView } from './UserMenu';
 
 const Header = () => {
-  const [isClose, setIsClose] = useState(true);
   const userAuthenticated = useAppSelector(authenticated);
+  const [openModal, setOpenModal] = useState(true);
+  const [hasCookies, setHasCookies] = useState(true);
+  const [appCookies, setAppCookies] = useCookies();
+
+  const getExpiredData = (days: number) => {
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    return date;
+  };
+
+  const closeModalUntilExpires = () => {
+    if (!appCookies) return;
+
+    const expires = getExpiredData(1);
+    setAppCookies('MODAL_EXPIRES', true, { path: '/', expires });
+
+    setOpenModal(false);
+  };
+
+  useEffect(() => {
+    if (appCookies['MODAL_EXPIRES']) return;
+    console.log(appCookies['MODAL_EXPIRES']);
+    setHasCookies(false);
+  }, []);
 
   return (
     <>
-      <>{isClose && <HeaderBanner onClose={setIsClose} />}</>
+      <>
+        {openModal && !hasCookies && (
+          <HeaderBanner
+            closeModal={() => setOpenModal(false)}
+            closeModalUntilExpires={closeModalUntilExpires}
+          />
+        )}
+      </>
 
       <Container>
         <Wrapper>
@@ -49,6 +80,7 @@ const Header = () => {
 export default Header;
 
 const Container = styled.div`
+  z-index: auto; !important;
   // width: 1920px;
   // position: fixed;
 `;
