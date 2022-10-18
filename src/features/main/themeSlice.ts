@@ -17,7 +17,7 @@ export const themeProductSlice = createSlice({
     // Use the PayloadAction type to declare the contents of `action.payload`
     getThemeProductData: (state, action: PayloadAction<any>) => {
       state.getThemeProduct = action.payload;
-      console.log(action.payload);
+      // console.log(action.payload);
     },
   },
 });
