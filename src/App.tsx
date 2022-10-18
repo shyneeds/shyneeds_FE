@@ -16,7 +16,7 @@ import { useAppDispatch } from './app/hooks';
 import { isLogin } from './features/kakaoLogin/kakaoLoginSlice';
 import Cart from './pages/cart/Cart';
 import GroupPage from './pages/groupPage/GroupPageView';
-
+import WritePage from './pages/community/WritePage';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -35,12 +35,14 @@ function App() {
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/loginResult" element={<LoginResult />} />
-        <Route path="/community" element={<Community />} />
+        <Route path="/community/*" element={<Community />}>
+          {/* <Route path="write/" element={<WritePage />} /> */}
+        </Route>
         <Route path="/loginRequest" element={<LoginRequest />} />
         <Route path="/offers" element={<Offers />} />
         <Route path="/reservation" element={<Reservation_Main />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/subPage" element={<GroupPage/>} />
+        <Route path="/subPage" element={<GroupPage />} />
       </Routes>
     </>
   );
