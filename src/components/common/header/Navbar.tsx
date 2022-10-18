@@ -371,6 +371,7 @@ const SubWrapper = styled.div`
   left: 0;
   border-bottom: 0.7px solid #ddd;
   background-color: #fff;
+  z-index: 99999999;
 `;
 
 const SubWrapper_theme = styled(SubWrapper)`
