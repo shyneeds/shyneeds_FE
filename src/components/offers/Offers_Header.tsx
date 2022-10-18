@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { getOfferData } from './Offers_Type';
+import { getProductData } from '../common/Product_Type';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   productId,
@@ -12,8 +12,13 @@ import {
 } from '../../features/userReservation/userReservationSlice';
 import { useNavigate } from 'react-router';
 
+type offerData = {
+  relatedPackageList: getProductData[];
+  travelPackageResponseDto: getProductData;
+};
+
 export default function Offers_Header() {
-  const [datas, setDatas] = useState<getOfferData | null>(null);
+  const [datas, setDatas] = useState<offerData>();
   const [option, setOption] = useState<number | null>(0);
   const [clicked, setClicked] = useState<boolean | null>(false);
   const productNum = useAppSelector(reservationProductNum);
@@ -22,10 +27,10 @@ export default function Offers_Header() {
   useEffect(() => {
     axios({
       method: 'get',
-      url: 'http://13.125.151.45:8080/api/package/admin/2',
+      url: 'http://13.125.151.45:8080/api/package/2',
       headers: {
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjEwMEBnbWFpbC5jb20iLCJhdXRoIjoiQURNSU4iLCJleHAiOjE4MjMxNTg5MTF9.XHWNGrugeIW1gYvVme_lDfcRQ6g0qriLqOfMTi592RY',
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
       },
     }).then((res) => {
       setDatas(res.data.data);
@@ -44,8 +49,8 @@ export default function Offers_Header() {
               onClick={() => {
                 if (navigator.share) {
                   navigator.share({
-                    title: datas?.title,
-                    text: datas?.summary,
+                    title: datas?.travelPackageResponseDto.title,
+                    text: datas?.travelPackageResponseDto.summary,
                     url: 'http://localhost:3000/offers',
                   });
                 } else {
@@ -56,11 +61,14 @@ export default function Offers_Header() {
               <img src={process.env.PUBLIC_URL + '/icons/share-icon.png'} />
             </Product_Share>
             <Product_Name>여자끼리 파타고니아</Product_Name>
-            <Product_Price>{datas?.price}원</Product_Price>
-            <Product_Summary>{datas?.summary}</Product_Summary>
+            <Product_Price>
+              {datas?.travelPackageResponseDto.price}원
+            </Product_Price>
+            <Product_Summary>
+              {datas?.travelPackageResponseDto.summary}
+            </Product_Summary>
             <Product_Area>그리스</Product_Area>
             <Product_Feature>포함투어 10개</Product_Feature>
-            <Product_Airplane>{datas?.flightInfo}</Product_Airplane>
             <Product_Option onChange={(e) => setOption(Number(e.target.value))}>
               <p>필수</p>
               <option value="100000">100000원</option>
@@ -84,7 +92,11 @@ export default function Offers_Header() {
               <Product_Total_Price>
                 <Price_Text>총 상품 금액</Price_Text>
                 <Total_Price>
-                  {(Number(datas?.price.replace(/,/g, '')) * productNum)
+                  {(
+                    Number(
+                      datas?.travelPackageResponseDto?.price.replace(/,/g, '')
+                    ) * productNum
+                  )
                     .toString()
                     .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
                   원
@@ -94,11 +106,20 @@ export default function Offers_Header() {
             <ButtonWrap>
               <Button_Reservation
                 onClick={() => {
-                  datas ? dispatch(productId(datas?.mainImage)) : '';
+                  datas
+                    ? dispatch(
+                        productId(datas?.travelPackageResponseDto.mainImage)
+                      )
+                    : '';
                   datas
                     ? dispatch(
                         productPrice(
-                          Number(datas?.price.replace(/,/g, '')) * productNum
+                          Number(
+                            datas?.travelPackageResponseDto.price.replace(
+                              /,/g,
+                              ''
+                            )
+                          ) * productNum
                         )
                       )
                     : '';
@@ -115,7 +136,9 @@ export default function Offers_Header() {
         </InfoWrap>
       </ProductWrap>
       <OfferImgWrap className={clicked ? 'clicked' : 'unclicked'}>
-        <Offer_Img src={datas?.descriptionImage[0]}></Offer_Img>
+        <Offer_Img
+          src={datas?.travelPackageResponseDto.descriptionImage[0]}
+        ></Offer_Img>
       </OfferImgWrap>
       <OfferBtnWrap>
         <Offer_Btn
