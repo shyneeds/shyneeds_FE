@@ -14,7 +14,7 @@ export interface PropsType {
   popup: boolean;
 }
 
-const Mypage = (props: PropsType) => {
+const Mypage = () => {
   const [tab, setTab] = useState<number>(1);
   const [popup, setPopup] = useState<PropsType['popup']>(false);
   // const [popup, setPopup] = useState<boolean>(false);
@@ -98,8 +98,8 @@ const Mypage = (props: PropsType) => {
               {tab === 2 && <Writing />}
               {tab === 3 && <Modify />}
               {/* {tab === 4 && <Withdrawal />} */}
-              {/* {popup === true && <Withdrawal (props:propsType)setPopup={setPopup}/>} */}
-              {popup === true && <Withdrawal {...popup} />}
+              {popup === true && <Withdrawal popup={popup} />}
+              {/* {popup === true && <Withdrawal {...popup} />} */}
             </ContentsResult>
           </ContentsMain>
         </Contents>

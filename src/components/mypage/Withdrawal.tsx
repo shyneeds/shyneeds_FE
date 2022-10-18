@@ -2,7 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import { PropsType } from './MypageTab';
 
-const Withdrawal = (popup: PropsType['popup']): JSX.Element | any => {
+const Withdrawal = ({
+  popup,
+}: {
+  popup: PropsType['popup'];
+}): JSX.Element | any => {
+  const onPopupToggle = (popup: any) => {
+    popup(!popup);
+    console.log(popup);
+  };
+
   if (popup) {
     return (
       <PopupBox>
@@ -16,7 +25,12 @@ const Withdrawal = (popup: PropsType['popup']): JSX.Element | any => {
             불가능합니다. 회원 탈퇴를 진행하시겠습니까?
           </Info>
           <BtnBox>
-            <Btn fontColor="#666" backgroundColor="#fff" padding="11px 26px">
+            <Btn
+              fontColor="#666"
+              backgroundColor="#fff"
+              padding="11px 26px"
+              onClick={onPopupToggle}
+            >
               취소
             </Btn>
             <Btn fontColor="#fff" backgroundColor="#4286F4" padding="11px 38px">
