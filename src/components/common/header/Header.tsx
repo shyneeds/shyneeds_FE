@@ -21,18 +21,18 @@ const Header = () => {
     return date;
   };
 
-  const closeModalUntilExpires = () => {
+  const closeBannerUntilExpires = () => {
     if (!appCookies) return;
 
     const expires = getExpiredData(1);
-    setAppCookies('MODAL_EXPIRES', true, { path: '/', expires });
+    setAppCookies('Banner_EXPIRES', true, { path: '/', expires });
 
     setOpenBanner(false);
   };
 
   useEffect(() => {
-    if (appCookies['MODAL_EXPIRES']) return;
-    console.log(appCookies['MODAL_EXPIRES']);
+    if (appCookies['Banner_EXPIRES']) return;
+    console.log(appCookies['Banner_EXPIRES']);
     setHasCookies(false);
   }, []);
 
@@ -41,8 +41,8 @@ const Header = () => {
       <>
         {openBanner && !hasCookies && (
           <HeaderBanner
-            closeModal={() => setOpenBanner(false)}
-            closeModalUntilExpires={closeModalUntilExpires}
+            closeBanner={() => setOpenBanner(false)}
+            closeBannerUntilExpires={closeBannerUntilExpires}
           />
         )}
       </>

@@ -2,15 +2,15 @@ import styled from 'styled-components';
 import { IoMdClose } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
-interface IModalProps {
-  closeModal: () => void;
-  closeModalUntilExpires: () => void;
+interface IBannerProps {
+  closeBanner: () => void;
+  closeBannerUntilExpires: () => void;
 }
 
 export const HeaderBanner = ({
-  closeModal,
-  closeModalUntilExpires,
-}: IModalProps) => {
+  closeBanner,
+  closeBannerUntilExpires,
+}: IBannerProps) => {
   return (
     <HeaderBannerContainer>
       <Link to="https://www.gotogether-s.com/notice">
@@ -20,8 +20,8 @@ export const HeaderBanner = ({
         />
       </Link>
       <CloseButton>
-        <p onClick={closeModalUntilExpires}>하루 동안 보지 않기</p>
-        <IoMdClose size="1rem" onClick={closeModal} />
+        <p onClick={closeBannerUntilExpires}>하루 동안 보지 않기</p>
+        <IoMdClose size="1rem" onClick={closeBanner} />
       </CloseButton>
     </HeaderBannerContainer>
   );
