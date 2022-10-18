@@ -8,7 +8,7 @@ const ReviewContent = () => {
   // const [page,setPage] = useState(1);
   const page = useAppSelector(pageNum);
   const offset = (page-1) * 12
-  console.log("offset " +offset)
+  // console.log("offset " +offset)
   return (
     <ReviewWrap>
       {CommunityReviewData.slice(offset,offset+12).map((review) => {
