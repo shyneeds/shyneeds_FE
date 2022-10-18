@@ -15,6 +15,7 @@ import Reservation_Main from './components/reservation/Reservation_Main';
 import { useAppDispatch } from './app/hooks';
 import { isLogin } from './features/kakaoLogin/kakaoLoginSlice';
 import Cart from './pages/cart/Cart';
+import GroupPage from './components/subPage/GroupPage';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ function App() {
         <Route path="/offers" element={<Offers />} />
         <Route path="/reservation" element={<Reservation_Main />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/subPage" element={<GroupPage />} />
       </Routes>
     </>
   );
