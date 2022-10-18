@@ -11,9 +11,9 @@ import { LogInView, LogOutView } from './UserMenu';
 
 const Header = () => {
   const userAuthenticated = useAppSelector(authenticated);
-  const [openModal, setOpenModal] = useState(true);
-  const [hasCookies, setHasCookies] = useState(true);
-  const [appCookies, setAppCookies] = useCookies();
+  const [openBanner, setOpenBanner] = useState<boolean>(true);
+  const [hasCookies, setHasCookies] = useState<boolean>(true);
+  const [appCookies, setAppCookies] = useCookies<string>([]);
 
   const getExpiredData = (days: number) => {
     const date = new Date();
@@ -27,7 +27,7 @@ const Header = () => {
     const expires = getExpiredData(1);
     setAppCookies('MODAL_EXPIRES', true, { path: '/', expires });
 
-    setOpenModal(false);
+    setOpenBanner(false);
   };
 
   useEffect(() => {
@@ -39,9 +39,9 @@ const Header = () => {
   return (
     <>
       <>
-        {openModal && !hasCookies && (
+        {openBanner && !hasCookies && (
           <HeaderBanner
-            closeModal={() => setOpenModal(false)}
+            closeModal={() => setOpenBanner(false)}
             closeModalUntilExpires={closeModalUntilExpires}
           />
         )}
@@ -81,8 +81,6 @@ export default Header;
 
 const Container = styled.div`
   z-index: auto; !important;
-  // width: 1920px;
-  // position: fixed;
 `;
 
 const Wrapper = styled.div`
