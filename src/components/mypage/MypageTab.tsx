@@ -1,60 +1,13 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Reservation from './Reservation';
 import Writing from './Writing';
 import Modify from './Modify';
 import Withdrawal from './Withdrawal';
 import HelloBox from './HelloBox';
-import axios from 'axios';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
-import { email, name } from '../../features/userData/userDataSlice';
-
-export interface PropsType {
-  popup: boolean;
-}
 
 const Mypage = () => {
   const [tab, setTab] = useState<number>(1);
-  const [popup, setPopup] = useState<PropsType['popup']>(false);
-  // const [popup, setPopup] = useState<boolean>(false);
-  // const [datas, setDatas] = useState<any>([]);
-  // const [booking, setBooking] = useState<any>([]);
-
-  const token = useAppSelector(userToken);
-  const userIdValue = useAppSelector(userId);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    axios({
-      method: 'get',
-      url: `http://13.125.151.45:8080/api/my/user/${userIdValue}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((res) => {
-      console.log(res.data.data.userInfo.name);
-      // setDatas(res.data.data);
-      // dispatch(email(datas.userInfo.email));
-
-      dispatch(name(res.data.data.userInfo.name));
-    });
-  }, []);
-  // useEffect(() => {
-  //   axios({
-  //     method: 'get',
-  //     url: `http://13.125.151.45:8080/api/reservation/user/${userIdValue}`,
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   }).then((res) => {
-  //     console.log(res);
-  //     setBooking(res);
-  //     // dispatch(email(datas.userInfo.email));
-  //     // dispatch(name(datas.userInfo.name));
-  //   });
-  // }, []);
-  // console.log(booking);
 
   return (
     <div>
@@ -82,7 +35,7 @@ const Mypage = () => {
             </p>
             <p
               className={tab === 4 ? 'active' : undefined}
-              onClick={() => setPopup(true)}
+              onClick={() => setTab(4)}
             >
               회원탈퇴
             </p>
@@ -97,9 +50,7 @@ const Mypage = () => {
               {tab === 1 && <Reservation />}
               {tab === 2 && <Writing />}
               {tab === 3 && <Modify />}
-              {/* {tab === 4 && <Withdrawal />} */}
-              {popup === true && <Withdrawal popup={popup} />}
-              {/* {popup === true && <Withdrawal {...popup} />} */}
+              {tab === 4 && <Withdrawal />}
             </ContentsResult>
           </ContentsMain>
         </Contents>
