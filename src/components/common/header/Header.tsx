@@ -25,14 +25,14 @@ const Header = () => {
     if (!appCookies) return;
 
     const expires = getExpiredData(1);
-    setAppCookies('Banner_EXPIRES', true, { path: '/', expires });
+    setAppCookies('HEADER_BANNER_EXPIRES', true, { path: '/', expires });
 
     setOpenBanner(false);
   };
 
   useEffect(() => {
-    if (appCookies['Banner_EXPIRES']) return;
-    console.log(appCookies['Banner_EXPIRES']);
+    if (appCookies['HEADER_BANNER_EXPIRES']) return;
+    console.log(appCookies['HEADER_BANNER_EXPIRES']);
     setHasCookies(false);
   }, []);
 
