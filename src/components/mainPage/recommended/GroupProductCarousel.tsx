@@ -31,7 +31,6 @@ export const GroupProductCarousel = () => {
       .then((res) => {
         const mainData = res.data.data;
         const groupData = mainData.mainCategoryPackageList.그룹별상품;
-        console.log('완료', groupData);
         dispatch(getGroupProductData(groupData));
         return groupData;
       })
@@ -112,7 +111,7 @@ const ProductWrap = styled.div`
     transition: all 0.15s ease-in;
     cursor: pointer;
   }
-  
+
   .wish-icon {
     position: absolute;
     top: 10px;

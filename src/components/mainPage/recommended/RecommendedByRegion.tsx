@@ -31,7 +31,6 @@ export const RecommendedByRegion = () => {
       .then((res) => {
         const mainData = res.data.data;
         const regionData = mainData.mainCategoryPackageList.지역별상품;
-        console.log('완료', regionData);
         dispatch(getRegionProductData(regionData));
         return regionData;
       })

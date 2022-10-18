@@ -17,7 +17,7 @@ export const groupProductSlice = createSlice({
     // Use the PayloadAction type to declare the contents of `action.payload`
     getGroupProductData: (state, action: PayloadAction<any>) => {
       state.getGroupProduct = action.payload;
-      console.log(action.payload);
+      // console.log(action.payload);
     },
   },
 });
