@@ -63,7 +63,7 @@ const Nav = styled.nav`
   align-items: center;
   gap: 4px;
   margin: 0 auto;
-  margin-bottom: 30px;
+  margin-bottom: 150px;
 `;
 
 const Button = styled.button`
