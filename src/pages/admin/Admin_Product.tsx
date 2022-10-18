@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { postAdminProductData } from '../../components/admin/Admin_Type';
+import { postAdminProductData } from '../../components/common/Product_Type';
 import Modal from '../../components/modal/Modal';
 
 // const registerInfo: postAdminProductData = {
