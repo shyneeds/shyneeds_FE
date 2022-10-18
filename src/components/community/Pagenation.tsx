@@ -1,39 +1,51 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { pageNum, setPage, totalData } from '../../features/page/page';
+import {
+  nextPage,
+  pageNum,
+  setPage,
+  totalData,
+  blockNum,
+  prevPage,
+} from '../../features/page/page';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Pagenation = () => {
   const dispatch = useAppDispatch();
   const page = useAppSelector(pageNum);
   const total = useAppSelector(totalData);
+  const blockNumber = useAppSelector(blockNum);
   const numPages = Math.ceil(total / 12);
-
-  console.log(numPages)
+  
+  const createArr = (n: number) => {
+    const totalArr: number[] = new Array(n);
+    for (let i = 0; i < n; i++) totalArr[i] = i + 1;
+    return totalArr;
+  };
+  
+  const startPage = Number(blockNumber * 10);
+  const rangeArr = createArr(numPages);
+  const sliceArr = rangeArr?.slice(startPage, Number(10) + startPage);
+  
   return (
     <>
       <Nav>
-        <Button
-          onClick={() => dispatch(setPage(page - 1))}
-          disabled={page === 1}
-        >
+        <Button onClick={() => dispatch(prevPage(0))} disabled={page === 1}>
           &lt;
         </Button>
-        {Array(numPages)
-          .fill(numPages)
-          .slice(page, page+10)
-          .map((_, i) => (
-            <NumButton
-              page={page}
-              key={i + 1}
-              onClick={() => dispatch(setPage(i + 1))}
-              ariaCurrent={page === i + 1}
-            >
-              {i+1}
-            </NumButton>
-          ))}
+        {sliceArr.map((n) => (
+          <NumButton
+            key={n}
+            onClick={() => dispatch(setPage(n))}
+            ariaCurrent={page === n}
+          >
+            {n}
+          </NumButton>
+        ))}
         <Button
-          onClick={() => dispatch(setPage(page + 1))}
+          onClick={() => dispatch(nextPage(0))}
           disabled={page === numPages}
         >
           &gt;
@@ -63,7 +75,7 @@ const Button = styled.button`
   font-size: 1rem;
 
   &:hover {
-    cursor: pointer;    
+    cursor: pointer;
   }
   &[disabled] {
     color: #aaaaaa;
@@ -72,7 +84,7 @@ const Button = styled.button`
   }
 `;
 
-const NumButton = styled.button<{ page: number; ariaCurrent: boolean }>`
+const NumButton = styled.button<{ ariaCurrent: boolean }>`
   border: none;
   border-radius: 8px;
   padding: 8px;
@@ -83,7 +95,7 @@ const NumButton = styled.button<{ page: number; ariaCurrent: boolean }>`
     props.ariaCurrent === true
       ? css`
           color: #4286f4;
-          pointer-events:none;
+          pointer-events: none;
           transform: revert;
           font-weight: bold;
         `
