@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   getGroupProductData,
   groupData,
-} from '../../../features/main/groupSlice';
+} from '../../../features/main/productSlice';
 import { useEffect } from 'react';
 import { ResponseType } from '../../../utils/ResponseType';
 

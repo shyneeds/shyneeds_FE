@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   getThemeProductData,
   themeData,
-} from '../../../features/main/themeSlice';
+} from '../../../features/main/productSlice';
 import { useEffect } from 'react';
 import { ResponseType } from '../../.././utils/ResponseType';
 

@@ -2,23 +2,20 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counterSlice';
 import kakaoLoginSliceReducer from '../features/kakaoLogin/kakaoLoginSlice';
 import userReservationSliceReducer from '../features/userReservation/userReservationSlice';
-import regionProductReducer from '../features/main/regionSlice';
-import themeProductReducer from '../features/main/themeSlice';
-import groupProductReducer from '../features/main/groupSlice';
+import productReducer from '../features/main/productSlice';
 import userDataSliceReducer from '../features/userData/userDataSlice';
-import pageReducer from '../features/page/page'
-
+import pageReducer from '../features/page/page';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     kakaoLogin: kakaoLoginSliceReducer,
     userReservation: userReservationSliceReducer,
-    regionData: regionProductReducer,
-    themeData: themeProductReducer,
-    groupData: groupProductReducer,
+    regionData: productReducer,
+    themeData: productReducer,
+    groupData: productReducer,
     userData: userDataSliceReducer,
-    page : pageReducer
+    page: pageReducer,
   },
 });
 
