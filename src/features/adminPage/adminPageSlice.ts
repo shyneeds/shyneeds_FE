@@ -41,10 +41,16 @@ export const adminPageSlice = createSlice({
       )
         state.options.push(action.payload);
     },
+    deleteOption: (state, action: PayloadAction<string>) => {
+      state.options = state.options.filter(
+        (option) => option.title !== action.payload
+      );
+    },
   },
 });
 
-export const { clickId, unclickId, productOption } = adminPageSlice.actions;
+export const { clickId, unclickId, productOption, deleteOption } =
+  adminPageSlice.actions;
 export const clickedIds = (state: RootState) => state.adminPage.clickedIds;
 export const options = (state: RootState) => state.adminPage.options;
 
