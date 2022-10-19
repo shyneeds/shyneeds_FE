@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { postAdminProductData } from '../../components/common/Product_Type';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { options } from '../../features/adminPage/adminPageSlice';
 import Modal from '../../components/modal/Modal';
 
 // const registerInfo: postAdminProductData = {
@@ -17,6 +19,13 @@ import Modal from '../../components/modal/Modal';
 //   searchKeyword: ['호주'],
 // };
 
+interface optionsType {
+  title: string;
+  optionValue: string;
+  optionPrice: string;
+  optionFlg: boolean;
+}
+
 export default function Admin_Product() {
   const [title, setTitle] = useState<string>('');
   const [summary, setSummary] = useState<string>('');
@@ -29,6 +38,9 @@ export default function Admin_Product() {
   const [inputMainImage, setInputMainImage] = useState<boolean>(false);
   const [inputDetailImage, setInputDetailImage] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const productOptions = useAppSelector(options);
+
+  console.log(productOptions);
 
   const onChangeMainImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
@@ -46,7 +58,6 @@ export default function Admin_Product() {
   };
   const onChangeDetailImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
-
     e.preventDefault();
 
     if (e.target.files) {
@@ -163,18 +174,24 @@ export default function Admin_Product() {
               </Admin_Main_Option_Image>
               <Admin_Main_Option_Options>
                 <OptionText>옵션</OptionText>
-                <OptionButton onClick={() => setIsOpen(true)}>
-                  옵션 추가히기
-                </OptionButton>
-                {isOpen && (
-                  <Modal
-                    open={isOpen}
-                    onClose={() => {
-                      setIsOpen(false);
-                    }}
-                  />
-                )}
-                <Admin_Main_Option_Options_Wrap></Admin_Main_Option_Options_Wrap>
+                <Admin_Main_Option_Options_Wrap>
+                  <OptionButton onClick={() => setIsOpen(true)}>
+                    옵션 추가히기
+                  </OptionButton>
+                  {isOpen && (
+                    <Modal
+                      open={isOpen}
+                      onClose={() => {
+                        setIsOpen(false);
+                      }}
+                    />
+                  )}
+                  <OptionTitle>
+                    {productOptions.map((option: any, i) => {
+                      return <p key={i}>{option.title}</p>;
+                    })}
+                  </OptionTitle>
+                </Admin_Main_Option_Options_Wrap>
               </Admin_Main_Option_Options>
               <Admin_Main_Option_Category>
                 <p>카테고리</p>
@@ -217,7 +234,6 @@ const MainWrap = styled.section`
 const Main_Header = styled.div`
   display: flex;
   align-items: center;
-
   position: relative;
   width: 100%;
   height: 7%;
@@ -287,7 +303,7 @@ const Admin_Main_Option_Name = styled.section`
     position: absolute;
     top: 30px;
     height: 40px;
-    width: 300px;
+    width: 100%;
     background: #ffffff;
     border: 1px solid #eeeeee;
     border-radius: 10px;
@@ -311,7 +327,7 @@ const Admin_Main_Option_Price = styled.section`
     position: absolute;
     top: 30px;
     height: 40px;
-    width: 300px;
+    width: 100%;
     background: #ffffff;
     border: 1px solid #eeeeee;
     border-radius: 10px;
@@ -337,7 +353,7 @@ const Admin_Main_Option_Image_Wrap = styled.section`
   display: flex;
   flex-direction: row;
   top: 30px;
-  width: 300px;
+  width: 100%;
   height: 75%;
   background: #ffffff;
   border: 1px solid #eeeeee;
@@ -371,7 +387,7 @@ const Images_Wrap = styled.section`
 const Admin_Main_Option_Options = styled.section`
   position: relative;
   width: 100%;
-  height: 20%;
+  height: 25%;
   padding: 10px;
 `;
 const OptionText = styled.p`
@@ -383,26 +399,42 @@ const OptionText = styled.p`
   line-height: 14px;
   color: #666666;
 `;
-const OptionButton = styled.button`
-  position: absolute;
-  top: 50px;
-  // left: 50px;
-  background: #4286f4;
-  border-radius: 8px;
-  width: 250px;
-  height: 60px;
-  color: white;
-  cursor: pointer;
-  z-index: 1;
-`;
 const Admin_Main_Option_Options_Wrap = styled.section`
   position: absolute;
   top: 30px;
-  width: 300px;
+  width: 100%;
   height: 60%;
   background: #eeeeee;
   border: 1px solid #eeeeee;
   border-radius: 10px;
+`;
+const OptionButton = styled.button`
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4286f4;
+  border-radius: 8px;
+  width: 80%;
+  height: 40px;
+  color: white;
+  cursor: pointer;
+  z-index: 1;
+`;
+const OptionTitle = styled.section`
+  position: absolute;
+  flex-direction: column;
+  display: flex;
+  width: 80%;
+  height: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  overflow-y: scroll;
+  p {
+    width: 100%;
+    height: 20px;
+  }
 `;
 const Admin_Main_Option_Category = styled.section`
   width: 100%;
@@ -428,7 +460,7 @@ const Admin_Main_Option_Summary = styled.section`
     position: absolute;
     top: 30px;
     height: 100px;
-    width: 300px;
+    width: 100%;
     background: #ffffff;
     border: 1px solid #eeeeee;
     border-radius: 10px;
