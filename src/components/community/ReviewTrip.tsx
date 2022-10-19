@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Pagenation from './Pagenation';
 import ReviewContent from './ReviewContent';
 
 const ReviewTrip = () => {
-  const [tab, setTab] = useState<number>();
+  const [tab, setTab] = useState<number>(0);
 
   return (
     <>
@@ -34,7 +35,7 @@ const ReviewTrip = () => {
           />
           <input type="text" placeholder="검색" />
         </SearchBox>
-        <WriteButton>
+        <WriteButton to='/community/write'>
           글쓰기
         </WriteButton>
       </SearchWrap>
@@ -110,7 +111,7 @@ const SearchBox = styled.div`
     line-height: 24px;
   }
 `;
-const WriteButton = styled.button`
+const WriteButton = styled(Link)`
   width: 140px;
   height: 48px;
   border-radius: 4px;
@@ -118,6 +119,9 @@ const WriteButton = styled.button`
   font-weight: bolder;
   background-color: #4286f4;
   color: white;
+  line-height: 48px;
+  text-align: center;
+  
   &:hover {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),
       0 2px 10px 0 rgba(0, 0, 0, 0.12);

@@ -3,6 +3,7 @@ import counterReducer from '../features/counter/counterSlice';
 import kakaoLoginSliceReducer from '../features/kakaoLogin/kakaoLoginSlice';
 import userReservationSliceReducer from '../features/userReservation/userReservationSlice';
 import productReducer from '../features/main/productSlice';
+import adminPageSliceReducer from '../features/adminPage/adminPageSlice';
 import userDataSliceReducer from '../features/userData/userDataSlice';
 import pageReducer from '../features/page/page';
 
@@ -14,6 +15,7 @@ export const store = configureStore({
     regionData: productReducer,
     themeData: productReducer,
     groupData: productReducer,
+    adminPage: adminPageSliceReducer,
     userData: userDataSliceReducer,
     page: pageReducer,
   },

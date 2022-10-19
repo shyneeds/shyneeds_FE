@@ -3,24 +3,90 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { ProductList } from '../../components/admin/Admin_Main_ProductList';
 import { useNavigate } from 'react-router';
+import {
+  clickId,
+  clickedIds,
+  unclickId,
+} from '../../features/adminPage/adminPageSlice';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { getProductData } from '../../components/common/Product_Type';
 
 export default function Admin_Main() {
-  const [datas, setDatas] = useState([]);
-  const [value, setValue] = useState(5);
-  const [page, setPage] = useState(1);
+  const [datas, setDatas] = useState<getProductData[]>([]);
+  const [value, setValue] = useState<number>(5);
+  const [page, setPage] = useState<number>(1);
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [keyword, setKeyword] = useState<string>('');
   const navigate = useNavigate();
-  const pageNumber: number = Math.floor(datas.length / value) + 1;
+  const dispatch = useAppDispatch();
+  const clicks = useAppSelector(clickedIds);
 
+  console.log(datas);
+  const pageNumber: number = Math.floor(datas.length / value) + 1;
   useEffect(() => {
     axios({
       method: 'get',
-      url: 'http://13.125.151.45:8080/api/package/admin',
+      url: 'http://13.125.151.45:8080/api/package/admin/list?title=all',
       headers: {
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjEwMEBnbWFpbC5jb20iLCJhdXRoIjoiQURNSU4iLCJleHAiOjE4MjMxNTg5MTF9.XHWNGrugeIW1gYvVme_lDfcRQ6g0qriLqOfMTi592RY',
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
       },
     }).then((res) => setDatas(res.data.data));
   }, []);
+
+  const searchBox = () => {
+    if (keyword === '') {
+      axios({
+        method: 'get',
+        url: 'http://13.125.151.45:8080/api/package/admin/list?title=all',
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
+        },
+      }).then((res) => setDatas(res.data.data));
+    } else {
+      axios({
+        method: 'get',
+        url: `http://13.125.151.45:8080/api/package/admin/list?title=${keyword}`,
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
+        },
+      }).then((res) => setDatas(res.data.data));
+    }
+  };
+
+  const deleteBtn = () => {
+    axios({
+      method: 'get',
+      // url: `http://13.125.151.45:8080/api/package/admin/delete/${id}`,
+      headers: {
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
+      },
+    }).then((res) => setDatas(res.data.data));
+  };
+
+  const checkAll = () => {
+    if (isClicked) {
+      datas
+        .slice((page - 1) * value, page * value)
+        .map((data: getProductData) => {
+          dispatch(unclickId(data.id));
+        });
+      setIsChecked(false);
+      setIsClicked(false);
+    } else {
+      datas
+        .slice((page - 1) * value, page * value)
+        .map((data: getProductData) => {
+          dispatch(clickId(data.id));
+        });
+      setIsChecked(true);
+      setIsClicked(true);
+    }
+  };
 
   return (
     <Wrap>
@@ -45,23 +111,46 @@ export default function Admin_Main() {
           >
             <p>상품 추가하기</p>
           </Main_Add_Btn>
+          <Main_Delete_Btn
+            onClick={() => {
+              deleteBtn;
+            }}
+          >
+            <p>삭제</p>
+          </Main_Delete_Btn>
           <Main_List_Number onChange={(e) => setValue(Number(e.target.value))}>
             <option value="5">5개</option>
             <option value="10">10개</option>
           </Main_List_Number>
+          <Main_Search
+            placeholder="검색"
+            onChange={(e) => {
+              setKeyword(e.target.value);
+            }}
+            onKeyUp={(e) => {
+              if (e.keyCode === 13) {
+                searchBox();
+              }
+            }}
+          ></Main_Search>
           <Main_Board>
             <Main_List>
               <Main_List_Category>
-                <input type="checkbox"></input>
+                <input
+                  type="checkbox"
+                  onClick={checkAll}
+                  checked={isChecked}
+                  readOnly
+                ></input>
                 <Title>상품명</Title>
                 <Summary>요약</Summary>
-                <Price>가격</Price>
+                <Price>판매가</Price>
                 <SearchKeyword>카테고리</SearchKeyword>
-                <UpdatedAt>등록일</UpdatedAt>
+                <Status>상태</Status>
               </Main_List_Category>
               {datas
                 .slice((page - 1) * value, page * value)
-                .map((data: any) => (
+                .map((data: getProductData) => (
                   <ProductList key={data.id} data={data} />
                 ))}
             </Main_List>
@@ -74,6 +163,8 @@ export default function Admin_Main() {
                   key={i + 1}
                   onClick={() => {
                     setPage(i + 1);
+                    setIsChecked(false);
+                    setIsClicked(false);
                   }}
                   aria-current={page === i + 1 && 'page'}
                 >
@@ -98,6 +189,7 @@ const Wrap = styled.div`
   width: 100vw;
   height: 100vh;
   display: grid;
+  overflow-x: hidden;
   grid-template-columns: 1fr 5fr;
   grid-template-rows: 80px auto;
   grid-template-areas:
@@ -195,6 +287,52 @@ const Main_Add_Btn = styled.button`
     color: #ffffff;
   }
 `;
+const Main_Delete_Btn = styled.button`
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: #4286f4;
+
+  margin: 0;
+  padding: 0.5rem 1rem;
+
+  -family: 'Noto Sans KR', sans-serif;
+  -size: 1rem;
+  -weight: 400;
+  text-align: center;
+  text-decoration: none;
+
+  border: none;
+  border-radius: 4px;
+
+  display: inline-block;
+  width: auto;
+
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  cursor: pointer;
+
+  transition: 0.5s;
+  right: 150px;
+  top: 20px;
+
+  &:active {
+    background: skyblue;
+    outline: 0;
+  }
+  &:disabled {
+    opacity: 0.5;
+  }
+  p {
+    -family: 'Pretendard';
+    -style: normal;
+    -weight: 500;
+    -size: 16px;
+    line-height: 24px;
+    color: #ffffff;
+  }
+`;
 const Main_Board = styled.div`
   width: 100%;
 `;
@@ -228,7 +366,7 @@ const Price = styled.p`
 const SearchKeyword = styled.p`
   width: 10%;
 `;
-const UpdatedAt = styled.p`
+const Status = styled.p`
   width: 15%;
 `;
 const Main_List_Number = styled.select`
@@ -263,6 +401,15 @@ const Main_List_Number = styled.select`
   &:disabled {
     opacity: 0.5;
   }
+`;
+const Main_Search = styled.input`
+  position: absolute;
+  top: 60px;
+  left: 130px;
+  width: 240px;
+  height: 35px;
+
+  background: #f5f5f5;
 `;
 const Main_Page_Number = styled.div`
   display: flex;
