@@ -71,8 +71,8 @@ const Header = () => {
             {userAuthenticated ? <LogOutView /> : <LogInView />}
           </UserMenu>
         </Wrapper>
+        <Navbar />
       </Container>
-      <Navbar />
     </>
   );
 };
@@ -80,7 +80,7 @@ const Header = () => {
 export default Header;
 
 const Container = styled.div`
-  z-index: auto; !important;
+  z-index: 999;
 `;
 
 const Wrapper = styled.div`

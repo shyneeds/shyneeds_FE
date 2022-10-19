@@ -74,7 +74,7 @@ const CarouselContainer = styled(Slider)`
     height: 40px;
     margin-left: 10px;
     margin-right: 10px;
-    z-index: 99999;
+    z-index: 2;
   }
   .slick-next::before,
   .slick-prev::before {
