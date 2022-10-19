@@ -113,7 +113,17 @@ function Modal({ onClose }: any) {
               </ProductPriceWrap>
               <ProductCancelWrap>
                 {inputItems.map((item) => (
-                  <ProductCancel key={item.id}>X</ProductCancel>
+                  <ProductCancel
+                    key={item.id}
+                    onClick={() => {
+                      if (inputItems.length > 1)
+                        setInputItems(
+                          inputItems.filter((items) => items.id !== item.id)
+                        );
+                    }}
+                  >
+                    X
+                  </ProductCancel>
                 ))}
               </ProductCancelWrap>
             </ProductAddWrap>
