@@ -1,12 +1,74 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Reservation from './Reservation';
 import Writing from './Writing';
 import Modify from './Modify';
 import Withdrawal from './Withdrawal';
+import HelloBox from './HelloBox';
+import axios from 'axios';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
+import {
+  email,
+  name,
+  profileImage,
+  // Listlength,
+  // imageUrl,
+  reservationList,
+} from '../../features/userData/userDataSlice';
+
+// export interface PropsType {
+//   popup: boolean;
+// }
 
 const Mypage = () => {
   const [tab, setTab] = useState<number>(1);
+  const [popup, setPopup] = useState<boolean>(false);
+  // const [popup, setPopup] = useState<boolean>(false);
+  // const [datas, setDatas] = useState<any>([]);
+  // const [booking, setBooking] = useState<any>([]);
+
+  const token = useAppSelector(userToken);
+  const userIdValue = useAppSelector(userId);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `http://13.125.151.45:8080/api/my/user/${userIdValue}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      console.log(res);
+      dispatch(name(res.data.data.userInfo.name));
+      dispatch(profileImage(res.data.data.userInfo.profileImage));
+
+      // dispatch(Listlength(res.data.data.reservationList.length));
+      // dispatch(
+      //   imageUrl(
+      //     res.data.data.reservationList[0].reservationPackage[0].imageUrl
+      //   )
+      // );
+      dispatch(reservationList(res.data.data.reservationList));
+      // console.log(res.data.data.reservationList.length);
+    });
+  }, []);
+  // useEffect(() => {
+  //   axios({
+  //     method: 'get',
+  //     url: `http://13.125.151.45:8080/api/reservation/user/${userIdValue}`,
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   }).then((res) => {
+  //     console.log(res);
+  //     setBooking(res);
+  //     // dispatch(email(datas.userInfo.email));
+  //     // dispatch(name(datas.userInfo.name));
+  //   });
+  // }, []);
+  // console.log(booking);
 
   return (
     <div>
@@ -34,7 +96,7 @@ const Mypage = () => {
             </p>
             <p
               className={tab === 4 ? 'active' : undefined}
-              onClick={() => setTab(4)}
+              onClick={() => setPopup(true)}
             >
               회원탈퇴
             </p>
@@ -42,28 +104,16 @@ const Mypage = () => {
           <ContentsMain>
             {tab === 1 || tab === 2 ? (
               <UserInfo>
-                <UserImg>
-                  <img
-                    src="https://www.gotogether-s.com/common/img/default_profile.png"
-                    alt=""
-                    style={{ width: 100 }}
-                  />
-                  <div>
-                    <h3>님 안녕하세요 ˙ᵕ˙</h3>
-                    <p>누적 결제금액 : 원</p>
-                  </div>
-                </UserImg>
-                <UserPoint>
-                  <p>포인트</p>
-                  <span>0</span>
-                </UserPoint>
+                <HelloBox />
               </UserInfo>
             ) : null}
             <ContentsResult>
               {tab === 1 && <Reservation />}
               {tab === 2 && <Writing />}
               {tab === 3 && <Modify />}
-              {tab === 4 && <Withdrawal />}
+              {/* {tab === 4 && <Withdrawal />} */}
+              {/* {popup === true && <Withdrawal (props:propsType)setPopup={setPopup}/>} */}
+              {popup === true && <Withdrawal />}
             </ContentsResult>
           </ContentsMain>
         </Contents>
@@ -120,53 +170,11 @@ const ContentsMain = styled.div`
   float: right;
 `;
 const UserInfo = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
   margin: 0 0 70px;
   padding: 50px 0 50px 40px;
   border: 1px solid #e9ecef;
 `;
-const UserImg = styled.div`
-  display: flex;
-  align-items: center;
-  width: 70%;
 
-  > img {
-    margin: 0 20px 0 0;
-  }
-  > div > h3 {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin: 0 0 10px 0;
-  }
-`;
-const UserPoint = styled.div`
-  position: relative;
-  text-align: center;
-  width: 30%;
-  > p {
-    margin: 0 0 10px 0;
-  }
-  > span {
-    font-size: 2.5rem;
-  }
-  > p,
-  > span {
-    font-weight: bold;
-  }
-  &:before {
-    content: '';
-    display: block;
-    width: 1px;
-    height: 100px;
-    position: absolute;
-    background: rgb(229, 229, 229);
-    left: 0px;
-    top: 50%;
-    margin-top: -50px;
-  }
-`;
 const ContentsResult = styled.div`
   > div > h2 {
     font-size: 1.4rem;

@@ -1,10 +1,18 @@
 import styled from 'styled-components';
 import { IoMdHeartEmpty } from 'react-icons/io';
-import { productData } from '../productCard/productData';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import axios from 'axios';
+import { API_URL } from '../../../constants/API_URL';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import {
+  getGroupProductData,
+  groupData,
+} from '../../../features/main/groupSlice';
+import { useEffect } from 'react';
+import { ResponseType } from '../../../utils/ResponseType';
 
 const settings = {
   slidesToShow: 4,
@@ -13,20 +21,42 @@ const settings = {
 };
 
 export const GroupProductCarousel = () => {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector(groupData);
+  const getGroupData: any = () => {
+    axios
+      .post<ResponseType>(API_URL.POST.MAIN, {
+        categoryList: ['그룹별상품'],
+      })
+      .then((res) => {
+        const mainData = res.data.data;
+        const groupData = mainData.mainCategoryPackageList.그룹별상품;
+        dispatch(getGroupProductData(groupData));
+        return groupData;
+      })
+      .catch(() => {
+        console.log('error');
+      });
+  };
+
+  useEffect(() => {
+    getGroupData();
+  }, []);
+
   return (
     <CarouselContainer {...settings}>
-      {productData.map((productData) => (
-        <Link to={productData.url} key={productData.id}>
+      {products.map((data: any) => (
+        <Link to={'offers/' + data.id} key={data.id}>
           <CardContainer>
-            <ProductWrap key={productData.id}>
-              <ProductImg src={productData.img} alt="product_image" />
+            <ProductWrap key={data.id}>
+              <ProductImg src={data.imageUrl} alt="product_image" />
               <ProductText>
-                <Title>{productData.title}</Title>
-                <Content>{productData.content}</Content>
-                <Price>{productData.price} 원</Price>
+                <Title>{data.title}</Title>
+                <Content>{data.summary}</Content>
+                <Price>{data.price} 원</Price>
               </ProductText>
               <ProductTag>
-                <TagTitle>{productData.tag}</TagTitle>
+                <TagTitle>{data.keyword}</TagTitle>
               </ProductTag>
               <IoMdHeartEmpty size="20px" className="wish-icon" />
             </ProductWrap>
@@ -70,12 +100,16 @@ const ProductWrap = styled.div`
   border-radius: 10px;
   border: 1px solid #ccc;
   position: relative;
-  height: 100%;
+  overflow: hidden;
+  margin: 5px 0;
+  transition: all 0.2s ease-in-out;
 
   &:hover {
     cursor: pointer;
-    top: -5px;
-    box-shadow: 0 12px 16px 5px #f0f0f0;
+    box-shadow: 1px 2px 5px 3px #f0f0f0;
+    transform: translate3d(0px, -3px, 0px);
+    transition: all 0.15s ease-in;
+    cursor: pointer;
   }
 
   .wish-icon {
@@ -88,8 +122,8 @@ const ProductWrap = styled.div`
 `;
 
 const ProductImg = styled.img`
-  width: 100%;
-  height: 56%;
+  width: 272px;
+  height: 180px;
 `;
 
 const ProductText = styled.div`

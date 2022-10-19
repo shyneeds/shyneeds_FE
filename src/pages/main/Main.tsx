@@ -1,7 +1,7 @@
-import Header from '../../components/common/Header';
+import Header from '../../components/common/header/Header';
 import { MainBanner } from '../../components/mainPage/banner/MainBanner/MainBanner';
-import { SideBar } from '../../components/mainPage/sideBar/SideBar';
-import { PersonalSection } from '../../components/mainPage/personalSection/PersonalSection';
+import { SideBar } from '../../components/common/sideBar/SideBar';
+// import { PersonalSection } from '../../components/mainPage/personalSection/PersonalSection';
 import { RecommendedByGroup } from '../../components/mainPage/recommended/RecommendedByGroup';
 import { RecommendedByRegion } from '../../components/mainPage/recommended/RecommendedByRegion';
 import { RecommendedByTheme } from '../../components/mainPage/recommended/RecommendedByTheme';
@@ -14,7 +14,7 @@ export default function Main() {
       <Header />
       <MainBanner />
       <SideBar />
-      <PersonalSection />
+      {/* <PersonalSection /> */}
       <RecommendedByGroup />
       <RecommendedByRegion />
       <RecommendedByTheme />
