@@ -1,16 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useAppSelector } from '../../app/hooks';
+import { userReservationList } from '../../features/userData/userDataSlice';
+// export interface YourType {
+//   children?: React.ReactNode
+// }
 
 const Reservation = () => {
+  const reservationList = useAppSelector(userReservationList);
+  // const Listlength = useAppSelector(userListlength);
+  console.log(reservationList.length);
+  // reservationList.length = 0;
+  reservationList.map((data: any) => {
+    console.log(data);
+  });
+  const test = [1, 2, 3];
   return (
-    <div>
-      <h2>예약조회</h2>
-      <ContentsResultBox>예약내역이 없습니다.</ContentsResultBox>
-    </div>
+    <>
+      {reservationList.map((data: any) => {
+        return (
+          <span key={data.reservationNumber}>{data.reservationNumber}</span>
+        );
+      })}
+      <h2>dd</h2>
+    </>
   );
 };
+
 const ContentsResultBox = styled.div`
   padding: 100px;
   text-align: center;
 `;
+
 export default Reservation;

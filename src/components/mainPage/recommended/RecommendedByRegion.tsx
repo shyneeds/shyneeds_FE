@@ -1,12 +1,66 @@
-import styled from 'styled-components';
 import { LAYOUT } from '../../../constants/layout';
-import { ProductCarousel } from '../productCard/ProductCarousel';
+import styled from 'styled-components';
+import { IoMdHeartEmpty } from 'react-icons/io';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { API_URL } from '../../../constants/API_URL';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import {
+  getRegionProductData,
+  regionData,
+} from '../../../features/main/regionSlice';
+import { useEffect } from 'react';
+import { ResponseType } from '../../.././utils/ResponseType';
+
+const settings = {
+  slidesToShow: 4,
+  slidesToScroll: 1,
+};
 
 export const RecommendedByRegion = () => {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector(regionData);
+  const getRegionData: any = () => {
+    axios
+      .post<ResponseType>(API_URL.POST.MAIN, {
+        categoryList: ['지역별상품'],
+      })
+      .then((res) => {
+        const mainData = res.data.data;
+        const regionData = mainData.mainCategoryPackageList.지역별상품;
+        dispatch(getRegionProductData(regionData));
+        return regionData;
+      })
+      .catch(() => {
+        console.log('error');
+      });
+  };
+
+  useEffect(() => {
+    getRegionData();
+  }, []);
+
   return (
     <RecommendedListContainer>
       <RecommendedListTitle>어디로 떠나세요?</RecommendedListTitle>
-      <ProductCarousel />
+      <CarouselContainer {...settings}>
+        {products.map((data: any) => (
+          <Link to={'detail/' + data.id} key={data.id}>
+            <ProductWrap>
+              <img src={data.imageUrl} alt="product_image" />
+              <ProductText>
+                <Title>{data.title}</Title>
+                <Content>{data.summary}</Content>
+                <Price>{data.price} 원</Price>
+              </ProductText>
+              <IoMdHeartEmpty size="20px" className="wish-icon" />
+            </ProductWrap>
+          </Link>
+        ))}
+      </CarouselContainer>
     </RecommendedListContainer>
   );
 };
@@ -28,4 +82,72 @@ const RecommendedListTitle = styled.h1`
   font-size: 1.5rem;
   font-weight: bold;
   letter-spacing: -1px;
+`;
+
+const CarouselContainer = styled(Slider)`
+  .slick-next,
+  .slick-prev {
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+    z-index: 99999;
+    top: 52%;
+  }
+  .slick-next::before,
+  .slick-prev::before {
+    font-size: 0;
+  }
+  .slick-prev {
+    background: url('/icons/ic-chevron-left-40x40-050.svg') no-repeat;
+  }
+  .slick-next {
+    background: url('/icons/ic-chevron-right-40x40-050.svg') no-repeat;
+  }
+`;
+
+const ProductWrap = styled.div`
+  border-radius: 10px;
+  border: 1px solid #cccccc;
+  overflow: hidden;
+  position: relative;
+
+  .wish-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #fff;
+    index: 1;
+  }
+
+  > img {
+    height: 13rem;
+  }
+`;
+
+const ProductText = styled.div`
+  height: 12rem;
+  padding: 22px;
+`;
+
+const Title = styled.p`
+  margin: 0 0 16px;
+  font-size: 1.18rem;
+  font-weight: bold;
+`;
+
+const Content = styled.p`
+  color: #666666;
+  height: 4rem;
+  font-size: 1rem;
+  line-height: 22px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const Price = styled.p`
+  margin: 20px 0 0;
+  font-size: 1.18rem;
+  font-weight: bold;
 `;
