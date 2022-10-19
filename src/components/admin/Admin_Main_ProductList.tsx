@@ -1,16 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { getAdminProductData } from './Admin_Type';
+import { getProductData } from '../common/Product_Type';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import {
+  clickedIds,
+  clickId,
+  unclickId,
+} from '../../features/adminPage/adminPageSlice';
 
 type userData = {
-  data: getAdminProductData;
+  data: getProductData;
 };
 
 export const ProductList = ({ data }: userData) => {
-  const { updatedAt, title, summary, price, searchKeyword, mainImage } = data;
+  const { id, soldoutFlg, title, summary, price, searchKeyword, mainImage } =
+    data;
+  const clicks = useAppSelector(clickedIds);
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setIsClicked(false);
+    clicks.map((click) => {
+      if (click === id) setIsClicked(true);
+    });
+  }, [clicks]);
+
   return (
     <List>
-      <input type="checkbox"></input>
+      <input
+        type="checkbox"
+        checked={isClicked}
+        onClick={() => {
+          if (clicks.find((click) => id === click)) {
+            dispatch(unclickId(id));
+          } else dispatch(clickId(id));
+        }}
+        readOnly
+      />
       <Title>
         <img src={mainImage} alt={title} />
         <p>{title}</p>
@@ -18,7 +46,7 @@ export const ProductList = ({ data }: userData) => {
       <Summary>{summary}</Summary>
       <Price>{price}</Price>
       <SearchKeyword>{searchKeyword}</SearchKeyword>
-      <UpdatedAt>{updatedAt}</UpdatedAt>
+      <Status>{soldoutFlg ? '판매중' : '판매중지'}</Status>
     </List>
   );
 };
@@ -61,6 +89,6 @@ const Price = styled.p`
 const SearchKeyword = styled.p`
   width: 10%;
 `;
-const UpdatedAt = styled.p`
+const Status = styled.p`
   width: 15%;
 `;
