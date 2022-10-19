@@ -29,7 +29,6 @@ const Background = styled.div`
 const Container = styled.div`
   width: ${LAYOUT.SIZE.WIDTH};
   margin: 0 auto;
-  // height: 524px;
 `;
 
 const Title = styled.h1`

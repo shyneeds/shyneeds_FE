@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   getGroupProductData,
   groupData,
-} from '../../../features/main/groupSlice';
+} from '../../../features/main/productSlice';
 import { useEffect } from 'react';
 import { ResponseType } from '../../../utils/ResponseType';
 
@@ -72,7 +72,7 @@ const CarouselContainer = styled(Slider)`
     height: 40px;
     margin-left: 2px;
     margin-right: 2px;
-    z-index: 99999;
+    z-index: 2;
   }
   .slick-next::before,
   .slick-prev::before {
@@ -113,7 +113,7 @@ const GroupWrap = styled.div`
     .slick-prev {
       width: 40px;
       height: 40px;
-      z-index: 99999;
+      z-index: 2;
       top: 50%;
     }
   }
