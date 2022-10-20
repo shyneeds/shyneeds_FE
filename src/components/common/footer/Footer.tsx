@@ -1,10 +1,25 @@
-import React from 'react';
+import { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { DomesticOverseas, Policy, Privacy } from './Modal';
 
 const Footer = () => {
   const now = new Date();
   const year = now.getFullYear();
+  // props 이용해서 간소화시키는 작업 고민중
+  const [modalOpen1, setModalOpen1] = useState<boolean>(false);
+  const [modalOpen2, setModalOpen2] = useState<boolean>(false);
+  const [modalOpen3, setModalOpen3] = useState<boolean>(false);
+
+  const onToggleModal1 = useCallback(() => {
+    setModalOpen1(!modalOpen1);
+  }, [modalOpen1]);
+  const onToggleModal2 = useCallback(() => {
+    setModalOpen2(!modalOpen2);
+  }, [modalOpen2]);
+  const onToggleModal3 = useCallback(() => {
+    setModalOpen3(!modalOpen3);
+  }, [modalOpen3]);
 
   return (
     <FooterWrap>
@@ -25,14 +40,19 @@ const Footer = () => {
         </FooterTop>
         <FooterMiddle>
           <Corp>
-          <li><Link to="/community">커뮤니티(임시)</Link></li>
+            <li>
+              <Link to="/community">커뮤니티(임시)</Link>
+            </li>
             <li>
               <Link to="/mypage">마이페이지(임시)</Link>
             </li>
             <li>안심카드결제</li>
-            <li>이용약관</li>
-            <li>개인정보처리방침</li>
-            <li>여행약관</li>
+            <li onClick={onToggleModal1}>이용약관</li>
+            {modalOpen1 && <Privacy onToggleModal={onToggleModal1} />}
+            <li onClick={onToggleModal2}>개인정보처리방침</li>
+            {modalOpen2 && <Policy onToggleModal={onToggleModal2} />}
+            <li onClick={onToggleModal3}>여행약관</li>
+            {modalOpen3 && <DomesticOverseas onToggleModal={onToggleModal3} />}
           </Corp>
           <SnsIcon>
             <li>
@@ -175,6 +195,10 @@ const Corp = styled.ul`
   }
   > li img {
     width: 20px;
+  }
+
+  &:hover {
+    cursor: pointer;
   }
 `;
 const SnsIcon = styled.ul`
