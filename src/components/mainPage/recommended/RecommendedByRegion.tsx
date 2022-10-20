@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   getRegionProductData,
   regionData,
-} from '../../../features/main/regionSlice';
+} from '../../../features/main/productSlice';
 import { useEffect } from 'react';
 import { ResponseType } from '../../.././utils/ResponseType';
 
@@ -91,7 +91,7 @@ const CarouselContainer = styled(Slider)`
     height: 40px;
     margin-left: 10px;
     margin-right: 10px;
-    z-index: 99999;
+    z-index: 2;
     top: 52%;
   }
   .slick-next::before,
