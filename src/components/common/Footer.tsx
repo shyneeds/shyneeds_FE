@@ -25,7 +25,9 @@ const Footer = () => {
         </FooterTop>
         <FooterMiddle>
           <Corp>
-          <li><Link to="/community">커뮤니티(임시)</Link></li>
+            <li>
+              <Link to="/community">커뮤니티(임시)</Link>
+            </li>
             <li>
               <Link to="/mypage">마이페이지(임시)</Link>
             </li>
