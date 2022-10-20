@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Reservation from './Reservation';
 import Writing from './Writing';
@@ -21,9 +21,12 @@ import {
 //   popup: boolean;
 // }
 
-const Mypage = () => {
+const MypageTab = () => {
   const [tab, setTab] = useState<number>(1);
   const [popup, setPopup] = useState<boolean>(false);
+  const togglePop = () => {
+    setPopup(!popup);
+  };
   // const [popup, setPopup] = useState<boolean>(false);
   // const [datas, setDatas] = useState<any>([]);
   // const [booking, setBooking] = useState<any>([]);
@@ -113,7 +116,7 @@ const Mypage = () => {
               {tab === 3 && <Modify />}
               {/* {tab === 4 && <Withdrawal />} */}
               {/* {popup === true && <Withdrawal (props:propsType)setPopup={setPopup}/>} */}
-              {popup === true && <Withdrawal />}
+              {popup === true && <Withdrawal togglePop={togglePop} />}
             </ContentsResult>
           </ContentsMain>
         </Contents>
@@ -182,4 +185,4 @@ const ContentsResult = styled.div`
   }
 `;
 
-export default Mypage;
+export default MypageTab;
