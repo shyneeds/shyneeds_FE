@@ -41,6 +41,11 @@ const Reservation = () => {
                       {data.totalReservationAmount}원
                     </Text>
                   </ProductText>
+                  {data.reservationStatus.includes('입금대기') ? (
+                    <Wait>{data.reservationStatus}</Wait>
+                  ) : data.reservationStatus.includes('예약취소') ? (
+                    <CancelOk>{data.reservationStatus}</CancelOk>
+                  ) : null}
                 </ProductInfo>
                 <Cancel>
                   <p>취소</p>
@@ -102,6 +107,20 @@ const ProductInfo = styled.div`
     border-radius: 6px;
   }
 `;
+const Wait = styled.p`
+  float: left;
+  color: #4286f4;
+  font-weight: 700;
+`;
+const CancelOk = styled.p`
+  float: left;
+  color: #666;
+  font-weight: 700;
+`;
+const ProductText = styled.div`
+  float: left;
+  width: 380px;
+`;
 const Cancel = styled.div`
   width: 186px;
   text-align: center;
@@ -116,9 +135,7 @@ const Cancel = styled.div`
     color: #666;
   }
 `;
-const ProductText = styled.div`
-  float: left;
-`;
+
 const Text = styled.p<{
   fontWeight: string;
 }>`
