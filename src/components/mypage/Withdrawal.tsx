@@ -10,10 +10,12 @@ interface Prop {
 const Withdrawal = ({ togglePop }: Prop): JSX.Element | any => {
   const token = useAppSelector(userToken);
   const userIdValue = useAppSelector(userId);
+  console.log(token);
+  console.log(userIdValue);
 
-  const goodbye = (userIdValue: string) => {
+  const goodbye = () => {
     axios({
-      method: 'get',
+      method: 'DELETE',
       url: `http://13.125.151.45:8080/api/user/${userIdValue}`,
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,7 +48,7 @@ const Withdrawal = ({ togglePop }: Prop): JSX.Element | any => {
             fontColor="#fff"
             backgroundColor="#4286F4"
             padding="11px 38px"
-            onClick={() => goodbye}
+            onClick={() => goodbye()}
           >
             탈퇴하기
           </Btn>
