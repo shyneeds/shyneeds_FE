@@ -1,6 +1,6 @@
 import Header from '../../components/common/header/Header';
 import { MainBanner } from '../../components/mainPage/banner/MainBanner/MainBanner';
-import { SideStorage } from '../../components/common/aside/watched/WatchedStorage';
+// import { SideStorage } from '../../components/common/aside/watched/WatchedStorage';
 // import { PersonalSection } from '../../components/mainPage/personalSection/PersonalSection';
 import { RecommendedByGroup } from '../../components/mainPage/recommended/RecommendedByGroup';
 import { RecommendedByRegion } from '../../components/mainPage/recommended/RecommendedByRegion';
@@ -14,7 +14,7 @@ export default function Main() {
     <>
       <Header />
       <MainBanner />
-      <SideStorage />
+      {/* <SideStorage /> */}
       {/* 디자인 결정에 따라 수정 예정 */}
       {/* <PersonalSection /> */}
       <RecommendedByGroup />
