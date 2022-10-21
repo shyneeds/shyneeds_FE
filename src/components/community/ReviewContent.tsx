@@ -1,28 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useAppSelector } from '../../app/hooks';
-import { pageNum } from '../../features/page/page';
-import CommunityReviewData from './CommunityReviewData';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { pageNum, getReviewList, ReviewData } from '../../features/page/page';
+import { Link } from 'react-router-dom';
+
+type reviewDataType = {
+  id: string;
+  author: string;
+  mainImage: string;
+  title: string;
+  updatedAt: string;
+};
 
 const ReviewContent = () => {
-  // const [page,setPage] = useState(1);
+  const dispatch = useAppDispatch();
   const page = useAppSelector(pageNum);
-  const offset = (page-1) * 12
-  // console.log("offset " +offset)
+  const reviewDatas = useAppSelector(ReviewData);
+  useEffect(() => {
+    dispatch(getReviewList(page));
+  }, [page]);
+  // /^\d{4}.-(0[1-9]|1[012]).(0[1-9]|[12][0-9]|3[01])$/
   return (
     <ReviewWrap>
-      {CommunityReviewData.slice(offset,offset+12).map((review) => {
+      {reviewDatas.map((review: reviewDataType) => {
         return (
           <ReviewCont key={review.id}>
-            <ReviewImg src={review.img} alt="" />
+            <Link to="/community/detail">
+            <ReviewImg src={review.mainImage} alt="" />
             <ReviewContentWrap>
               <ReviewContentTitle>{review.title}</ReviewContentTitle>
               <ReviewDate>
-                <ReviewContentWriter>{review.date}</ReviewContentWriter>
-                <ReviewContentWriter>{review.writer}</ReviewContentWriter>
+                <ReviewContentWriter>{(review.updatedAt).slice(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/ , "$1. $2. $3" )}</ReviewContentWriter>
+                <ReviewContentWriter>{review.author}</ReviewContentWriter>
                 <ReviewContentWriter>{review.id}</ReviewContentWriter>
               </ReviewDate>
             </ReviewContentWrap>
+            </Link>
           </ReviewCont>
         );
       })}
@@ -37,17 +50,17 @@ const ReviewWrap = styled.div`
   margin: 0 auto;
   /* display: flex; */
   /* flex-wrap: wrap; */
-  font-size : 0;
+  font-size: 0;
 `;
 const ReviewCont = styled.div`
-  display : inline-block;
+  display: inline-block;
   width: 284px;
   height: 420px;
   margin-right: 16px;
-  margin-bottom : 70px;
+  margin-bottom: 70px;
   border: 1px solid #cccccc;
-  :nth-child(4n){
-    margin-right : 0px;
+  :nth-child(4n) {
+    margin-right: 0px;
   }
 `;
 
@@ -61,9 +74,8 @@ const ReviewDate = styled.div`
 `;
 
 const ReviewImg = styled.img`
-  width: 284px;
+  width: 283px;
   height: 284px;
-  
 `;
 const ReviewContentWrap = styled.div`
   padding-left: 24px;
@@ -83,4 +95,5 @@ const ReviewContentWriter = styled.p`
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
+  margin-top :12px;
 `;
