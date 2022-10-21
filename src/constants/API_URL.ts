@@ -14,5 +14,6 @@ export const API_URL = {
     USER_INDEX: 'http://13.125.151.45:8080/user/index',
     ADMIN_PACKAGE_LIST: 'http://13.125.151.45:8080/api/package/admin', // 특정 상품 조회 /admin/{id}
     ADMIN_PACKAGE_DELETE: 'http://13.125.151.45:8080/api/package/admin/delete', // delete/{id} 이용하여 삭제
+    REVIEW_LIST : 'http://13.125.151.45:8080/api/review',
   },
 };

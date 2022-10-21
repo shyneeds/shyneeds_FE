@@ -64,6 +64,17 @@ export interface ResponseType {
           title: string;
         }
       ];
+      기획전상품: [
+        {
+          id: number;
+          imageUrl: string;
+          keyword: string;
+          price: string;
+          summary: string;
+          tag: string;
+          title: string;
+        }
+      ];
     };
   };
   message: string;
