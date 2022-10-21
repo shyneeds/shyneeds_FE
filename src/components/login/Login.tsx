@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import Footer from '../../components/common/Footer';
+import Footer from '../common/footer/Footer';
 import Header from '../common/header/Header';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';

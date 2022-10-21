@@ -58,7 +58,7 @@ export const KakaoLoginSlice = createSlice({
       state.authenticated = true; // 로그인 상태 확인
       sessionStorage.setItem('accessToken', state.userToken); // 세션에 저장
       sessionStorage.setItem('refreshToken', state.refreshToken); // 세션에 저장
-      sessionStorage.setItem('userId', state.userId+""); // 세션에 저장
+      sessionStorage.setItem('userId', state.userId + ''); // 세션에 저장
       console.log(payload);
     },
     userLogout: (state, action: PayloadAction<boolean>) => {
@@ -67,13 +67,13 @@ export const KakaoLoginSlice = createSlice({
       sessionStorage.removeItem('refreshToken');
       sessionStorage.removeItem('userId');
     },
-    isLogin: (state, {payload})=>{
+    isLogin: (state, { payload }) => {
       state.authenticated = true;
       const { accessToken, userId, refreshToken } = payload;
       state.userToken = accessToken; // 백엔드에서 발급받은 토큰
       state.refreshToken = refreshToken;
       state.userId = userId;
-    }
+    },
   },
   // extraReducers: {
   //   [(KakaoLoginAsync.pending as any)]: (state, action) => {
@@ -89,7 +89,8 @@ export const KakaoLoginSlice = createSlice({
   // },
 });
 
-export const { kakaoToken, userLogin, userLogout,isLogin } = KakaoLoginSlice.actions;
+export const { kakaoToken, userLogin, userLogout, isLogin } =
+  KakaoLoginSlice.actions;
 export const loginToken = (state: RootState) => state.kakaoLogin.kakaoToken;
 export const authenticated = (state: RootState) =>
   state.kakaoLogin.authenticated;
