@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Pagenation from './Pagenation';
+import { useAppSelector } from '../../app/hooks';
+import { totalElementsNum } from '../../features/page/page';
+import Pagenation from './Pagination';
 import ReviewContent from './ReviewContent';
 
 const ReviewTrip = () => {
   const [tab, setTab] = useState<number>(0);
-
+  const totalNum = useAppSelector(totalElementsNum)
   return (
     <>
       <CategoryWrap>
@@ -16,7 +18,7 @@ const ReviewTrip = () => {
           }}
           className={tab === 0 ? 'active' : undefined}
         >
-          <CategoryText>여행후기( 1234 )</CategoryText>
+          <CategoryText>여행후기({totalNum})</CategoryText>
         </CategoryButton>
         <CategoryButton
           onClick={() => {
