@@ -5,19 +5,17 @@ import {
   nextPage,
   pageNum,
   setPage,
-  totalData,
   blockNum,
   prevPage,
+  totalPageData,
 } from '../../features/page/page';
-import { useState } from 'react';
-import { useEffect } from 'react';
+
 
 const Pagenation = () => {
   const dispatch = useAppDispatch();
   const page = useAppSelector(pageNum);
-  const total = useAppSelector(totalData);
+  const totalPages = useAppSelector(totalPageData)
   const blockNumber = useAppSelector(blockNum);
-  const numPages = Math.ceil(total / 12);
   
   const createArr = (n: number) => {
     const totalArr: number[] = new Array(n);
@@ -26,9 +24,9 @@ const Pagenation = () => {
   };
   
   const startPage = Number(blockNumber * 10);
-  const rangeArr = createArr(numPages);
+  const rangeArr = createArr(totalPages);
   const sliceArr = rangeArr?.slice(startPage, Number(10) + startPage);
-  
+  // dispatch(getReviewList())
   return (
     <>
       <Nav>
@@ -46,7 +44,7 @@ const Pagenation = () => {
         ))}
         <Button
           onClick={() => dispatch(nextPage(0))}
-          disabled={page === numPages}
+          disabled={page === totalPages}
         >
           &gt;
         </Button>
