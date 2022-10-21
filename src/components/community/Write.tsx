@@ -1,15 +1,15 @@
-import React from 'react'
-import Footer from '../common/Footer'
-import Header from '../common/header/Header'
+import React from 'react';
+import Footer from '../common/footer/Footer';
+import Header from '../common/header/Header';
 
 const Write = () => {
   return (
     <>
-    <Header/>
+      <Header />
       TEST
-    <Footer/>
+      <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Write
+export default Write;
