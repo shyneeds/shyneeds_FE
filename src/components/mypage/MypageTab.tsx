@@ -111,6 +111,8 @@ const MypageTab = () => {
               </UserInfo>
             ) : null}
             <ContentsResult>
+              {/* 1. 취소를 클릭하면 tab이라는 게 바뀐다.
+              2. 트루값을 가지고 있는애면 예약조회 : 면 예약취소 사이트 */}
               {tab === 1 && <Reservation />}
               {tab === 2 && <Writing />}
               {tab === 3 && <Modify />}
@@ -176,6 +178,8 @@ const UserInfo = styled.div`
   margin: 0 0 70px;
   padding: 50px 0 50px 40px;
   border: 1px solid #e9ecef;
+  border-radius: 8px;
+  box-shadow: 0px 4px 4px rgb(0 0 0 / 5%);
 `;
 
 const ContentsResult = styled.div`
