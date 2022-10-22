@@ -1,13 +1,13 @@
 import React from 'react';
 import Footer from '../../components/common/footer/Footer';
 import Header from '../../components/common/header/Header';
-import MypageTab from '../../components/mypage/MypageTab';
+import CancelPage from '../../components/mypage/CancelPage';
 
 const Cancel = () => {
   return (
     <div>
       <Header />
-      <MypageTab />
+      <CancelPage />
       <Footer />
     </div>
   );

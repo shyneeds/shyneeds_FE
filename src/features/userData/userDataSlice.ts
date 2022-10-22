@@ -9,10 +9,10 @@ export interface userDataList {
       birthday: string;
       gender: string;
       profileImage: string;
-      // totalPaymentAmount : number;
     }
   ];
   reservationList: Array<object>;
+  cancelNum: number;
 }
 
 const initialState: userDataList = {
@@ -23,10 +23,10 @@ const initialState: userDataList = {
       birthday: '',
       gender: '',
       profileImage: '',
-      // totalPaymentAmount: 0,
     },
   ],
   reservationList: [],
+  cancelNum: 0,
 };
 
 export const userDataSlice = createSlice({
@@ -49,15 +49,11 @@ export const userDataSlice = createSlice({
     profileImage: (state, action: PayloadAction<string>) => {
       state.userInfo[0].profileImage = action.payload;
     },
-    // Listlength: (state, action: PayloadAction<number>) => {
-    //   state.reservationList[0].Listlength.fill(0) = action.payload;
-    // },
-    // imageUrl: (state, action: PayloadAction<string>) => {
-    //   state.reservationList[0].imageUrl = action.payload;
-    // },
     reservationList: (state, action: PayloadAction<Array<object>>) => {
       state.reservationList = action.payload;
-      // console.log(state.reservationList);
+    },
+    cancelNum: (state, action: PayloadAction<number>) => {
+      state.cancelNum = action.payload;
     },
   },
 });
@@ -68,9 +64,8 @@ export const {
   birthday,
   gender,
   profileImage,
-  // Listlength,
-  // imageUrl,
   reservationList,
+  cancelNum,
 } = userDataSlice.actions;
 export const userDataEmail = (state: RootState) =>
   state.userData.userInfo[0].email;
@@ -84,8 +79,6 @@ export const userDataImage = (state: RootState) =>
   state.userData.userInfo[0].profileImage;
 export const userReservationList = (state: RootState) =>
   state.userData.reservationList;
-// export const userListlength = (state: RootState) =>
-//   state.userData.reservationList[0].Listlength;
-// export const userimageUrl = (state: RootState) =>
-//   state.userData.reservationList[0].imageUrl;
+export const userCancelNum = (state: RootState) => state.userData.cancelNum;
+
 export default userDataSlice.reducer;

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { userReservationList } from '../../features/userData/userDataSlice';
 import { Link } from 'react-router-dom';
+import { cancelNum } from '../../features/userData/userDataSlice';
 
 const Reservation = () => {
+  const dispatch = useAppDispatch();
   const reservationList = useAppSelector(userReservationList);
-  reservationList.map((data: any) => {
-    console.log(data);
-  });
+  // console.log(reservationList);
 
   return (
     <ReservationBox>
@@ -16,7 +16,7 @@ const Reservation = () => {
       {reservationList.length === 0 ? (
         <ContentsResultBox>예약내역이 없습니다.</ContentsResultBox>
       ) : (
-        reservationList.map((data: any) => {
+        reservationList.map((data: any, i: number) => {
           return (
             <Product key={data.reservationNumber}>
               <p>
@@ -42,7 +42,15 @@ const Reservation = () => {
                     <CancelOk>{data.reservationStatus}</CancelOk>
                   ) : null}
                 </ProductInfo>
-                <Cancel>
+                <Cancel
+                  data-key={i}
+                  // onClick={(e: any) =>
+                  //   dispatch(cancelNum(e.currentTarget.dataset.key))
+                  // }
+                  onClick={(e: any) =>
+                    dispatch(cancelNum(e.currentTarget.dataset.key))
+                  }
+                >
                   <Link to="/mypage/cancel">취소</Link>
                 </Cancel>
               </ProductMain>
@@ -102,6 +110,19 @@ const ProductInfo = styled.div`
     border-radius: 6px;
   }
 `;
+const ProductText = styled.div`
+  float: left;
+  width: 380px;
+`;
+const Text = styled.p<{
+  fontWeight: string;
+}>`
+  margin: 0 0 10px;
+  color: #666666;
+  font-size: 1rem;
+  font-weight: ${(props) => props.fontWeight};
+`;
+
 const Wait = styled.p`
   float: left;
   color: #4286f4;
@@ -112,10 +133,7 @@ const CancelOk = styled.p`
   color: #666;
   font-weight: 700;
 `;
-const ProductText = styled.div`
-  float: left;
-  width: 380px;
-`;
+
 const Cancel = styled.div`
   width: 186px;
   text-align: center;
@@ -129,15 +147,6 @@ const Cancel = styled.div`
     border-radius: 8px;
     color: #666;
   }
-`;
-
-const Text = styled.p<{
-  fontWeight: string;
-}>`
-  margin: 0 0 10px;
-  color: #666666;
-  font-size: 1rem;
-  font-weight: ${(props) => props.fontWeight};
 `;
 
 export default Reservation;
