@@ -25,12 +25,12 @@ export const MainBanner = () => {
           </Category>
         </CurationBox>
         <ResultBox>{/* <ResultSlider /> */}</ResultBox>
-        <BtnLink to="offers">
-          <img
+        <Link to="offers">
+          {/* <Btn
             src={process.env.PUBLIC_URL + '/icons/main-icon/btn.svg'}
             alt="main_icon_btn"
-          />
-        </BtnLink>
+          /> */}
+        </Link>
       </Wrapper>
       {/* <BannerSlider /> */}
     </Container>
@@ -38,20 +38,17 @@ export const MainBanner = () => {
 };
 
 const Container = styled.div`
-  position: relative;
   width: 100%;
   height: 760px;
-  z-index: -1;
 `;
 
 const Wrapper = styled.div`
-  position: absolute;
   top: 200px;
 `;
 
 const CurationBox = styled.div`
   position: absolute;
-  // top: 196px;
+  top: 196px;
   left: 368px;
   width: 474px;
   height: 400px;
@@ -69,11 +66,11 @@ const ResultBox = styled.ul`
   width: 200px;
 `;
 
-const BtnLink = styled(Link)`
-  width: 148px
+const Btn = styled.img`
+  // width: 148px
   height: 48px;
-  position: absolute;
+  position: relative;
   top: 632px;
   left: 370px;
-  z-index: 9999;
+  z-index: 4;
 `;
