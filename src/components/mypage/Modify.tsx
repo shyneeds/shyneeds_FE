@@ -108,7 +108,7 @@ const Modify = () => {
             <NameStyle>이름</NameStyle>
             <InputStyle
               placeholder="이름"
-              style={{ outline: errors.email ? '2px solid red' : '' }}
+              style={{ outline: errors.name ? '2px solid red' : '' }}
               {...register('name', {
                 required: true,
                 minLength: 2,
