@@ -27,7 +27,6 @@ const SignUp = () => {
   } = useForm();
   const onSubmit = (formData: any) => {
     delete formData.password_repeat;
-    console.log(formData);
     axios({
       headers: {
         'Content-Type': 'application/json',
@@ -358,4 +357,3 @@ const SigupAgree = styled.div`
 const AgreementText = styled.a`
   color: #4e89ef;
 `;
-
