@@ -14,13 +14,13 @@ export const KakaoTalkBanner = () => {
     script.async = true;
     try {
       if (typeof window.Kakao !== 'undefined') {
-        window.Kakao.init('8d130553d7b7af436576d8295c294463'); // 자바스크립트 API 키
+        window.Kakao.init(''); // 자바스크립트 API 키
       }
       // eslint-disable-next-line no-empty
     } catch (e) {}
     // Kakao Channel 추가 버튼 생성
     window.Kakao.Channel.chat({
-      channelPublicId: '_GAxijxj/chat', // 카카오톡 채널 홈 URL에 명시된 id로 설정합니다.
+      channelPublicId: '', // 카카오톡 채널 홈 URL에 명시된 id로 설정합니다.
     });
   };
 
