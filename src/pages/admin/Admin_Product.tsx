@@ -21,27 +21,25 @@ export default function Admin_Product() {
   const [searchKeyword, setSearchKeyword] = useState<any>([]);
   const [summary, setSummary] = useState<string>('');
   const [price, setPrice] = useState<string>('0');
-  const [mainImage, setMainImage] = useState<any>();
-  const [detailImage, setDetailImage] = useState<any>();
   const [mainImageUrl, setMainImageUrl] = useState<any>('');
   const [detailImageUrl, setDetailImageUrl] = useState<any>('');
   const [inputMainImage, setInputMainImage] = useState<boolean>(false);
   const [inputDetailImage, setInputDetailImage] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const productOptions = useAppSelector<optionsType[]>(options);
-  const firstId = useRef<number>(0);
-  const secondId = useRef<number>(0);
-  const dispatch = useAppDispatch();
   const [firstListCheck, setFirstListCheck] = useState<boolean[]>([]);
   const [secondListCheck, setSecondListCheck] = useState<boolean[][]>([]);
   const [thirdListCheck, setThirdListCheck] = useState<boolean[]>([]);
+
+  const firstId = useRef<number>(0);
+  const secondId = useRef<number>(0);
   const firstCheckId = useRef<number[]>([]);
   const secondCheckId = useRef<number[]>([]);
   const thirdCheckId = useRef<number[]>([]);
 
   const mainImageFile: any = useRef();
   const detailImageFile: any = useRef();
+  const productOptions = useAppSelector<optionsType[]>(options);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,7 +80,6 @@ export default function Admin_Product() {
     e.preventDefault();
 
     if (e.target.files) {
-      setMainImage(e.target.files[0]);
       setInputMainImage(true);
       reader.readAsDataURL(e.target.files[0]);
       mainImageFile.current = e.target.files[0];
@@ -97,7 +94,6 @@ export default function Admin_Product() {
     e.preventDefault();
 
     if (e.target.files) {
-      setDetailImage(e.target.files[0]);
       setInputDetailImage(true);
       reader.readAsDataURL(e.target.files[0]);
       detailImageFile.current = e.target.files[0];
@@ -452,7 +448,6 @@ export default function Admin_Product() {
                                                 if (
                                                   thirdListCheck[third.id - 1]
                                                 ) {
-                                                  console.log(third.id);
                                                   thirdCheckId.current.push(
                                                     third.id
                                                   );
