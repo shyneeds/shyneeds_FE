@@ -1,24 +1,30 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useAppSelector } from '../../app/hooks';
-import { userReservationList } from '../../features/userData/userDataSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import {
+  userReservationList,
+  userCancelReason,
+} from '../../features/userData/userDataSlice';
 import { Link } from 'react-router-dom';
+import { cancelNum } from '../../features/userData/userDataSlice';
 
 const Reservation = () => {
+  const dispatch = useAppDispatch();
   const reservationList = useAppSelector(userReservationList);
-  reservationList.map((data: any) => {
-    console.log(data);
-  });
-
+  const cancelReason = useAppSelector(userCancelReason);
+  // console.log(reservationList);
+  const cancelDtPop = () => {
+    console.log(cancelReason);
+  };
   return (
     <ReservationBox>
       <h2>예약조회</h2>
       {reservationList.length === 0 ? (
         <ContentsResultBox>예약내역이 없습니다.</ContentsResultBox>
       ) : (
-        reservationList.map((data: any) => {
+        reservationList.map((data: any, i: number) => {
           return (
-            <Product key={data.reservationNumber}>
+            <Product key={data.reservationNumber + i}>
               <p>
                 예약번호 <span>{data.reservationNumber}</span>
               </p>
@@ -30,20 +36,46 @@ const Reservation = () => {
                       {data.reservationPackage[0].title}
                     </Text>
                     <Text fontWeight="400">
-                      {data.reservationPackage[1].optionValue}
+                      {data.reservationPackage[0]
+                        ? data.reservationPackage[0].optionValue
+                        : null}
                     </Text>
                     <Text fontWeight="400">
                       {data.totalReservationAmount}원
                     </Text>
                   </ProductText>
                   {data.reservationStatus.includes('입금대기') ? (
-                    <Wait>{data.reservationStatus}</Wait>
+                    <OrderStatus fontColor="#4286F4">
+                      {data.reservationStatus}
+                    </OrderStatus>
                   ) : data.reservationStatus.includes('예약취소') ? (
-                    <CancelOk>{data.reservationStatus}</CancelOk>
+                    <OrderStatus fontColor="#EA4335">
+                      {data.reservationStatus}
+                    </OrderStatus>
+                  ) : data.reservationStatus.includes('예약확정') ? (
+                    <OrderStatus fontColor="#34A853">
+                      {data.reservationStatus}
+                    </OrderStatus>
+                  ) : data.reservationStatus.includes('입금완료') ? (
+                    <OrderStatus fontColor="#000">
+                      {data.reservationStatus}
+                    </OrderStatus>
                   ) : null}
                 </ProductInfo>
-                <Cancel>
-                  <Link to="/mypage/cancel">취소</Link>
+                <Cancel
+                  data-key={i}
+                  // onClick={(e: any) =>
+                  //   dispatch(cancelNum(e.currentTarget.dataset.key))
+                  // }
+                  onClick={(e: any) =>
+                    dispatch(cancelNum(e.currentTarget.dataset.key))
+                  }
+                >
+                  {data.reservationStatus.includes('예약취소') ? (
+                    <CancelDt onClick={() => cancelDtPop()}>취소상세</CancelDt>
+                  ) : (
+                    <Link to="/mypage/cancel">취소</Link>
+                  )}
                 </Cancel>
               </ProductMain>
             </Product>
@@ -56,7 +88,7 @@ const Reservation = () => {
 
 const ReservationBox = styled.div`
   > h2 {
-    margin: 0 0 4px;
+    margin: 0 0 8px;
     font-weight: 700;
     font-size: 1.8rem;
     color: #666666;
@@ -68,10 +100,10 @@ const ContentsResultBox = styled.div`
   text-align: center;
 `;
 const Product = styled.div`
-  margin: 0 0 28px;
+  margin: 0 0 30px;
 
   > p {
-    padding: 12px 0;
+    padding: 15px 0;
     color: #666;
     font-weight: 500;
     font-size: 1rem;
@@ -86,7 +118,7 @@ const ProductMain = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 48px 36px;
+  padding: 45px 36px;
   border: 1px solid #e9ecef;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
   border-radius: 8px;
@@ -102,20 +134,27 @@ const ProductInfo = styled.div`
     border-radius: 6px;
   }
 `;
-const Wait = styled.p`
-  float: left;
-  color: #4286f4;
-  font-weight: 700;
-`;
-const CancelOk = styled.p`
-  float: left;
-  color: #666;
-  font-weight: 700;
-`;
 const ProductText = styled.div`
   float: left;
   width: 380px;
 `;
+const Text = styled.p<{
+  fontWeight: string;
+}>`
+  margin: 0 0 10px;
+  color: #666666;
+  font-size: 1rem;
+  font-weight: ${(props) => props.fontWeight};
+`;
+
+const OrderStatus = styled.p<{
+  fontColor: string;
+}>`
+  float: left;
+  color: ${(props) => props.fontColor};
+  font-weight: 700;
+`;
+
 const Cancel = styled.div`
   width: 186px;
   text-align: center;
@@ -130,14 +169,14 @@ const Cancel = styled.div`
     color: #666;
   }
 `;
-
-const Text = styled.p<{
-  fontWeight: string;
-}>`
-  margin: 0 0 10px;
-  color: #666666;
-  font-size: 1rem;
-  font-weight: ${(props) => props.fontWeight};
+const CancelDt = styled.p`
+  display: inline-block;
+  width: 80px;
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  color: #666;
+  cursor: pointer;
 `;
-
 export default Reservation;

@@ -18,9 +18,6 @@ const Withdrawal = ({ togglePop }: Prop): JSX.Element | any => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  console.log(token);
-  console.log(userIdValue);
-
   const goodbye = () => {
     axios({
       method: 'DELETE',
