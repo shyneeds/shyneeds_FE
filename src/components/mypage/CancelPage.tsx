@@ -1,20 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useAppSelector } from '../../app/hooks';
-import HelloBox from './HelloBox';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useNavigate } from 'react-router-dom';
 import {
   userCancelNum,
   userReservationList,
+  cancelReason,
 } from '../../features/userData/userDataSlice';
 import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
 
 const CancelPage = () => {
+  const [optio, setOptio] = useState<string | undefined>();
+  const [detail, setDetail] = useState<string | undefined>();
   const reservationList = useAppSelector(userReservationList);
   const cancleNum = useAppSelector(userCancelNum);
   const ProductData: any = reservationList[cancleNum];
+  const navigate = useNavigate();
   const token = useAppSelector(userToken);
   const userIdValue = useAppSelector(userId);
+  const dispatch = useAppDispatch();
   const cancleAlert = () => {
     if (confirm('주문 취소를 진행하시겠습니까?') === true) {
       axios({
@@ -23,14 +28,22 @@ const CancelPage = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        data: {
+          cancelReason: optio,
+          cancelReasonDetail: detail,
+        },
       }).then((res) => {
         console.log(res);
+        dispatch(cancelReason(res.config.data));
       });
+      alert('주문이 정상적으로 취소되었습니다.');
+      navigate(-1);
     } else {
       return;
     }
   };
-
+  console.log(optio);
+  console.log(detail);
   return (
     <CancelWrap>
       {/* <HelloBox /> */}
@@ -38,13 +51,13 @@ const CancelPage = () => {
         예약 취소요청 <p>{ProductData.reservationNumber}</p>
       </h2>
       <ProductInfo>
-        <img src={ProductData.reservationPackage[1].imageUrl} alt="" />
+        <img src={ProductData.reservationPackage[0].imageUrl} alt="" />
         <ProductText>
           <Text fontWeight="700">
-            {ProductData.reservationPackage[1].title}
+            {ProductData.reservationPackage[0].title}
           </Text>
           <Text fontWeight="400">
-            {ProductData.reservationPackage[1].optionValue}
+            {ProductData.reservationPackage[0].optionValue}
           </Text>
           <Text fontWeight="400">{ProductData.totalReservationAmount}원</Text>
         </ProductText>
@@ -55,14 +68,17 @@ const CancelPage = () => {
           <p>{ProductData.totalReservationAmount}원</p>
         </CancelMoney>
         <h2>취소 사유 선택</h2>
-        <SelectBox>
+        <SelectBox onChange={(e) => setOptio(e.target.value)}>
           <option value="">취소사유 선택</option>
-          <option value="변심">예약 의사 취소</option>
-          <option value="잘못주문">다른 상품 잘못 주문</option>
-          <option value="불만족">서비스 및 상품 불만족</option>
-          <option value="정보상이">상품 정보 상이</option>
+          <option value="예약 의사 취소">예약 의사 취소</option>
+          <option value="다른 상품 잘못 주문">다른 상품 잘못 주문</option>
+          <option value="서비스 및 상품 불만족">서비스 및 상품 불만족</option>
+          <option value="상품 정보 상이">상품 정보 상이</option>
         </SelectBox>
-        <InputBox placeholder="상세 사유 입력(선택사항)" />
+        <InputBox
+          placeholder="상세 사유 입력(선택사항)"
+          onChange={(e) => setDetail(e.target.value)}
+        />
         <CancelBtn onClick={() => cancleAlert()}>주문 취소</CancelBtn>
       </CancelInfo>
     </CancelWrap>

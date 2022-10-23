@@ -13,6 +13,12 @@ export interface userDataList {
   ];
   reservationList: Array<object>;
   cancelNum: number;
+  cancle: [
+    {
+      cancelReason: string;
+      cancelReasonDetail: string;
+    }
+  ];
 }
 
 const initialState: userDataList = {
@@ -27,6 +33,12 @@ const initialState: userDataList = {
   ],
   reservationList: [],
   cancelNum: 0,
+  cancle: [
+    {
+      cancelReason: '',
+      cancelReasonDetail: '',
+    },
+  ],
 };
 
 export const userDataSlice = createSlice({
@@ -55,6 +67,12 @@ export const userDataSlice = createSlice({
     cancelNum: (state, action: PayloadAction<number>) => {
       state.cancelNum = action.payload;
     },
+    cancelReason: (state, action: PayloadAction<string>) => {
+      state.cancle[0].cancelReason = action.payload;
+    },
+    cancelReasonDetail: (state, action: PayloadAction<string>) => {
+      state.cancle[0].cancelReasonDetail = action.payload;
+    },
   },
 });
 
@@ -66,6 +84,8 @@ export const {
   profileImage,
   reservationList,
   cancelNum,
+  cancelReason,
+  cancelReasonDetail
 } = userDataSlice.actions;
 export const userDataEmail = (state: RootState) =>
   state.userData.userInfo[0].email;
@@ -80,5 +100,8 @@ export const userDataImage = (state: RootState) =>
 export const userReservationList = (state: RootState) =>
   state.userData.reservationList;
 export const userCancelNum = (state: RootState) => state.userData.cancelNum;
-
+export const userCancelReason = (state: RootState) =>
+  state.userData.cancle[0].cancelReason;
+export const userCancelReasonDetail = (state: RootState) =>
+  state.userData.cancle[0].cancelReasonDetail;
 export default userDataSlice.reducer;

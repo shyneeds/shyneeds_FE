@@ -1,42 +1,42 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
-import 'tui-color-picker/dist/tui-color-picker.css';
-import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
-import '@toast-ui/editor/dist/i18n/ko-kr';
-import { Editor } from '@toast-ui/react-editor';
+// import '@toast-ui/editor/dist/toastui-editor.css';
+// import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
+// import 'tui-color-picker/dist/tui-color-picker.css';
+// import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
+// import '@toast-ui/editor/dist/i18n/ko-kr';
+// import { Editor } from '@toast-ui/react-editor';
 
 const ReviewWrite = () => {
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = (title: any) => {
-    const contentData = editorRef.current?.getInstance().getHTML();
-    Object.assign(title, { contentData });
-    console.log(title);
-  };
-  const editorRef = useRef<Editor>(null);
-  const onChange = () => {
-    // 단순 로그 찍기용 함수
-    const data = editorRef.current?.getInstance().getHTML();
-    console.log(data);
-  };
-  const imgRef = useRef<HTMLInputElement | null>(null);
-  const [myImage, setMyImage] = useState<string>();
-  const uploadImage = (e: any) => {
-    setMyImage(URL.createObjectURL(e.target.files[0]));
-    setValue('image', e.target.files[0]);
-  };
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   getValues,
+  //   setValue,
+  //   watch,
+  //   formState: { errors },
+  // } = useForm();
+  // const onSubmit = (title: any) => {
+  //   const contentData = editorRef.current?.getInstance().getHTML();
+  //   Object.assign(title, { contentData });
+  //   console.log(title);
+  // };
+  // const editorRef = useRef<Editor>(null);
+  // const onChange = () => {
+  //   // 단순 로그 찍기용 함수
+  //   const data = editorRef.current?.getInstance().getHTML();
+  //   console.log(data);
+  // };
+  // const imgRef = useRef<HTMLInputElement | null>(null);
+  // const [myImage, setMyImage] = useState<string>();
+  // const uploadImage = (e: any) => {
+  //   setMyImage(URL.createObjectURL(e.target.files[0]));
+  //   setValue('image', e.target.files[0]);
+  // };
   return (
     <Wrap>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* <form onSubmit={handleSubmit(onSubmit)}>
         <HeaderWrap>
           <span>여행후기</span>
           <WriteSubmitWrap>
@@ -92,7 +92,7 @@ const ReviewWrite = () => {
             </InputImgBox>
           </RightWrap>
         </ContentWrap>
-      </form>
+      </form> */}
     </Wrap>
   );
 };
