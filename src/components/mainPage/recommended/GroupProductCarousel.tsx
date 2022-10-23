@@ -109,7 +109,6 @@ const ProductWrap = styled.div`
     box-shadow: 1px 2px 5px 3px #f0f0f0;
     transform: translate3d(0px, -3px, 0px);
     transition: all 0.15s ease-in;
-    cursor: pointer;
   }
 
   .wish-icon {

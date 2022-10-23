@@ -1,20 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../app/hooks';
 import { userReservationList } from '../../features/userData/userDataSlice';
-// export interface YourType {
-//   children?: React.ReactNode
-// }
+import { Link } from 'react-router-dom';
 
 const Reservation = () => {
   const reservationList = useAppSelector(userReservationList);
-  // const Listlength = useAppSelector(userListlength);
-  console.log(reservationList.length);
-  // reservationList.length = 0;
   reservationList.map((data: any) => {
     console.log(data);
   });
-  // const test = [1, 2, 3];
+
   return (
     <ReservationBox>
       <h2>예약조회</h2>
@@ -48,7 +43,7 @@ const Reservation = () => {
                   ) : null}
                 </ProductInfo>
                 <Cancel>
-                  <p>취소</p>
+                  <Link to="/mypage/cancel">취소</Link>
                 </Cancel>
               </ProductMain>
             </Product>
@@ -125,7 +120,7 @@ const Cancel = styled.div`
   width: 186px;
   text-align: center;
   float: left;
-  > p {
+  > a {
     display: inline-block;
     width: 80px;
     height: 40px;

@@ -1,8 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useAppSelector } from '../../app/hooks';
-import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
+import { useNavigate } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import {
+  userToken,
+  userId,
+  userLogout,
+} from '../../features/kakaoLogin/kakaoLoginSlice';
 
 interface Prop {
   togglePop: () => void;
@@ -10,10 +15,15 @@ interface Prop {
 const Withdrawal = ({ togglePop }: Prop): JSX.Element | any => {
   const token = useAppSelector(userToken);
   const userIdValue = useAppSelector(userId);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const goodbye = (userIdValue: string) => {
+  console.log(token);
+  console.log(userIdValue);
+
+  const goodbye = () => {
     axios({
-      method: 'get',
+      method: 'DELETE',
       url: `http://13.125.151.45:8080/api/user/${userIdValue}`,
       headers: {
         Authorization: `Bearer ${token}`,
@@ -21,6 +31,9 @@ const Withdrawal = ({ togglePop }: Prop): JSX.Element | any => {
     }).then((res) => {
       console.log(res);
     });
+    togglePop();
+    dispatch(userLogout(false));
+    navigate('/');
   };
   return (
     <PopupBox>
@@ -46,7 +59,7 @@ const Withdrawal = ({ togglePop }: Prop): JSX.Element | any => {
             fontColor="#fff"
             backgroundColor="#4286F4"
             padding="11px 38px"
-            onClick={() => goodbye}
+            onClick={() => goodbye()}
           >
             탈퇴하기
           </Btn>
