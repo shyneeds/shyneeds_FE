@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -67,7 +67,6 @@ const SignUp = () => {
       );
     }
   };
-
   return (
     <WrapContainer>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -141,7 +140,7 @@ const SignUp = () => {
           <NameStyle>이름</NameStyle>
           <InputStyle
             placeholder="이름을 적어주세요"
-            style={{ outline: errors.email ? '2px solid red' : '' }}
+            style={{ outline: errors.name ? '2px solid red' : '' }}
             {...register('name', {
               required: true,
               minLength: 2,
@@ -168,7 +167,7 @@ const SignUp = () => {
         <InputBox>
           <NameStyle>생년월일</NameStyle>
           <BirthdayBox>
-            <BirthSelect
+            <BirthSelect defaultValue={year}
               {...register('year', { required: true })}
               onChange={(e) =>
                 setSelectedDate({ ...selectedDate, year: e.target.value })
@@ -180,19 +179,19 @@ const SignUp = () => {
                 </option>
               ))}
             </BirthSelect>
-            <BirthSelect
+            <BirthSelect defaultValue={month}
               {...register('month', { required: true })}
               onChange={(e) =>
                 setSelectedDate({ ...selectedDate, month: e.target.value })
               }
             >
               {Array.from(new Array(12), (v, i) => (
-                <option key={i} value={1 + i}>
+                <option key={i} value={1+i}>
                   {1 + i}
                 </option>
               ))}
             </BirthSelect>
-            <BirthSelect
+            <BirthSelect defaultValue={day}
               {...register('day', { required: true })}
               onChange={(e) =>
                 setSelectedDate({ ...selectedDate, day: e.target.value })

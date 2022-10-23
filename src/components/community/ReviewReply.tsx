@@ -33,6 +33,22 @@ const ReviewReply = () => {
   }
   return (
     <>
+      {!modify&&
+      <NewReplyWrap>
+      <NewReply>
+        <NewReplyAuthorWrap>
+          <NewReplyAuthor>권영민</NewReplyAuthor>
+          <NewReplyDate>2022.10.21</NewReplyDate>
+        </NewReplyAuthorWrap>
+        <NewReplyContent>안녕하세요 반갑습니다.</NewReplyContent>
+        <NewReplyButtonWrap>
+          <button>댓글</button> <p>/</p>
+          <button onClick={()=>toggleModify()}>수정</button> <p>/</p>
+          <button>삭제</button>
+        </NewReplyButtonWrap>
+      </NewReply>
+      </NewReplyWrap>
+      }
       {!modify&&<NewReply>
         <NewReplyAuthorWrap>
           <NewReplyAuthor>권영민</NewReplyAuthor>
@@ -172,14 +188,14 @@ const ReplyCancelButton = styled.button`
       0 2px 10px 0 rgba(0, 0, 0, 0.12);
   }
 `;
+const NewReplyWrap =styled.div`
+  margin-top: 40px;
+`
 
 const NewReply = styled.div`
   width: 1000px;
   height: 148px;
   border-top: 1px solid #cccccc;
-  margin: 0 auto;
-  margin-top: 40px;
-  margin-bottom: 30px;
 `;
 
 const NewReplyButtonWrap = styled.div`
