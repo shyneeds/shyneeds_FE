@@ -36,7 +36,9 @@ const Review = () => {
 const ReviewWrap = styled.div`
   width: 1184px;
   height: 608px;
-  margin: 80px auto;
+  margin: 56px auto;
+  padding: 8px;
+
   > h2 {
     margin: 0 0 20px;
     font-size: 1.2rem;

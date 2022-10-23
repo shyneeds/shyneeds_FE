@@ -39,12 +39,13 @@ const Header = () => {
   return (
     <>
       <>
-        {openBanner && !hasCookies && (
+        {/* 작업 편의를 위한 주석 처리 */}
+        {/* {openBanner && !hasCookies && (
           <HeaderBanner
             closeBanner={() => setOpenBanner(false)}
             closeBannerUntilExpires={closeBannerUntilExpires}
           />
-        )}
+        )} */}
       </>
 
       <Container>

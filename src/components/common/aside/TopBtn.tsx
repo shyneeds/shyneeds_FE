@@ -6,7 +6,7 @@ export const TopBtn = () => {
 
   useEffect(() => {
     window.addEventListener('scroll', () => {
-      window.scrollY > 500 ? setShowTopBtn(true) : setShowTopBtn(false);
+      window.scrollY > 50 ? setShowTopBtn(true) : setShowTopBtn(false);
     });
   }, []);
   const goToTop = () => {
@@ -21,7 +21,7 @@ export const TopBtn = () => {
       {showTopBtn && (
         <StyledTopBtnIcon
           onClick={goToTop}
-          src={process.env.PUBLIC_URL + '/icons/Top_btn.svg'}
+          src={process.env.PUBLIC_URL + '/icons/main-icon/btn-top-56x56.svg'}
         />
       )}
     </>
@@ -29,7 +29,7 @@ export const TopBtn = () => {
 };
 
 const StyledTopBtnIcon = styled.img`
-  width: 100px;
-  height: 40px;
+  width: 56px;
+  height: 56px;
   cursor: pointer;
 `;

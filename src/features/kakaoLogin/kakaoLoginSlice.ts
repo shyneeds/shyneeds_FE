@@ -62,7 +62,7 @@ export const KakaoLoginSlice = createSlice({
       console.log(payload);
     },
     userLogout: (state, action: PayloadAction<boolean>) => {
-      state.authenticated = false;
+      state.authenticated = action.payload;
       sessionStorage.removeItem('accessToken');
       sessionStorage.removeItem('refreshToken');
       sessionStorage.removeItem('userId');

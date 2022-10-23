@@ -1889,6 +1889,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;
 `;
 
 const Content = styled.div`
@@ -1897,7 +1898,6 @@ const Content = styled.div`
   height: 800px;
   text-align: left;
   background-color: #fff;
-  z-index: 1001;
   overflow-y: auto;
   border-radius: 3px;
   box-shadow: 0 5px 15px rgb(0 0 0 / 20%);
