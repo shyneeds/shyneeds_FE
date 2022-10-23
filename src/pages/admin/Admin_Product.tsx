@@ -1,21 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { postAdminProductData } from '../../components/common/Product_Type';
+import { requestInfo } from '../../components/common/Product_Type';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { options, deleteOption } from '../../features/adminPage/adminPageSlice';
 import Modal from '../../components/modal/Modal';
 import { categoryList } from '../../components/admin/Admin_Product_Category';
+import { useNavigate } from 'react-router';
 
 interface optionsType {
   title: string;
   optionValue: string;
-  optionPrice: string;
+  price: string;
   optionFlg: boolean;
 }
 
 export default function Admin_Product() {
   const [title, setTitle] = useState<string>('');
+  const [keyword, setKeyword] = useState<string>();
+  const [searchKeyword, setSearchKeyword] = useState<any>([]);
   const [summary, setSummary] = useState<string>('');
   const [price, setPrice] = useState<string>('0');
   const [mainImage, setMainImage] = useState<any>();
@@ -25,13 +28,54 @@ export default function Admin_Product() {
   const [inputMainImage, setInputMainImage] = useState<boolean>(false);
   const [inputDetailImage, setInputDetailImage] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [clickFirst, setClickFirst] = useState<boolean>(false);
-  const [checkId, setCheckId] = useState<boolean>(false);
-
-  const [clickSecond, setClickSecond] = useState<boolean>(false);
 
   const productOptions = useAppSelector<optionsType[]>(options);
+  const firstId = useRef<number>(0);
+  const secondId = useRef<number>(0);
   const dispatch = useAppDispatch();
+  const [firstListCheck, setFirstListCheck] = useState<boolean[]>([]);
+  const [secondListCheck, setSecondListCheck] = useState<boolean[][]>([]);
+  const [thirdListCheck, setThirdListCheck] = useState<boolean[]>([]);
+  const firstCheckId = useRef<number[]>([]);
+  const secondCheckId = useRef<number[]>([]);
+  const thirdCheckId = useRef<number[]>([]);
+
+  const mainImageFile: any = useRef();
+  const detailImageFile: any = useRef();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    for (let i = 0; i < categoryList.length; i++) {
+      const pushSecond: boolean[] = [];
+      setFirstListCheck((firstListCheck) => [...firstListCheck, false]);
+      for (
+        let j = 0;
+        j < categoryList[i].subCategoryResponseDtoList.length;
+        j++
+      ) {
+        pushSecond.push(false);
+      }
+      setSecondListCheck((secondListCheck) => [...secondListCheck, pushSecond]);
+    }
+
+    for (let i = 0; i < categoryList.length; i++) {
+      for (
+        let j = 0;
+        j < categoryList[i].subCategoryResponseDtoList.length;
+        j++
+      ) {
+        for (
+          let k = 0;
+          k <
+          categoryList[i].subCategoryResponseDtoList[j]
+            .thirdCategoryResponseDtoList.length;
+          k++
+        ) {
+          setThirdListCheck((thirdListCheck) => [...thirdListCheck, false]);
+        }
+      }
+    }
+  }, []);
 
   const onChangeMainImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
@@ -41,6 +85,7 @@ export default function Admin_Product() {
       setMainImage(e.target.files[0]);
       setInputMainImage(true);
       reader.readAsDataURL(e.target.files[0]);
+      mainImageFile.current = e.target.files[0];
     }
     reader.onloadend = () => {
       const resultImage = reader.result;
@@ -55,37 +100,58 @@ export default function Admin_Product() {
       setDetailImage(e.target.files[0]);
       setInputDetailImage(true);
       reader.readAsDataURL(e.target.files[0]);
+      detailImageFile.current = e.target.files[0];
     }
     reader.onloadend = () => {
       const resultImage = reader.result;
       setDetailImageUrl(resultImage);
     };
   };
-  // const onSubmit = (e: any) => {
-  //   const formData = new FormData();
 
-  //   e.preventDefault();
+  const onSubmit = (e: any) => {
+    const formData = new FormData();
 
-  //   formData.append('description', file1);
-  //   formData.append('main', file2);
-  //   formData.append('registerInfo', JSON.stringify(registerInfo));
+    e.preventDefault();
 
-  //   axios({
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data',
-  //       'Access-Control-Allow-Origin': '*',
-  //     },
-  //     url: 'http://13.125.151.45:8080/api/package/admin/register',
-  //     method: 'post',
-  //     data: formData,
-  //   })
-  //     .then((response) => {
-  //       console.log({ response });
-  //     })
-  //     .catch((error) => {
-  //       console.log({ error });
-  //     });
-  // };
+    const data: requestInfo = {
+      title: title,
+      categoryIds: firstCheckId.current,
+      subCategoryIds: secondCheckId.current,
+      thirdCategoryIds: thirdCheckId.current,
+      price: price,
+      summary: summary,
+      packageOptionRequestDtoList: productOptions,
+      soldoutFlg: false,
+      dispFlg: true,
+      searchKeyword: searchKeyword,
+    };
+    console.log(JSON.stringify(data));
+    console.log(mainImageFile.current);
+    console.log(detailImageFile.current);
+
+    formData.append('main', mainImageFile.current);
+    formData.append('description', detailImageFile.current);
+    formData.append('registerInfo', JSON.stringify(data));
+
+    axios({
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Access-Control-Allow-Origin': '*',
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
+      },
+      url: 'http://13.125.151.45:8080/api/package/admin/register',
+      method: 'post',
+      data: formData,
+    })
+      .then((response) => {
+        console.log({ response });
+        navigate('/admin');
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  };
 
   return (
     <Wrap>
@@ -95,7 +161,14 @@ export default function Admin_Product() {
       <MainWrap>
         <Main_Header>
           <p>상세설명</p>
-          <button>저장</button>
+          <Nav_Btn
+            onClick={() => {
+              navigate('/admin');
+            }}
+          >
+            어드민 페이지
+          </Nav_Btn>
+          <Save_Btn onClick={(e) => onSubmit(e)}>저장</Save_Btn>
         </Main_Header>
         <Admin_Main>
           <Admin_Main_Preview>
@@ -113,6 +186,39 @@ export default function Admin_Product() {
                   }}
                 />
               </Admin_Main_Option_Name>
+              <Admin_Main_Option_Keyword>
+                <p>키워드</p>
+                <input
+                  placeholder="키워드를 적어주세요."
+                  onChange={(e) => {
+                    setKeyword(e.target.value);
+                  }}
+                  onKeyPress={(e) => {
+                    if (e.key == 'Enter') {
+                      setSearchKeyword([...searchKeyword, keyword]);
+                    }
+                  }}
+                />
+                <Admin_Main_Option_Keyword_Text_Wrap>
+                  {searchKeyword.map((word: string, i: number) => {
+                    return (
+                      <div key={i.toString()}>
+                        <Admin_Main_Option_Keyword_Text>
+                          {word}
+                        </Admin_Main_Option_Keyword_Text>
+                        <button
+                          onClick={() => {
+                            searchKeyword.splice(i, 1);
+                            setSearchKeyword([...searchKeyword]);
+                          }}
+                        >
+                          X
+                        </button>
+                      </div>
+                    );
+                  })}
+                </Admin_Main_Option_Keyword_Text_Wrap>
+              </Admin_Main_Option_Keyword>
               <Admin_Main_Option_Price>
                 <p>판매가</p>
                 <input
@@ -221,43 +327,153 @@ export default function Admin_Product() {
                         <input
                           type="checkbox"
                           onClick={() => {
-                            first.subCategoryResponseDtoList.map((sub) => {
-                              if (sub.categoryId === first.id)
-                                setCheckId(!checkId);
-                            });
-                            setClickFirst(!clickFirst);
+                            firstListCheck[i] = !firstListCheck[i];
+                            setFirstListCheck([...firstListCheck]);
+                            firstId.current = i;
+                            if (firstListCheck[i])
+                              firstCheckId.current.push(first.id);
+                            else {
+                              firstCheckId.current =
+                                firstCheckId.current.filter(
+                                  (id) => id !== first.id
+                                );
+                              secondCheckId.current =
+                                secondCheckId.current.filter(
+                                  (id) =>
+                                    !categoryList[i].subCategoryResponseDtoList
+                                      .map((secondId) => secondId.id)
+                                      .includes(id)
+                                );
+                              secondListCheck[i] = secondListCheck[i].map(
+                                () => false
+                              );
+                              for (let n = 0; n < secondListCheck.length; n++) {
+                                setSecondListCheck([...secondListCheck]);
+                              }
+                              const tempSecond: any = [];
+                              const tempThirdId: any = [];
+                              categoryList[i].subCategoryResponseDtoList.map(
+                                (second) => tempSecond.push(second)
+                              );
+                              for (let i = 0; i < tempSecond.length; i++) {
+                                for (
+                                  let j = 0;
+                                  j <
+                                  tempSecond[i].thirdCategoryResponseDtoList
+                                    .length;
+                                  j++
+                                ) {
+                                  tempThirdId.push(
+                                    tempSecond[i].thirdCategoryResponseDtoList[
+                                      j
+                                    ].id
+                                  );
+                                }
+                              }
+                              for (let i = 0; i < tempThirdId.length; i++) {
+                                thirdListCheck[tempThirdId[i] - 1] = false;
+                              }
+                              thirdCheckId.current =
+                                thirdCheckId.current.filter(
+                                  (id) => !tempThirdId.includes(id)
+                                );
+                            }
                           }}
                         />
                         <p>{first.title}</p>
                       </Category>
-                      {clickFirst && checkId
-                        ? first.subCategoryResponseDtoList.map((second) => (
-                            <Second_Category key={second.id}>
-                              <Category>
-                                <input
-                                  type="checkbox"
-                                  onClick={() => setClickSecond(!clickSecond)}
-                                />
-                                <p>{second.title}</p>
-                              </Category>
-                              {clickSecond
-                                ? second.thirdCategoryResponseDtoList.map(
-                                    (third: any) => (
-                                      <Third_Category key={third.id}>
-                                        <Category>
-                                          <input
-                                            type="checkbox"
-                                            // onClick={() => setFirstCategoryId(first.id)}
-                                          />
-                                          <p>{third.title}</p>
-                                        </Category>
-                                      </Third_Category>
+                      {firstListCheck[i]
+                        ? categoryList[i].subCategoryResponseDtoList.map(
+                            (second, j) => (
+                              <Second_Category key={second.id}>
+                                <Category>
+                                  <input
+                                    type="checkbox"
+                                    onClick={() => {
+                                      secondListCheck[i][j] =
+                                        !secondListCheck[i][j];
+                                      for (
+                                        let n = 0;
+                                        n < secondListCheck.length;
+                                        n++
+                                      ) {
+                                        setSecondListCheck([
+                                          ...secondListCheck,
+                                        ]);
+                                      }
+                                      secondId.current = j;
+                                      if (secondListCheck[i][j]) {
+                                        secondCheckId.current.push(second.id);
+                                      } else {
+                                        secondCheckId.current =
+                                          secondCheckId.current.filter(
+                                            (id) => id !== second.id
+                                          );
+                                        thirdCheckId.current =
+                                          thirdCheckId.current.filter(
+                                            (id) =>
+                                              !categoryList[
+                                                i
+                                              ].subCategoryResponseDtoList[
+                                                j
+                                              ].thirdCategoryResponseDtoList
+                                                .map((third) => third.id)
+                                                .includes(id)
+                                          );
+                                        categoryList[
+                                          i
+                                        ].subCategoryResponseDtoList[
+                                          j
+                                        ].thirdCategoryResponseDtoList.map(
+                                          (third) =>
+                                            (thirdListCheck[third.id - 1] =
+                                              false)
+                                        );
+                                      }
+                                    }}
+                                  />
+                                  <p>{second.title}</p>
+                                </Category>
+                                {firstListCheck[i] && secondListCheck[i][j]
+                                  ? categoryList[i].subCategoryResponseDtoList[
+                                      j
+                                    ].thirdCategoryResponseDtoList.map(
+                                      (third: any, k) => (
+                                        <Third_Category key={third.id}>
+                                          <Category>
+                                            <input
+                                              type="checkbox"
+                                              onClick={() => {
+                                                thirdListCheck[third.id - 1] =
+                                                  !thirdListCheck[third.id - 1];
+                                                setThirdListCheck([
+                                                  ...thirdListCheck,
+                                                ]);
+                                                if (
+                                                  thirdListCheck[third.id - 1]
+                                                ) {
+                                                  console.log(third.id);
+                                                  thirdCheckId.current.push(
+                                                    third.id
+                                                  );
+                                                } else {
+                                                  thirdCheckId.current =
+                                                    thirdCheckId.current.filter(
+                                                      (id) => id !== third.id
+                                                    );
+                                                }
+                                              }}
+                                            />
+                                            <p>{third.title}</p>
+                                          </Category>
+                                        </Third_Category>
+                                      )
                                     )
-                                  )
-                                : null}
-                            </Second_Category>
-                          ))
-                        : null}
+                                  : false}
+                              </Second_Category>
+                            )
+                          )
+                        : false}
                     </First_Category>
                   ))}
                 </Admin_Main_Option_Category_Wrap>
@@ -313,15 +529,26 @@ const Main_Header = styled.div`
     line-height: 28px;
     left: 30px;
   }
-  button {
-    width: 80px;
-    height: 40px;
-    position: absolute;
-    background: #4286f4;
-    border-radius: 8px;
-    color: white;
-    right: 30px;
-  }
+`;
+const Nav_Btn = styled.button`
+  width: 100px;
+  height: 40px;
+  position: absolute;
+  background: #4286f4;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  right: 130px;
+`;
+const Save_Btn = styled.button`
+  width: 80px;
+  height: 40px;
+  position: absolute;
+  background: #4286f4;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  right: 30px;
 `;
 const Admin_Main = styled.section`
   width: 100%;
@@ -375,6 +602,56 @@ const Admin_Main_Option_Name = styled.section`
     border: 1px solid #eeeeee;
     border-radius: 10px;
   }
+`;
+const Admin_Main_Option_Keyword = styled.section`
+  position: relative;
+  width: 100%;
+  height: 13%;
+  padding: 10px;
+  p {
+    position: absolute;
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    color: #666666;
+  }
+  input {
+    position: absolute;
+    top: 30px;
+    height: 40px;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #eeeeee;
+    border-radius: 10px;
+  }
+`;
+const Admin_Main_Option_Keyword_Text_Wrap = styled.section`
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  top: 80px;
+  border: 1px solid #eeeeee;
+  overflow-y: auto;
+  button {
+    cursor: pointer;
+  }
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+const Admin_Main_Option_Keyword_Text = styled.div`
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 14px;
+  color: #666666;
 `;
 const Admin_Main_Option_Price = styled.section`
   position: relative;
@@ -563,13 +840,17 @@ const Category = styled.div`
     line-height: 24px;
     color: #666666;
   }
+  img {
+    width: 10px;
+    height: 10px;
+  }
 `;
 const First_Category = styled.section``;
 const Second_Category = styled.section`
   padding-left: 20px;
 `;
 const Third_Category = styled.section`
-  padding-left: 40px;
+  padding-left: 20px;
 `;
 
 const Admin_Main_Option_Summary = styled.section`
