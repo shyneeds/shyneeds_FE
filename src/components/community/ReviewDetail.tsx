@@ -12,7 +12,7 @@ const ReviewDetail = () => {
   };
 
   return (
-    <>
+    <Wrap>
       <TopCategoryWrap>
         <CategoryWrap>
           <TripReviewText>여행후기</TripReviewText>
@@ -69,17 +69,22 @@ const ReviewDetail = () => {
             <ShowProduct>상품 보기</ShowProduct>
           </div>
         </RelateProduct>
-        <ReviewReply/>
+        <ReviewReply />
       </ReviewContentWrap>
-    </>
+    </Wrap>
   );
 };
 
 export default ReviewDetail;
 
+const Wrap = styled.div`
+  width: 1184px;
+  margin : 0 auto;
+`;
+
 const TopCategoryWrap = styled.div`
   width: 1184px;
-  margin: 0 auto;
+  
 `;
 const CategoryWrap = styled.div`
   width: 1000px;
@@ -124,7 +129,7 @@ const ReviewContentWriter = styled.p`
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  :nth-child(0) {
+  :nth-child(1) {
     margin-left: 0px;
   }
 `;
@@ -160,15 +165,13 @@ const Like = styled.p`
 
 const ReviewContentWrap = styled.div`
   width: 1184px;
-  margin: 0 auto;
   margin-bottom: 58px;
   border-top: 1px solid #eeeeee;
-  padding-top: 40px;
+  padding : 40px 92px 0;
 `;
 
 const ReviewContent = styled.pre`
   width: 1000px;
-  margin: 0 auto;
   margin-bottom: 58px;
 `;
 const ReviewImage = styled.img`
