@@ -17,6 +17,7 @@ import { isLogin } from './features/kakaoLogin/kakaoLoginSlice';
 import Cart from './pages/cart/Cart';
 import GroupPage from './pages/groupPage/GroupPageView';
 import WritePage from './pages/community/Detail';
+import Write from './pages/community/Write';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ function App() {
         <Route path="/community/" element={<Community />}>
         </Route>
         <Route path="/community/detail" element={<WritePage />} />
+        <Route path='/community/write' element={<Write/>}/>
         <Route path="/loginRequest" element={<LoginRequest />} />
         <Route path="/offers" element={<Offers />} />
         <Route path="/reservation" element={<Reservation_Main />} />
