@@ -14,7 +14,7 @@ import { getProductData } from '../../components/common/Product_Type';
 
 export default function Admin_Main() {
   const [datas, setDatas] = useState<getProductData[]>([]);
-  const [value, setValue] = useState<number>(5.1);
+  const [value, setValue] = useState<number>(6.1);
   const [page, setPage] = useState<number>(1);
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -131,9 +131,12 @@ export default function Admin_Main() {
           >
             <p>삭제</p>
           </Main_Delete_Btn>
-          <Main_List_Number onChange={(e) => setValue(Number(e.target.value))}>
-            <option value="5.1">5개</option>
-            <option value="10.1">10개</option>
+          <Main_List_Number
+            value={value}
+            onChange={(e) => setValue(Number(e.target.value))}
+          >
+            <option value="4.1">4개</option>
+            <option value="6.1">6개</option>
           </Main_List_Number>
           <Main_Search
             placeholder="검색"
