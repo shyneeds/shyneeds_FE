@@ -46,7 +46,7 @@ export const ProductList = ({ data }: userData) => {
       <Summary>{summary}</Summary>
       <Price>{price}</Price>
       <SearchKeyword>{searchKeyword}</SearchKeyword>
-      <Status>{soldoutFlg ? '판매중' : '판매중지'}</Status>
+      <Status>{soldoutFlg ? '판매중지' : '판매중'}</Status>
     </List>
   );
 };
@@ -81,7 +81,7 @@ const Title = styled.div`
   }
 `;
 const Summary = styled.p`
-  width: 50%;
+  width: 55%;
 `;
 const Price = styled.p`
   width: 10%;

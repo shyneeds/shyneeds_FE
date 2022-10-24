@@ -107,12 +107,12 @@ export const categoryList = [
         categoryId: 2,
         thirdCategoryResponseDtoList: [
           {
-            id: 10,
+            id: 8,
             title: '중남미',
             subCategoryId: 11,
           },
           {
-            id: 11,
+            id: 9,
             title: '북미',
             subCategoryId: 11,
           },
@@ -124,17 +124,17 @@ export const categoryList = [
         categoryId: 2,
         thirdCategoryResponseDtoList: [
           {
-            id: 12,
+            id: 10,
             title: '대만',
             subCategoryId: 12,
           },
           {
-            id: 13,
+            id: 11,
             title: '중국',
             subCategoryId: 12,
           },
           {
-            id: 14,
+            id: 12,
             title: '일본',
             subCategoryId: 12,
           },
@@ -158,32 +158,32 @@ export const categoryList = [
         categoryId: 3,
         thirdCategoryResponseDtoList: [
           {
-            id: 15,
+            id: 13,
             title: '유럽/미국/특수지역',
             subCategoryId: 14,
           },
           {
-            id: 16,
+            id: 14,
             title: '태국/라오스/미얀마',
             subCategoryId: 14,
           },
           {
-            id: 17,
+            id: 15,
             title: '필리핀/인도네시아',
             subCategoryId: 14,
           },
           {
-            id: 18,
+            id: 16,
             title: '베트남/캄보디아',
             subCategoryId: 14,
           },
           {
-            id: 19,
+            id: 17,
             title: '싱가폴/기타동남아',
             subCategoryId: 14,
           },
           {
-            id: 20,
+            id: 18,
             title: '중국/일본/대만',
             subCategoryId: 14,
           },

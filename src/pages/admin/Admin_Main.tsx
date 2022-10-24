@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { ProductList } from '../../components/admin/Admin_Main_ProductList';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 import {
   clickId,
   clickedIds,
@@ -13,7 +14,7 @@ import { getProductData } from '../../components/common/Product_Type';
 
 export default function Admin_Main() {
   const [datas, setDatas] = useState<getProductData[]>([]);
-  const [value, setValue] = useState<number>(5);
+  const [value, setValue] = useState<number>(6.1);
   const [page, setPage] = useState<number>(1);
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -22,7 +23,6 @@ export default function Admin_Main() {
   const dispatch = useAppDispatch();
   const clicks = useAppSelector(clickedIds);
 
-  console.log(datas);
   const pageNumber: number = Math.floor(datas.length / value) + 1;
   useEffect(() => {
     axios({
@@ -33,7 +33,7 @@ export default function Admin_Main() {
           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
       },
     }).then((res) => setDatas(res.data.data));
-  }, []);
+  }, [clicks]);
 
   const searchBox = () => {
     if (keyword === '') {
@@ -44,7 +44,9 @@ export default function Admin_Main() {
           Authorization:
             'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
         },
-      }).then((res) => setDatas(res.data.data));
+      }).then((res) => {
+        setDatas(res.data.data);
+      });
     } else {
       axios({
         method: 'get',
@@ -53,19 +55,30 @@ export default function Admin_Main() {
           Authorization:
             'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
         },
-      }).then((res) => setDatas(res.data.data));
+      }).then((res) => {
+        setDatas(res.data.data);
+      });
     }
   };
 
   const deleteBtn = () => {
-    axios({
-      method: 'get',
-      // url: `http://13.125.151.45:8080/api/package/admin/delete/${id}`,
-      headers: {
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
-      },
-    }).then((res) => setDatas(res.data.data));
+    clicks.map((id) => {
+      axios({
+        method: 'post',
+        url: `http://13.125.151.45:8080/api/package/admin/delete/${id}`,
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
+        },
+      })
+        .then((response) => {
+          console.log({ response });
+          dispatch(unclickId(id));
+        })
+        .catch((error) => {
+          console.log({ error });
+        });
+    });
   };
 
   const checkAll = () => {
@@ -113,22 +126,25 @@ export default function Admin_Main() {
           </Main_Add_Btn>
           <Main_Delete_Btn
             onClick={() => {
-              deleteBtn;
+              deleteBtn();
             }}
           >
             <p>삭제</p>
           </Main_Delete_Btn>
-          <Main_List_Number onChange={(e) => setValue(Number(e.target.value))}>
-            <option value="5">5개</option>
-            <option value="10">10개</option>
+          <Main_List_Number
+            value={value}
+            onChange={(e) => setValue(Number(e.target.value))}
+          >
+            <option value="4.1">4개</option>
+            <option value="6.1">6개</option>
           </Main_List_Number>
           <Main_Search
             placeholder="검색"
             onChange={(e) => {
               setKeyword(e.target.value);
             }}
-            onKeyUp={(e) => {
-              if (e.keyCode === 13) {
+            onKeyPress={(e) => {
+              if (e.key == 'Enter') {
                 searchBox();
               }
             }}
@@ -145,7 +161,7 @@ export default function Admin_Main() {
                 <Title>상품명</Title>
                 <Summary>요약</Summary>
                 <Price>판매가</Price>
-                <SearchKeyword>카테고리</SearchKeyword>
+                <SearchKeyword>키워드</SearchKeyword>
                 <Status>상태</Status>
               </Main_List_Category>
               {datas
@@ -358,7 +374,7 @@ const Title = styled.p`
   width: 12%;
 `;
 const Summary = styled.p`
-  width: 50%;
+  width: 55%;
 `;
 const Price = styled.p`
   width: 10%;
