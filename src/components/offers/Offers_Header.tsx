@@ -7,11 +7,14 @@ import {
 } from '../common/Product_Type';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
-  productId,
-  productPrice,
+  addProduct,
+  setProductImage,
+  setProductTitle,
+  setTotalPrice,
   minusNum,
   plusNum,
   reservationProductNum,
+  reservationInfo,
 } from '../../features/userReservation/userReservationSlice';
 import { useNavigate } from 'react-router';
 
@@ -21,8 +24,12 @@ type offerData = {
 };
 
 interface optionType {
-  price: string;
+  optionFlg: boolean;
   optionValue: string;
+  price: string;
+  quantity: number;
+  optionTitle: string;
+  travelPackageId: number;
 }
 
 export default function Offers_Header() {
@@ -35,10 +42,6 @@ export default function Offers_Header() {
   const isLoaded = useRef<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  console.log(datas);
-  console.log(optionsPrice);
-  console.log(options);
 
   useEffect(() => {
     axios({
@@ -134,6 +137,10 @@ export default function Offers_Header() {
                               setOptions([
                                 ...options,
                                 {
+                                  optionFlg:
+                                    datas?.travelPackageResponseDto
+                                      .packageOptionResponseDto[`${name}`][i]
+                                      .optionFlg,
                                   optionValue: e.target.value.replaceAll(
                                     '[^a-zA-Z]',
                                     ''
@@ -148,6 +155,15 @@ export default function Offers_Header() {
                                       /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
                                       ','
                                     ),
+                                  quantity: 0,
+                                  optionTitle:
+                                    datas?.travelPackageResponseDto.packageOptionResponseDto[
+                                      `${name}`
+                                    ][i].title.replaceAll("'", ''),
+                                  travelPackageId:
+                                    datas?.travelPackageResponseDto
+                                      .packageOptionResponseDto[`${name}`][i]
+                                      .id,
                                 },
                               ]);
                             }
@@ -237,27 +253,77 @@ export default function Offers_Header() {
                 onClick={() => {
                   datas
                     ? dispatch(
-                        productId(datas?.travelPackageResponseDto.mainImage)
+                        setProductImage(
+                          datas.travelPackageResponseDto.mainImage
+                        )
                       )
                     : '';
                   datas
                     ? dispatch(
-                        productPrice(
-                          Number(
-                            datas?.travelPackageResponseDto.price.replace(
-                              /,/g,
-                              ''
-                            )
-                          ) * productNum
+                        setProductTitle(datas.travelPackageResponseDto.title)
+                      )
+                    : '';
+                  datas
+                    ? dispatch(
+                        setTotalPrice(
+                          (
+                            (optionsPrice.current +
+                              Number(
+                                datas?.travelPackageResponseDto?.price.replace(
+                                  /,/g,
+                                  ''
+                                )
+                              )) *
+                            productNum
+                          )
+                            .toString()
+                            .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
                         )
                       )
                     : '';
+                  datas ? dispatch(reservationInfo(options)) : '';
                   navigate('/reservation');
                 }}
               >
                 <p>예약하기</p>
               </Button_Reservation>
-              <Button_Cart onClick={() => navigate('/cart')}>
+              <Button_Cart
+                onClick={() => {
+                  datas ? dispatch(addProduct()) : '';
+                  datas
+                    ? dispatch(
+                        setProductImage(
+                          datas.travelPackageResponseDto.mainImage
+                        )
+                      )
+                    : '';
+                  datas
+                    ? dispatch(
+                        setProductTitle(datas.travelPackageResponseDto.title)
+                      )
+                    : '';
+                  datas
+                    ? dispatch(
+                        setTotalPrice(
+                          (
+                            (optionsPrice.current +
+                              Number(
+                                datas?.travelPackageResponseDto?.price.replace(
+                                  /,/g,
+                                  ''
+                                )
+                              )) *
+                            productNum
+                          )
+                            .toString()
+                            .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+                        )
+                      )
+                    : '';
+                  datas ? dispatch(reservationInfo(options)) : '';
+                  navigate('/cart');
+                }}
+              >
                 <p>장바구니</p>
               </Button_Cart>
             </ButtonWrap>
