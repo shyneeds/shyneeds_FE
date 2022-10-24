@@ -6,7 +6,7 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 interface InputItem {
   id: number;
   optionValue: string;
-  optionPrice: string;
+  price: string;
 }
 
 function Modal({ onClose }: any) {
@@ -17,7 +17,7 @@ function Modal({ onClose }: any) {
     {
       id: 0,
       optionValue: '',
-      optionPrice: '',
+      price: '',
     },
   ]);
   const dispatch = useAppDispatch();
@@ -30,7 +30,7 @@ function Modal({ onClose }: any) {
       const input = {
         id: inputId.current,
         optionValue: '',
-        optionPrice: '',
+        price: '',
       };
       setInputItems([...inputItems, input]);
       inputId.current += 1;
@@ -49,7 +49,7 @@ function Modal({ onClose }: any) {
                 const option = {
                   title: title,
                   optionValue: item.optionValue,
-                  optionPrice: item.optionPrice,
+                  price: item.price,
                   optionFlg: optionFlg,
                 };
                 dispatch(productOption(option));
@@ -101,7 +101,7 @@ function Modal({ onClose }: any) {
                     key={item.id}
                     placeholder="가격"
                     onChange={(e) => {
-                      item.optionPrice = e.target.value;
+                      item.price = e.target.value;
                     }}
                     onKeyUp={(e) => {
                       if (e.keyCode == 13) {

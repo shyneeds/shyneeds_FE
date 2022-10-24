@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { getProductData } from '../common/Product_Type';
+import {
+  getProductData,
+  packageOptionResponseDtoType,
+} from '../common/Product_Type';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   productId,
@@ -17,25 +20,53 @@ type offerData = {
   travelPackageResponseDto: getProductData;
 };
 
+interface optionType {
+  price: string;
+  optionValue: string;
+}
+
 export default function Offers_Header() {
   const [datas, setDatas] = useState<offerData>();
-  const [option, setOption] = useState<number | null>(0);
+  const [options, setOptions] = useState<optionType[]>([]);
   const [clicked, setClicked] = useState<boolean | null>(false);
   const productNum = useAppSelector(reservationProductNum);
+  const optionsName = useRef<string[]>([]);
+  const optionsPrice = useRef<number>(0);
+  const isLoaded = useRef<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  console.log(datas);
+  console.log(optionsPrice);
+  console.log(options);
+
   useEffect(() => {
     axios({
       method: 'get',
-      url: 'http://13.125.151.45:8080/api/package/2',
+      url: 'http://13.125.151.45:8080/api/package/24',
       headers: {
         Authorization:
           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
       },
     }).then((res) => {
       setDatas(res.data.data);
+      if (!isLoaded.current) {
+        for (const [key] of Object.entries(
+          res.data.data.travelPackageResponseDto.packageOptionResponseDto
+        )) {
+          optionsName.current.push(`${key}`);
+        }
+        isLoaded.current = !isLoaded.current;
+      }
     });
   }, []);
+
+  useEffect(() => {
+    optionsPrice.current = 0;
+    options.map((option) => {
+      optionsPrice.current += Number(option.price.replace(/,/g, ''));
+    });
+  }, [options]);
 
   return (
     <>
@@ -60,32 +91,128 @@ export default function Offers_Header() {
             >
               <img src={process.env.PUBLIC_URL + '/icons/share-icon.png'} />
             </Product_Share>
-            <Product_Name>여자끼리 파타고니아</Product_Name>
+            <Product_Name>{datas?.travelPackageResponseDto.title}</Product_Name>
             <Product_Price>
-              {datas?.travelPackageResponseDto.price}원
+              {datas?.travelPackageResponseDto?.price.replace(
+                /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+                ','
+              )}
+              원
             </Product_Price>
             <Product_Summary>
               {datas?.travelPackageResponseDto.summary}
             </Product_Summary>
-            <Product_Area>그리스</Product_Area>
-            <Product_Feature>포함투어 10개</Product_Feature>
-            <Product_Option onChange={(e) => setOption(Number(e.target.value))}>
-              <p>필수</p>
-              <option value="100000">100000원</option>
-              <option value="200000">200000원</option>
-            </Product_Option>
-            <Product_Option>
-              <p>필수</p>
-              <option value="50000">50000원</option>
-              <option value="300000">300000원</option>
-            </Product_Option>
+            <Product_Option_Wrap>
+              {optionsName.current.map((optionName, i) => (
+                <Product_Option key={optionName}>
+                  {datas?.travelPackageResponseDto.packageOptionResponseDto[
+                    `${optionName}`
+                  ][0].optionFlg
+                    ? optionName.replaceAll("'", '') + '(필수)'
+                    : optionName.replaceAll("'", '') + '(선택)'}
+                  {optionsName.current.map((name: string, j) =>
+                    i === j ? (
+                      <Product_Option_Select
+                        key={name}
+                        onChange={(e) => {
+                          for (
+                            let i = 0;
+                            i <
+                            datas?.travelPackageResponseDto
+                              .packageOptionResponseDto[`${name}`].length;
+                            i++
+                          ) {
+                            if (
+                              datas?.travelPackageResponseDto
+                                .packageOptionResponseDto[`${name}`][i]
+                                .optionValue === e.target.value &&
+                              !options.find(
+                                (option) =>
+                                  option.optionValue === e.target.value
+                              )
+                            ) {
+                              setOptions([
+                                ...options,
+                                {
+                                  optionValue: e.target.value.replaceAll(
+                                    '[^a-zA-Z]',
+                                    ''
+                                  ),
+                                  price: Number(
+                                    datas?.travelPackageResponseDto
+                                      .packageOptionResponseDto[`${name}`][i]
+                                      .price
+                                  )
+                                    .toString()
+                                    .replace(
+                                      /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+                                      ','
+                                    ),
+                                },
+                              ]);
+                            }
+                          }
+                        }}
+                      >
+                        {datas?.travelPackageResponseDto.packageOptionResponseDto[
+                          `${name}`
+                        ].map((option: packageOptionResponseDtoType) => (
+                          <option key={option.id} value={option.optionValue}>
+                            {option.optionValue.replaceAll('[^a-zA-Z]', '')}
+                            {'       '}
+                            {Number(option.price) === 0
+                              ? null
+                              : '(+' +
+                                Number(option.price)
+                                  .toString()
+                                  .replace(
+                                    /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,
+                                    ','
+                                  ) +
+                                '원)'}
+                          </option>
+                        ))}
+                      </Product_Option_Select>
+                    ) : (
+                      false
+                    )
+                  )}
+                </Product_Option>
+              ))}
+            </Product_Option_Wrap>
             <PriceWrap>
               <Product_Num>
-                <People_Num_Text>{option}</People_Num_Text>
+                <People_Option>
+                  <People_Option_Title>
+                    {options.map((option) => (
+                      <p key={option.optionValue}>{option.optionValue}</p>
+                    ))}
+                  </People_Option_Title>
+                  <People_Option_Btn>
+                    {options.map((option, i) => (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          setOptions([
+                            ...options.filter((opt) => opt !== option),
+                          ]);
+                        }}
+                      >
+                        x
+                      </button>
+                    ))}
+                  </People_Option_Btn>
+                </People_Option>
                 <People_Num>
-                  <Num_Plus onClick={() => dispatch(minusNum())}>-</Num_Plus>
+                  <Num_Minus
+                    onClick={() => {
+                      dispatch(minusNum());
+                    }}
+                  >
+                    -
+                  </Num_Minus>
                   <Num_Value>{productNum}</Num_Value>
-                  <Num_Minus onClick={() => dispatch(plusNum())}>+</Num_Minus>
+                  <Num_Plus onClick={() => dispatch(plusNum())}>+</Num_Plus>
                 </People_Num>
               </Product_Num>
               <PriceWrap_Line></PriceWrap_Line>
@@ -93,9 +220,11 @@ export default function Offers_Header() {
                 <Price_Text>총 상품 금액</Price_Text>
                 <Total_Price>
                   {(
-                    Number(
-                      datas?.travelPackageResponseDto?.price.replace(/,/g, '')
-                    ) * productNum
+                    (optionsPrice.current +
+                      Number(
+                        datas?.travelPackageResponseDto?.price.replace(/,/g, '')
+                      )) *
+                    productNum
                   )
                     .toString()
                     .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
@@ -208,17 +337,15 @@ const Product_Summary = styled.p`
   width: 70%;
   margin-top: 20px;
 `;
-const Product_Area = styled.p`
+const Product_Option_Wrap = styled.section``;
+const Product_Option = styled.section`
   font-family: 'Pretendard';
   font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
+  font-weight: 600;
+  font-size: 16px;
   line-height: 34px;
-  margin-top: 20px;
 `;
-const Product_Feature = styled.p``;
-const Product_Airplane = styled.p``;
-const Product_Option = styled.select`
+const Product_Option_Select = styled.select`
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 500;
@@ -255,20 +382,44 @@ const PriceWrap = styled.section`
   border: 1px solid #cccccc;
 `;
 const Product_Num = styled.div`
+  position: relative;
   height: 50%;
   display: flex;
-  position: relative;
+  overflow-y: auto;
   align-items: center;
 `;
-const People_Num_Text = styled.p`
+const People_Option = styled.section`
   position: absolute;
   left: 20px;
-  font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 15px;
-  line-height: 20px;
+  height: 100%;
 `;
+const People_Option_Title = styled.section`
+  position: absolute;
+  flex-direction: column;
+  p {
+    display: flex;
+    align-items: center;
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    height: 25px;
+    width: 100px;
+  }
+`;
+const People_Option_Btn = styled.section`
+  position: absolute;
+  left: 100px;
+  flex-direction: column;
+  button {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    height: 25px;
+    cursor: pointer;
+  }
+`;
+
 const People_Num = styled.div`
   position: absolute;
   right: 20px;

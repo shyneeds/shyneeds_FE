@@ -1,13 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Action } from '@remix-run/router';
 import { RootState } from '../../app/store';
+import { packageOptionRequestDtoListType } from '../../components/common/Product_Type';
 
-export interface packageOptionRequestDtoListType {
-  title: string;
-  optionValue: string;
-  optionPrice: string;
-  optionFlg: boolean;
-}
 export interface adminInfo {
   clickedIds: number[];
   options: packageOptionRequestDtoListType[];
@@ -37,7 +32,7 @@ export const adminPageSlice = createSlice({
       if (
         action.payload.title !== '' &&
         action.payload.optionValue !== '' &&
-        action.payload.optionPrice !== ''
+        action.payload.price !== ''
       )
         state.options.push(action.payload);
     },

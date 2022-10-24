@@ -9,17 +9,10 @@ import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
 import {
-  email,
   name,
   profileImage,
-  // Listlength,
-  // imageUrl,
   reservationList,
 } from '../../features/userData/userDataSlice';
-
-// export interface PropsType {
-//   popup: boolean;
-// }
 
 const MypageTab = () => {
   const [tab, setTab] = useState<number>(1);
@@ -27,9 +20,6 @@ const MypageTab = () => {
   const togglePop = () => {
     setPopup(!popup);
   };
-  // const [popup, setPopup] = useState<boolean>(false);
-  // const [datas, setDatas] = useState<any>([]);
-  // const [booking, setBooking] = useState<any>([]);
 
   const token = useAppSelector(userToken);
   const userIdValue = useAppSelector(userId);
@@ -47,14 +37,7 @@ const MypageTab = () => {
       dispatch(name(res.data.data.userInfo.name));
       dispatch(profileImage(res.data.data.userInfo.profileImage));
 
-      // dispatch(Listlength(res.data.data.reservationList.length));
-      // dispatch(
-      //   imageUrl(
-      //     res.data.data.reservationList[0].reservationPackage[0].imageUrl
-      //   )
-      // );
       dispatch(reservationList(res.data.data.reservationList));
-      // console.log(res.data.data.reservationList.length);
     });
   }, []);
   // useEffect(() => {
