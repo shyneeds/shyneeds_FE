@@ -9,7 +9,6 @@ import LoginResult from './components/login/LoginResult';
 import MyPage from './pages/myPage/MyPage';
 import LoginPage from './pages/login/LoginPage';
 import Community from './pages/community/Community';
-import LoginRequest from './components/login/LoginRequest';
 import Offers from './pages/offers/Offers';
 import Reservation_Main from './components/reservation/Reservation_Main';
 import { useAppDispatch } from './app/hooks';
@@ -41,7 +40,6 @@ function App() {
         <Route path="/community/" element={<Community />}></Route>
         <Route path="/community/detail" element={<DetailPage />} />
         <Route path='/community/write' element={<Write/>}/>
-        <Route path="/loginRequest" element={<LoginRequest />} />
         <Route path="/offers" element={<Offers />} />
         <Route path="/reservation" element={<Reservation_Main />} />
         <Route path="/cart" element={<Cart />} />
