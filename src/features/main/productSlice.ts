@@ -6,6 +6,7 @@ export interface getProductState {
   getRegionProduct: [];
   getThemeProduct: [];
   getExhibitionProduct: [];
+  getBannerProduct: [];
 }
 
 const initialState: getProductState = {
@@ -13,6 +14,7 @@ const initialState: getProductState = {
   getRegionProduct: [],
   getThemeProduct: [],
   getExhibitionProduct: [],
+  getBannerProduct: [],
 };
 
 export const productSlice = createSlice({
@@ -31,6 +33,9 @@ export const productSlice = createSlice({
     getExhibitionProductData: (state, action: PayloadAction<any>) => {
       state.getExhibitionProduct = action.payload;
     },
+    getBannerProductData: (state, action: PayloadAction<any>) => {
+      state.getBannerProduct = action.payload;
+    },
   },
 });
 
@@ -39,6 +44,7 @@ export const {
   getRegionProductData,
   getThemeProductData,
   getExhibitionProductData,
+  getBannerProductData,
 } = productSlice.actions;
 
 export const groupData = (state: RootState) => state.groupData.getGroupProduct;
@@ -47,5 +53,7 @@ export const regionData = (state: RootState) =>
 export const themeData = (state: RootState) => state.themeData.getThemeProduct;
 export const exhibitionData = (state: RootState) =>
   state.exhibitionData.getExhibitionProduct;
+export const bannerData = (state: RootState) =>
+  state.bannerData.getBannerProduct;
 
 export default productSlice.reducer;
