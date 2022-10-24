@@ -3,9 +3,7 @@ import { RootState } from '../../app/store';
 import axios from 'axios';
 import { REDIRECT_URL } from '../../constants/KAKAO_AUTH_URL';
 import { API_URL } from '../../constants/API_URL';
-import { useCookies } from 'react-cookie';
 
-// export const TOKEN_TIME_OUT = 600*1000;
 export const KakaoLoginAsync = createAsyncThunk(
   'GET_ACCESS_CODE',
   async (AccessCode: string, thunkAPI) => {

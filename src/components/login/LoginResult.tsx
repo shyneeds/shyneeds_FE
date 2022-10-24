@@ -1,13 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { REDIRECT_URL } from '../../constants/KAKAO_AUTH_URL';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
-  // getServerToken,
   KakaoLoginAsync,
-  loginToken,
-  userLogin,
   userToken,
 } from '../../features/kakaoLogin/kakaoLoginSlice';
 import { useCookies } from 'react-cookie';
@@ -18,7 +12,6 @@ const LoginResult = () => {
   const serverToken = useAppSelector(userToken);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get('code');
   const onlogin = new Promise(function (resolve) {
@@ -29,9 +22,6 @@ const LoginResult = () => {
       setCookie('token', serverToken, { path: '/', maxAge: 1800 });
     })
     .then(() => navigate(-1));
-
-  const url = window.location.href;
-  const arr = url.split('=');
   return (
     <>
       <Background>
