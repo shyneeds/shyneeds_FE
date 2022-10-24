@@ -1,18 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import {
-  reservationProductId,
-  reservationProductPrice,
-} from '../../features/userReservation/userReservationSlice';
+// import { reservationProductPrice } from '../../features/userReservation/userReservationSlice';
 
 export default function Reservation_Main() {
-  const productId = useAppSelector(reservationProductId);
-  const productPrice = useAppSelector(reservationProductPrice);
-  console.log(productId);
-  console.log(
-    productPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
-  );
   return (
     <Wrap>
       <MainWrap>
@@ -23,7 +14,7 @@ export default function Reservation_Main() {
           <Reservation_Product>
             <Reservation_Product_Text>예약 상품 정보</Reservation_Product_Text>
             <Reservation_Product_Wrap>
-              <Reservation_Product_Img src={productId} />
+              {/* <Reservation_Product_Img src={null} /> */}
               <Reservation_Product_Option_Wrap>
                 <Reservation_Product_Name>
                   5080의 버킷리스트
