@@ -18,11 +18,13 @@ import GroupPage from './pages/groupPage/GroupPageView';
 import DetailPage from './pages/community/Detail';
 import Write from './pages/community/Write';
 import Cancel from './pages/myPage/Cancel';
+import { useCookies } from 'react-cookie';
 
 function App() {
+  const [cookies, setCookie] = useCookies(['token']);
   const dispatch = useAppDispatch();
   const loggedInfo = () => {
-    sessionStorage.getItem('accessToken') && dispatch(isLogin(sessionStorage));
+    sessionStorage.getItem('refreshToken') && dispatch(isLogin(sessionStorage));
   };
   return (
     <>
@@ -37,8 +39,8 @@ function App() {
         <Route path="/mypage/cancel" element={<Cancel />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/loginResult" element={<LoginResult />} />
-        <Route path="/community/" element={<Community />}></Route>
-        <Route path="/community/detail" element={<DetailPage />} />
+        <Route path="/community/*" element={<Community />}></Route>
+        <Route path="/community/detail/*" element={<DetailPage />}/>
         <Route path='/community/write' element={<Write/>}/>
         <Route path="/offers" element={<Offers />} />
         <Route path="/reservation" element={<Reservation_Main />} />
