@@ -76,7 +76,7 @@ const ReviewWrap = styled.div`
 const ReviewContentWrap = styled.div`
   width: 100%;
   padding: 10px;
-  border: 1px solid #cccccc;
+  border: 1px solid #e9ecef;
   :nth-child(4n) {
     margin-right: 0px;
   }
