@@ -20,7 +20,7 @@ const CancelPage = () => {
   const token = useAppSelector(userToken);
   const userIdValue = useAppSelector(userId);
   const dispatch = useAppDispatch();
-  const cancleAlert = () => {
+  const cancelAlert = () => {
     if (confirm('주문 취소를 진행하시겠습니까?') === true) {
       axios({
         method: 'DELETE',
@@ -79,7 +79,7 @@ const CancelPage = () => {
           placeholder="상세 사유 입력(선택사항)"
           onChange={(e) => setDetail(e.target.value)}
         />
-        <CancelBtn onClick={() => cancleAlert()}>주문 취소</CancelBtn>
+        <CancelBtn onClick={() => cancelAlert()}>주문 취소</CancelBtn>
       </CancelInfo>
     </CancelWrap>
   );
