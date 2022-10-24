@@ -1,3 +1,16 @@
+export interface packageOptionResponseDtoType {
+  id: number;
+  title: string;
+  optionValue: string;
+  price: string;
+  optionFlg: boolean;
+}
+export interface packageOptionRequestDtoListType {
+  title: string;
+  optionValue: string;
+  price: string;
+  optionFlg: boolean;
+}
 export interface getProductData {
   categoryResponseDtoList: {
     createdAt: null;
@@ -22,19 +35,14 @@ export interface getProductData {
   title: string;
   updatedAt: string;
 }
-
-export interface postAdminProductData {
+export interface requestInfo {
   title: string;
   categoryIds: number[];
   subCategoryIds: number[];
   thirdCategoryIds: number[];
   price: string;
   summary: string;
-  requiredOptionName: string;
-  requiredOptionValues: string;
-  optionalName: string;
-  optionalValues: string;
-  flightInfo: string;
+  packageOptionRequestDtoList: packageOptionRequestDtoListType[];
   soldoutFlg: boolean;
   dispFlg: boolean;
   searchKeyword: string[];
