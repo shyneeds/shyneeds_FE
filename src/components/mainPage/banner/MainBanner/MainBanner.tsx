@@ -109,7 +109,11 @@ export const MainBanner = () => {
       <BannerSlider />
       <Wrapper_Left>
         <CurationBox>
-          <Select value={selected1} onChange={handleChange1}>
+          <Select
+            onClick={() => setIsResult(false)}
+            value={selected1}
+            onChange={handleChange1}
+          >
             {options_group.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.text}
