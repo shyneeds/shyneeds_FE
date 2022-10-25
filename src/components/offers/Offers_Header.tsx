@@ -46,7 +46,7 @@ export default function Offers_Header() {
   useEffect(() => {
     axios({
       method: 'get',
-      url: 'http://13.125.151.45:8080/api/package/24',
+      url: 'http://13.125.151.45:8080/api/package/25',
       headers: {
         Authorization:
           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
@@ -251,78 +251,86 @@ export default function Offers_Header() {
             <ButtonWrap>
               <Button_Reservation
                 onClick={() => {
-                  datas ? dispatch(addProduct()) : '';
-                  datas
-                    ? dispatch(
-                        setProductImage(
-                          datas.travelPackageResponseDto.mainImage
-                        )
-                      )
-                    : '';
-                  datas
-                    ? dispatch(
-                        setProductTitle(datas.travelPackageResponseDto.title)
-                      )
-                    : '';
-                  datas
-                    ? dispatch(
-                        setTotalPrice(
-                          (
-                            (optionsPrice.current +
-                              Number(
-                                datas?.travelPackageResponseDto?.price.replace(
-                                  /,/g,
-                                  ''
-                                )
-                              )) *
-                            productNum
+                  if (productNum > 0) {
+                    datas ? dispatch(addProduct()) : '';
+                    datas
+                      ? dispatch(
+                          setProductImage(
+                            datas.travelPackageResponseDto.mainImage
                           )
-                            .toString()
-                            .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
                         )
-                      )
-                    : '';
-                  datas ? dispatch(reservationInfo(options)) : '';
-                  navigate('/reservation');
+                      : '';
+                    datas
+                      ? dispatch(
+                          setProductTitle(datas.travelPackageResponseDto.title)
+                        )
+                      : '';
+                    datas
+                      ? dispatch(
+                          setTotalPrice(
+                            (
+                              (optionsPrice.current +
+                                Number(
+                                  datas?.travelPackageResponseDto?.price.replace(
+                                    /,/g,
+                                    ''
+                                  )
+                                )) *
+                              productNum
+                            )
+                              .toString()
+                              .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+                          )
+                        )
+                      : '';
+                    datas ? dispatch(reservationInfo(options)) : '';
+                    navigate('/reservation');
+                  } else {
+                    alert('인원이 0명입니다.');
+                  }
                 }}
               >
                 <p>예약하기</p>
               </Button_Reservation>
               <Button_Cart
                 onClick={() => {
-                  datas ? dispatch(addProduct()) : '';
-                  datas
-                    ? dispatch(
-                        setProductImage(
-                          datas.travelPackageResponseDto.mainImage
-                        )
-                      )
-                    : '';
-                  datas
-                    ? dispatch(
-                        setProductTitle(datas.travelPackageResponseDto.title)
-                      )
-                    : '';
-                  datas
-                    ? dispatch(
-                        setTotalPrice(
-                          (
-                            (optionsPrice.current +
-                              Number(
-                                datas?.travelPackageResponseDto?.price.replace(
-                                  /,/g,
-                                  ''
-                                )
-                              )) *
-                            productNum
+                  if (productNum > 0) {
+                    datas ? dispatch(addProduct()) : '';
+                    datas
+                      ? dispatch(
+                          setProductImage(
+                            datas.travelPackageResponseDto.mainImage
                           )
-                            .toString()
-                            .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
                         )
-                      )
-                    : '';
-                  datas ? dispatch(reservationInfo(options)) : '';
-                  navigate('/cart');
+                      : '';
+                    datas
+                      ? dispatch(
+                          setProductTitle(datas.travelPackageResponseDto.title)
+                        )
+                      : '';
+                    datas
+                      ? dispatch(
+                          setTotalPrice(
+                            (
+                              (optionsPrice.current +
+                                Number(
+                                  datas?.travelPackageResponseDto?.price.replace(
+                                    /,/g,
+                                    ''
+                                  )
+                                )) *
+                              productNum
+                            )
+                              .toString()
+                              .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+                          )
+                        )
+                      : '';
+                    datas ? dispatch(reservationInfo(options)) : '';
+                    navigate('/cart');
+                  } else {
+                    alert('인원이 0명입니다.');
+                  }
                 }}
               >
                 <p>장바구니</p>
