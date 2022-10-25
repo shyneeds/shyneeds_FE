@@ -7,7 +7,8 @@ export interface getProductState {
   getThemeProduct: [];
   getExhibitionProduct: [];
   getBannerProduct: [];
-  getProductId: [];
+  getProductIds: number[];
+  getProductId: number;
 }
 
 const initialState: getProductState = {
@@ -16,7 +17,8 @@ const initialState: getProductState = {
   getThemeProduct: [],
   getExhibitionProduct: [],
   getBannerProduct: [],
-  getProductId: [],
+  getProductIds: [],
+  getProductId: 0,
 };
 
 export const productSlice = createSlice({
@@ -38,7 +40,8 @@ export const productSlice = createSlice({
     getBannerProductData: (state, action: PayloadAction<any>) => {
       state.getBannerProduct = action.payload;
     },
-    getProductIdData: (state, action: PayloadAction<any>) => {
+    getProductIdData: (state, action: PayloadAction<number>) => {
+      state.getProductIds.push(action.payload);
       state.getProductId = action.payload;
     },
   },
