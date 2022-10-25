@@ -29,6 +29,8 @@ export const getServerToken = createAsyncThunk(
         Authorization: KakaoToken,
       },
     }).then((res) => {
+      const state: any = thunkAPI.getState();
+      // console.log(res.data.data.accessToken)
       thunkAPI.dispatch(userLogin(res.data.data))
       return res.data.data;
     });
@@ -64,14 +66,13 @@ export const KakaoLoginSlice = createSlice({
       state.kakaoToken = action.payload;
       console.log(state.kakaoToken);
     },
-    userLogin: (state, {payload}) => {
+    userLogin: (state, { payload }) => {
       console.log('슬라이스 실행');
       const { accessToken, userId, refreshToken } = payload;
-      console.log(payload);
-      state.userId = userId
+      state.userId = userId;
       state.userToken = accessToken
-      state.refreshToken = refreshToken
-      sessionStorage.setItem('accessToken',accessToken);
+      state.refreshToken = refreshToken;
+      sessionStorage.setItem('refreshToken', refreshToken);
       state.authenticated = true; // 로그인 상태 확인
     },
     userLogout: (state, action: PayloadAction<boolean>) => {
@@ -90,6 +91,8 @@ export const KakaoLoginSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getServerToken.fulfilled, (state) => {
       state.authenticated = true; // 로그인 상태 확인
+      // const {accessToken} = payload
+      // state.userToken = accessToken;
     });
   },
 });
