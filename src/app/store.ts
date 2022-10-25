@@ -17,6 +17,8 @@ export const store = configureStore({
     themeData: productReducer,
     groupData: productReducer,
     exhibitionData: productReducer,
+    bannerData: productReducer,
+    productId: productReducer,
     adminPage: adminPageSliceReducer,
     userData: userDataSliceReducer,
     page: pageReducer,
@@ -29,7 +31,7 @@ export const store = configureStore({
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-export const useAppDispatch: () => AppDispatch = useDispatch
+export const useAppDispatch: () => AppDispatch = useDispatch;
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
