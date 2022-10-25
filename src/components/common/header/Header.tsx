@@ -39,12 +39,13 @@ const Header = () => {
   return (
     <>
       <>
-        {openBanner && !hasCookies && (
+        {/* 작업 편의를 위한 주석 처리 */}
+        {/* {openBanner && !hasCookies && (
           <HeaderBanner
             closeBanner={() => setOpenBanner(false)}
             closeBannerUntilExpires={closeBannerUntilExpires}
           />
-        )}
+        )} */}
       </>
 
       <Container>
@@ -71,8 +72,8 @@ const Header = () => {
             {userAuthenticated ? <LogOutView /> : <LogInView />}
           </UserMenu>
         </Wrapper>
+        <Navbar />
       </Container>
-      <Navbar />
     </>
   );
 };
@@ -80,7 +81,7 @@ const Header = () => {
 export default Header;
 
 const Container = styled.div`
-  z-index: auto; !important;
+  z-index: 999;
 `;
 
 const Wrapper = styled.div`

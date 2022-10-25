@@ -22,21 +22,21 @@ export const RecommendedByGroup = () => {
 
 const Background = styled.div`
   width: 100%;
-  height: 732px;
+  height: 684px;
   background-color: #e8f5ff;
+  margin-bottom: 56px auto;
 `;
 
 const Container = styled.div`
   width: ${LAYOUT.SIZE.WIDTH};
   margin: 0 auto;
-  // height: 524px;
 `;
 
 const Title = styled.h1`
   font-size: 24px;
   font-weight: bold;
   letter-spacing: -1px;
-  padding: 80px 0 20px;
+  padding: 56px 0 24px 0;
 `;
 
 const Wrapper = styled.div`

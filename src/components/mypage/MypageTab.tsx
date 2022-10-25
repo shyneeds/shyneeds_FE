@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Reservation from './Reservation';
 import Writing from './Writing';
@@ -9,24 +9,19 @@ import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
 import {
-  email,
-  name,
-  profileImage,
-  // Listlength,
-  // imageUrl,
-  reservationList,
+  // name,
+  // profileImage,
+  // reservationList,
+  // totalPaymentAmount,
+  userInfo,
 } from '../../features/userData/userDataSlice';
 
-// export interface PropsType {
-//   popup: boolean;
-// }
-
-const Mypage = () => {
+const MypageTab = () => {
   const [tab, setTab] = useState<number>(1);
   const [popup, setPopup] = useState<boolean>(false);
-  // const [popup, setPopup] = useState<boolean>(false);
-  // const [datas, setDatas] = useState<any>([]);
-  // const [booking, setBooking] = useState<any>([]);
+  const togglePop = () => {
+    setPopup(!popup);
+  };
 
   const token = useAppSelector(userToken);
   const userIdValue = useAppSelector(userId);
@@ -41,34 +36,13 @@ const Mypage = () => {
       },
     }).then((res) => {
       console.log(res);
-      dispatch(name(res.data.data.userInfo.name));
-      dispatch(profileImage(res.data.data.userInfo.profileImage));
-
-      // dispatch(Listlength(res.data.data.reservationList.length));
-      // dispatch(
-      //   imageUrl(
-      //     res.data.data.reservationList[0].reservationPackage[0].imageUrl
-      //   )
-      // );
-      dispatch(reservationList(res.data.data.reservationList));
-      // console.log(res.data.data.reservationList.length);
+      dispatch(userInfo(res.data.data.userInfo));
+      // dispatch(name(res.data.data.userInfo.name));
+      // dispatch(profileImage(res.data.data.userInfo.profileImage));
+      // dispatch(reservationList(res.data.data.reservationList));
+      // dispatch(totalPaymentAmount(res.data.data.userInfo.totalPaymentAmount));
     });
   }, []);
-  // useEffect(() => {
-  //   axios({
-  //     method: 'get',
-  //     url: `http://13.125.151.45:8080/api/reservation/user/${userIdValue}`,
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   }).then((res) => {
-  //     console.log(res);
-  //     setBooking(res);
-  //     // dispatch(email(datas.userInfo.email));
-  //     // dispatch(name(datas.userInfo.name));
-  //   });
-  // }, []);
-  // console.log(booking);
 
   return (
     <div>
@@ -108,12 +82,14 @@ const Mypage = () => {
               </UserInfo>
             ) : null}
             <ContentsResult>
+              {/* 1. 취소를 클릭하면 tab이라는 게 바뀐다.
+              2. 트루값을 가지고 있는애면 예약조회 : 면 예약취소 사이트 */}
               {tab === 1 && <Reservation />}
               {tab === 2 && <Writing />}
               {tab === 3 && <Modify />}
               {/* {tab === 4 && <Withdrawal />} */}
               {/* {popup === true && <Withdrawal (props:propsType)setPopup={setPopup}/>} */}
-              {popup === true && <Withdrawal />}
+              {popup === true && <Withdrawal togglePop={togglePop} />}
             </ContentsResult>
           </ContentsMain>
         </Contents>
@@ -173,6 +149,8 @@ const UserInfo = styled.div`
   margin: 0 0 70px;
   padding: 50px 0 50px 40px;
   border: 1px solid #e9ecef;
+  border-radius: 8px;
+  box-shadow: 0px 4px 4px rgb(0 0 0 / 5%);
 `;
 
 const ContentsResult = styled.div`
@@ -182,4 +160,4 @@ const ContentsResult = styled.div`
   }
 `;
 
-export default Mypage;
+export default MypageTab;

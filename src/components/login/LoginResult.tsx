@@ -1,50 +1,56 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
-import { REDIRECT_URL } from '../../constants/KAKAO_AUTH_URL';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
-  kakaoToken,
-  loginToken,
+  KakaoLoginAsync,
+  userToken,
 } from '../../features/kakaoLogin/kakaoLoginSlice';
-import qs from 'qs';
-const { Kakao } = window;
+import { useCookies } from 'react-cookie';
+import styled from 'styled-components';
 
 const LoginResult = () => {
-  // const status = useAppSelector(loginToken);
+  const [cookies, setCookie] = useCookies(['token']);
+  const serverToken = useAppSelector(userToken);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const getToken = async () => {
-    const code = searchParams.get('code');
-    const grant_type = 'authorization_code';
-    const client_id = process.env.REACT_APP_KAKAO_API_KEY;
-
-    await axios({
-      url: `https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${client_id}&redirect_uri=${REDIRECT_URL}&code=${code}`,
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/x-www-form-urlencoded',
-      },
-    }).then((res) => {
-      console.log(res);
-      dispatch(kakaoToken(res.data.access_token));
-      navigate('/LoginRequest');
-    });
-  };
-  useEffect(() => {
-    getToken();
-  }, []);
-  const url = window.location.href;
-  const arr = url.split('=');
-
+  const code = searchParams.get('code');
+  const onlogin = new Promise(function (resolve) {
+    resolve(code && dispatch(KakaoLoginAsync(code)));
+  });
+  onlogin
+    .then(() => {
+      setCookie('token', serverToken, { path: '/', maxAge: 1800 });
+    })
+    .then(() => navigate(-1));
   return (
     <>
-      <h1>카카오 로그인 테스트</h1>
-      <h3>{url}</h3>
-      <h3>{arr[1]}</h3>
+      <Background>
+        <LoadingText>로그인중 입니다...</LoadingText>
+        <img src={process.env.PUBLIC_URL + '/icons/Rolling-2.4S.gif'}/>
+      </Background>
     </>
   );
 };
 
 export default LoginResult;
+export const Background = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: #ffffffb7;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  img{
+    width: 7%;
+    height : 7%;
+  }
+`;
+
+export const LoadingText = styled.div`
+  text-align: center;
+`;

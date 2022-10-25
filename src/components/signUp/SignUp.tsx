@@ -1,20 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import axios from 'axios';
 import { API_URL } from '../../constants/API_URL';
+import { useNavigate } from 'react-router';
 
 const SignUp = () => {
   const now = new Date();
   const year = now.getFullYear();
-  const month = now.getMonth() + 1 + '';
-  const day = now.getDate() + '';
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState({
-    year: (year + '') as any,
-    month: (month + '') as any,
-    day: (day + '') as any,
+    year: (year + '') as string,
+    month: (month + '') as string,
+    day: (day + '') as string,
   });
-  const [myImage, setMyImage] = useState<string>();
   const [tab, setTab] = useState<number>();
   const {
     register,
@@ -26,7 +27,6 @@ const SignUp = () => {
   } = useForm();
   const onSubmit = (formData: any) => {
     delete formData.password_repeat;
-    console.log(formData);
     axios({
       headers: {
         'Content-Type': 'application/json',
@@ -42,13 +42,8 @@ const SignUp = () => {
       .catch((error) => {
         console.log({ error });
       });
+    isError();
   };
-
-  const uploadImage = (e: any) => {
-    setMyImage(URL.createObjectURL(e.target.files[0]));
-    // setValue('image', e.target.files[0]); 삭제 예정
-  };
-  const imgRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const isPhoneNum = () => {
@@ -67,28 +62,13 @@ const SignUp = () => {
       );
     }
   };
-
+  const isError = () => {
+    Object.keys(errors).length === 0 && alert('회원가입이 완료되었습니다.'),
+      navigate(-1);
+  };
   return (
     <WrapContainer>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        {/* <InputImgBox>
-          <ImgButton
-            src={
-              imgRef.current
-                ? myImage
-                : process.env.PUBLIC_URL + '/icons/ic-member.svg'
-            }
-            onClick={() => imgRef.current?.click()}
-          />
-
-          <input
-            style={{ display: 'none' }}
-            ref={imgRef}
-            onChange={uploadImage}
-            type="file"
-            accept="image/*"
-          />
-        </InputImgBox> */}
         <NameStyle>이메일</NameStyle>
         <InputBox>
           <InputStyle
@@ -126,12 +106,10 @@ const SignUp = () => {
             style={{
               outline: errors.password_repeat ? '2px solid red' : '',
             }}
-            // ref={passwordRef}
             {...register('password_repeat', {
               validate: (value: string) => getValues('password') === value,
             })}
           />
-          {/* {watch(passwordRef.current?.value)} */}
           {passwordRef.current?.value !== getValues('password')}
           {errors.password_repeat && (
             <ErrorMessage>비밀번호를 확인해 주세요.</ErrorMessage>
@@ -141,7 +119,7 @@ const SignUp = () => {
           <NameStyle>이름</NameStyle>
           <InputStyle
             placeholder="이름을 적어주세요"
-            style={{ outline: errors.email ? '2px solid red' : '' }}
+            style={{ outline: errors.name ? '2px solid red' : '' }}
             {...register('name', {
               required: true,
               minLength: 2,
@@ -156,9 +134,9 @@ const SignUp = () => {
             placeholder="연락처를 적어주세요"
             style={{ outline: errors.phoneNumber ? '2px solid red' : '' }}
             {...register('phoneNumber', {
-              onChange: () => isPhoneNum(),
               required: true,
               pattern: /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/,
+              onChange: () => isPhoneNum(),
             })}
           />
           {errors.phoneNumber && (
@@ -169,6 +147,7 @@ const SignUp = () => {
           <NameStyle>생년월일</NameStyle>
           <BirthdayBox>
             <BirthSelect
+              defaultValue={year}
               {...register('year', { required: true })}
               onChange={(e) =>
                 setSelectedDate({ ...selectedDate, year: e.target.value })
@@ -181,6 +160,7 @@ const SignUp = () => {
               ))}
             </BirthSelect>
             <BirthSelect
+              defaultValue={month}
               {...register('month', { required: true })}
               onChange={(e) =>
                 setSelectedDate({ ...selectedDate, month: e.target.value })
@@ -193,6 +173,7 @@ const SignUp = () => {
               ))}
             </BirthSelect>
             <BirthSelect
+              defaultValue={day}
               {...register('day', { required: true })}
               onChange={(e) =>
                 setSelectedDate({ ...selectedDate, day: e.target.value })
@@ -200,7 +181,11 @@ const SignUp = () => {
             >
               {Array.from(
                 new Array(
-                  new Date(selectedDate.year, selectedDate.month, 0).getDate()
+                  new Date(
+                    parseInt(selectedDate.year),
+                    parseInt(selectedDate.month),
+                    0
+                  ).getDate()
                 ),
                 (v, i) => (
                   <option key={i} value={1 + i}>
@@ -248,10 +233,6 @@ const SignUp = () => {
 };
 
 export default SignUp;
-
-const InputImgBox = styled.div`
-  margin-bottom: 34px;
-`;
 
 const WrapContainer = styled.div`
   width: 600px;
@@ -375,9 +356,4 @@ const SigupAgree = styled.div`
 `;
 const AgreementText = styled.a`
   color: #4e89ef;
-`;
-const ImgButton = styled.img`
-  width: 100px;
-  height: 100px;
-  margin: 0 auto;
 `;

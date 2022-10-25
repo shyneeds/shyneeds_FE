@@ -1,10 +1,40 @@
 import React from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import {
+  userToken,
+  userId,
+  userLogout,
+} from '../../features/kakaoLogin/kakaoLoginSlice';
 
-const Withdrawal = () => {
+interface Prop {
+  togglePop: () => void;
+}
+const Withdrawal = ({ togglePop }: Prop): JSX.Element | any => {
+  const token = useAppSelector(userToken);
+  const userIdValue = useAppSelector(userId);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const goodbye = () => {
+    axios({
+      method: 'DELETE',
+      url: `http://13.125.151.45:8080/api/user/${userIdValue}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      console.log(res);
+    });
+    togglePop();
+    dispatch(userLogout(false));
+    navigate('/');
+  };
   return (
     <PopupBox>
-      <BackGround />
+      <BackGround onClick={togglePop} />
       <Popup>
         <Title>회원탈퇴</Title>
         <Info>
@@ -14,10 +44,20 @@ const Withdrawal = () => {
           탈퇴를 진행하시겠습니까?
         </Info>
         <BtnBox>
-          <Btn fontColor="#666" backgroundColor="#fff" padding="11px 26px">
+          <Btn
+            fontColor="#666"
+            backgroundColor="#fff"
+            padding="11px 26px"
+            onClick={togglePop}
+          >
             취소
           </Btn>
-          <Btn fontColor="#fff" backgroundColor="#4286F4" padding="11px 38px">
+          <Btn
+            fontColor="#fff"
+            backgroundColor="#4286F4"
+            padding="11px 38px"
+            onClick={() => goodbye()}
+          >
             탈퇴하기
           </Btn>
         </BtnBox>
