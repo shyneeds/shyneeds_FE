@@ -1,16 +1,18 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
+import { useAppSelector } from '../../../../app/hooks';
+import { useAppDispatch } from '../../../../app/store';
+import { productId } from '../../../../features/main/productSlice';
 
 export const WatchedStorage = () => {
-  useEffect(() => {
-    localStorage.setItem('WATCHED_PRODUCTS', JSON.stringify([]));
-  }, []);
+  const dispatch = useAppDispatch();
+  const id = useAppSelector(productId);
+  localStorage.setItem('WATCHED_PRODUCTS', JSON.stringify(id));
 
   return (
     <Container>
       <TextWrapper>
         <span>최근 본 상품</span>
-        <Quantity>({0})</Quantity>
+        <Quantity>({id.length})</Quantity>
       </TextWrapper>
       <StorageWrapper>
         <EmptyDiv>
