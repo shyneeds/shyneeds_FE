@@ -30,12 +30,26 @@ const Modify = () => {
     setValue,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => {
+    delete data.password_repeat;
+    console.log(data);
+    axios({
+      method: 'PATCH',
+      url: `http://13.125.151.45:8080/api/user`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    }).then((res) => {
+      console.log(res);
+    });
+    alert('회원정보 수정이 완료되었습니다.');
+  };
 
-  const { ref, ...rest } = register('image');
+  const { ref, ...rest } = register('profileImage');
   const uploadImage = (e: any) => {
     setMyImage(URL.createObjectURL(e.target.files[0]));
-    setValue('image', e.target.files[0]);
+    setValue('profileImage', e.target.files[0]);
   };
   const imgRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -45,18 +59,7 @@ const Modify = () => {
   const userInfo = useAppSelector<any>(userUserInfo);
   const userImg: any = userInfo.profileImage;
 
-  const modify = () => {
-    axios({
-      method: 'PATCH',
-      url: `http://13.125.151.45:8080/api/user`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((res) => {
-      console.log(res);
-    });
-    alert('회원정보 수정이 완료되었습니다.');
-  };
+  // const modify = () => {};
 
   useEffect(() => {
     //only use for Test
@@ -92,35 +95,7 @@ const Modify = () => {
               accept="image/*"
             />
           </InputImgBox>
-          <NameStyle>이메일</NameStyle>
-          <InputBox>
-            <InputStyle
-              type="text"
-              placeholder="이메일"
-              style={{
-                outline: errors.email ? '2px solid red' : '',
-              }}
-              {...register('email', { required: true, pattern: /^\S+@\S+$/i })}
-            />
-            {errors.email && <ErrorMessage>이메일 확인</ErrorMessage>}
-          </InputBox>
-          <InputBox>
-            <NameStyle>비밀번호</NameStyle>
-            <InputStyle
-              type="password"
-              placeholder="비밀번호"
-              {...register('password', {
-                required: true,
-                pattern: /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/,
-              })}
-            />
-            {errors.password && (
-              <ErrorMessage>
-                비밀번호는 영문자+숫자+특수문자 조합으로 8~25자리 사용해야
-                합니다.
-              </ErrorMessage>
-            )}
-          </InputBox>
+
           <InputBox>
             <NameStyle>새로운 비밀번호</NameStyle>
             <InputStyle
@@ -241,9 +216,7 @@ const Modify = () => {
           {Object.keys(errors).length !== 0 ? (
             <SubmitFailedButton>수정하기</SubmitFailedButton>
           ) : (
-            <SubmitButton type={'submit'} onClick={() => modify()}>
-              수정하기
-            </SubmitButton>
+            <SubmitButton type={'submit'}>수정하기</SubmitButton>
           )}
         </Form>
       </WrapContainer>

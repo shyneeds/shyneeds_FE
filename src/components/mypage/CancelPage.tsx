@@ -24,7 +24,7 @@ const CancelPage = () => {
     if (confirm('주문 취소를 진행하시겠습니까?') === true) {
       axios({
         method: 'DELETE',
-        url: `http://13.125.151.45:8080/api/reservation/user/${userIdValue}?reservation_number=${ProductData.reservationNumber}`,
+        url: `http://13.125.151.45:8080/api/reservation/user?reservation_number=${ProductData.reservationNumber}`,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -44,7 +44,6 @@ const CancelPage = () => {
   };
   console.log(optio);
   console.log(detail);
-  console.log('유저아이디' + userIdValue);
   return (
     <CancelWrap>
       <h2>
