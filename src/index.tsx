@@ -1,7 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { store } from './app/store';
+import { persistor, store } from './app/store';
+import { PersistGate } from 'redux-persist/integration/react';
 import App from './App';
 import GlobalStyle from './styles/global-styles';
 import { BrowserRouter } from 'react-router-dom';
@@ -13,10 +14,12 @@ const root = createRoot(container);
 root.render(
   <CookiesProvider>
     <Provider store={store}>
-      <BrowserRouter>
-        <GlobalStyle />
-        <App />
-      </BrowserRouter>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <GlobalStyle />
+          <App />
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   </CookiesProvider>
 );

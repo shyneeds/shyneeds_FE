@@ -8,12 +8,34 @@ import userDataSliceReducer from '../features/userData/userDataSlice';
 import pageReducer from '../features/communityPage/communityPageSlice';
 import { useDispatch } from 'react-redux';
 import replySliceReducer from '../features/communityPage/replySlice';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+
+const persistConfig = {
+  key: 'root',
+  version: 1,
+  storage,
+};
+
+const persistedReducer = persistReducer(
+  persistConfig,
+  userReservationSliceReducer
+);
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     kakaoLogin: kakaoLoginSliceReducer,
-    userReservation: userReservationSliceReducer,
+    userReservation: persistedReducer,
     regionData: productReducer,
     themeData: productReducer,
     groupData: productReducer,
@@ -23,11 +45,12 @@ export const store = configureStore({
     adminPage: adminPageSliceReducer,
     userData: userDataSliceReducer,
     page: pageReducer,
-    reply : replySliceReducer,
+    reply: replySliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     }),
 });
 
@@ -40,3 +63,4 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
+export const persistor = persistStore(store);

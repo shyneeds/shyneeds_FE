@@ -20,12 +20,14 @@ export interface reservationProductType {
 export interface userReservationInfo {
   num: number;
   peopleNum: number;
+  pageIds: (string | null)[];
   reservationProducts: reservationProductType[];
 }
 
 const initialState: userReservationInfo = {
   num: 0,
   peopleNum: 0,
+  pageIds: [],
   reservationProducts: [],
 };
 
@@ -42,6 +44,15 @@ export const userReservationSlice = createSlice({
         productNum: 0,
         reservationPackages: [],
       });
+    },
+    setProductIds: (state, action: PayloadAction<string | null>) => {
+      if (!state.pageIds.includes(action.payload)) {
+        if (state.pageIds.length > 1) {
+          state.pageIds = state.pageIds.reverse();
+          state.pageIds.pop();
+          state.pageIds.push(action.payload);
+        } else state.pageIds.push(action.payload);
+      }
     },
     setProductImage: (state, action: PayloadAction<string>) => {
       state.reservationProducts[state.num].mainImage = action.payload;
@@ -79,6 +90,7 @@ export const userReservationSlice = createSlice({
 
 export const {
   addProduct,
+  setProductIds,
   setProductImage,
   setProductTitle,
   setTotalPrice,

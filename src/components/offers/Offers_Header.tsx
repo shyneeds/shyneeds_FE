@@ -8,6 +8,7 @@ import {
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   addProduct,
+  setProductIds,
   setProductImage,
   setProductTitle,
   setTotalPrice,
@@ -16,6 +17,7 @@ import {
   reservationProductNum,
   reservationInfo,
 } from '../../features/userReservation/userReservationSlice';
+import { productId } from '../../features/main/productSlice';
 import { useNavigate } from 'react-router';
 
 type offerData = {
@@ -36,17 +38,19 @@ export default function Offers_Header() {
   const [datas, setDatas] = useState<offerData>();
   const [options, setOptions] = useState<optionType[]>([]);
   const [clicked, setClicked] = useState<boolean | null>(false);
-  const productNum = useAppSelector(reservationProductNum);
   const optionsName = useRef<string[]>([]);
   const optionsPrice = useRef<number>(0);
   const isLoaded = useRef<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const productNum = useAppSelector(reservationProductNum);
+
+  const id = localStorage.getItem('WATCHED_PRODUCTS');
 
   useEffect(() => {
     axios({
       method: 'get',
-      url: 'http://13.125.151.45:8080/api/package/24',
+      url: `http://13.125.151.45:8080/api/package/${id}`,
       headers: {
         Authorization:
           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
@@ -61,6 +65,7 @@ export default function Offers_Header() {
         }
         isLoaded.current = !isLoaded.current;
       }
+      dispatch(setProductIds(id));
     });
   }, []);
 
@@ -85,7 +90,7 @@ export default function Offers_Header() {
                   navigator.share({
                     title: datas?.travelPackageResponseDto.title,
                     text: datas?.travelPackageResponseDto.summary,
-                    url: 'http://localhost:3000/offers',
+                    url: `http://localhost:3000/offers/${productId}`,
                   });
                 } else {
                   alert('공유하기가 지원되지 않는 환경 입니다.');
@@ -251,77 +256,86 @@ export default function Offers_Header() {
             <ButtonWrap>
               <Button_Reservation
                 onClick={() => {
-                  datas
-                    ? dispatch(
-                        setProductImage(
-                          datas.travelPackageResponseDto.mainImage
-                        )
-                      )
-                    : '';
-                  datas
-                    ? dispatch(
-                        setProductTitle(datas.travelPackageResponseDto.title)
-                      )
-                    : '';
-                  datas
-                    ? dispatch(
-                        setTotalPrice(
-                          (
-                            (optionsPrice.current +
-                              Number(
-                                datas?.travelPackageResponseDto?.price.replace(
-                                  /,/g,
-                                  ''
-                                )
-                              )) *
-                            productNum
+                  if (productNum > 0) {
+                    datas ? dispatch(addProduct()) : '';
+                    datas
+                      ? dispatch(
+                          setProductImage(
+                            datas.travelPackageResponseDto.mainImage
                           )
-                            .toString()
-                            .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
                         )
-                      )
-                    : '';
-                  datas ? dispatch(reservationInfo(options)) : '';
-                  navigate('/reservation');
+                      : '';
+                    datas
+                      ? dispatch(
+                          setProductTitle(datas.travelPackageResponseDto.title)
+                        )
+                      : '';
+                    datas
+                      ? dispatch(
+                          setTotalPrice(
+                            (
+                              (optionsPrice.current +
+                                Number(
+                                  datas?.travelPackageResponseDto?.price.replace(
+                                    /,/g,
+                                    ''
+                                  )
+                                )) *
+                              productNum
+                            )
+                              .toString()
+                              .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+                          )
+                        )
+                      : '';
+                    datas ? dispatch(reservationInfo(options)) : '';
+                    navigate('/reservation');
+                  } else {
+                    alert('인원이 0명입니다.');
+                  }
                 }}
               >
                 <p>예약하기</p>
               </Button_Reservation>
               <Button_Cart
                 onClick={() => {
-                  datas ? dispatch(addProduct()) : '';
-                  datas
-                    ? dispatch(
-                        setProductImage(
-                          datas.travelPackageResponseDto.mainImage
-                        )
-                      )
-                    : '';
-                  datas
-                    ? dispatch(
-                        setProductTitle(datas.travelPackageResponseDto.title)
-                      )
-                    : '';
-                  datas
-                    ? dispatch(
-                        setTotalPrice(
-                          (
-                            (optionsPrice.current +
-                              Number(
-                                datas?.travelPackageResponseDto?.price.replace(
-                                  /,/g,
-                                  ''
-                                )
-                              )) *
-                            productNum
+                  if (productNum > 0) {
+                    datas ? dispatch(addProduct()) : '';
+                    datas
+                      ? dispatch(
+                          setProductImage(
+                            datas.travelPackageResponseDto.mainImage
                           )
-                            .toString()
-                            .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
                         )
-                      )
-                    : '';
-                  datas ? dispatch(reservationInfo(options)) : '';
-                  navigate('/cart');
+                      : '';
+                    datas
+                      ? dispatch(
+                          setProductTitle(datas.travelPackageResponseDto.title)
+                        )
+                      : '';
+                    datas
+                      ? dispatch(
+                          setTotalPrice(
+                            (
+                              (optionsPrice.current +
+                                Number(
+                                  datas?.travelPackageResponseDto?.price.replace(
+                                    /,/g,
+                                    ''
+                                  )
+                                )) *
+                              productNum
+                            )
+                              .toString()
+                              .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+                          )
+                        )
+                      : '';
+                    datas ? dispatch(reservationInfo(options)) : '';
+                    navigate('/cart');
+                  } else {
+                    alert('인원이 0명입니다.');
+                  }
                 }}
               >
                 <p>장바구니</p>
