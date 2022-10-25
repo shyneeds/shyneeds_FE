@@ -50,63 +50,65 @@ export default function Cart_Main() {
             <Cart_Info_Num>인원</Cart_Info_Num>
             <Cart_Info_Price>예약금액</Cart_Info_Price>
           </Cart_Info_Wrap>
-          {reservations.map((reservation, i) => (
-            <Cart_Product_Wrap key={i}>
-              <Cart_SelectBtn
-                onClick={() => {
-                  if (!isAdded.includes(i)) {
-                    totalPrice.current += Number(
-                      reservation.totalPrice.replaceAll(',', '')
-                    );
-                    setIsAdded((isAdded) => [...isAdded, i]);
-                  } else {
-                    totalPrice.current -= Number(
-                      reservation.totalPrice.replaceAll(',', '')
-                    );
-                    setIsAdded(isAdded.filter((add) => add != i));
-                  }
-                }}
-                type="checkbox"
-                checked={isAdded.includes(i)}
-                readOnly
-              ></Cart_SelectBtn>
-              <Cart_Product_Info>
-                <Cart_Product_Img
-                  src={reservation.mainImage}
-                ></Cart_Product_Img>
-                <Cart_Product_Info_Wrap>
-                  <Cart_Prouct_Name>
-                    {reservation.productTitle}
-                  </Cart_Prouct_Name>
-                  <Cart_Prouct_Option_Wrap>
-                    <Cart_Prouct_Option>
-                      {reservation.reservationPackages.map(
-                        (reservationPackage) => {
-                          return (
-                            <p key={reservationPackage.optionTitle}>
-                              {reservationPackage.optionTitle}
-                              {'     -      '}
-                              {'[' + reservationPackage.optionValue + ']'}
-                            </p>
-                          );
-                        }
-                      )}
-                    </Cart_Prouct_Option>
-                  </Cart_Prouct_Option_Wrap>
-                </Cart_Product_Info_Wrap>
-              </Cart_Product_Info>
-              <Cart_Product_Num>
-                <Cart_Product_Num_Text>
-                  {reservation.productNum + '명'}
-                </Cart_Product_Num_Text>
-              </Cart_Product_Num>
-              <Cart_Product_Price>
-                <Cart_Product_Price_Text>
-                  {reservation.totalPrice + '원'}
-                </Cart_Product_Price_Text>
-              </Cart_Product_Price>
-            </Cart_Product_Wrap>
-          ))}
+          <Cart_Product>
+            {reservations.map((reservation, i) => (
+              <Cart_Product_Wrap key={i}>
+                <Cart_SelectBtn
+                  onClick={() => {
+                    if (!isAdded.includes(i)) {
+                      totalPrice.current += Number(
+                        reservation.totalPrice.replaceAll(',', '')
+                      );
+                      setIsAdded((isAdded) => [...isAdded, i]);
+                    } else {
+                      totalPrice.current -= Number(
+                        reservation.totalPrice.replaceAll(',', '')
+                      );
+                      setIsAdded(isAdded.filter((add) => add != i));
+                    }
+                  }}
+                  type="checkbox"
+                  checked={isAdded.includes(i)}
+                  readOnly
+                ></Cart_SelectBtn>
+                <Cart_Product_Info>
+                  <Cart_Product_Img
+                    src={reservation.mainImage}
+                  ></Cart_Product_Img>
+                  <Cart_Product_Info_Wrap>
+                    <Cart_Prouct_Name>
+                      {reservation.productTitle}
+                    </Cart_Prouct_Name>
+                    <Cart_Prouct_Option_Wrap>
+                      <Cart_Prouct_Option>
+                        {reservation.reservationPackages.map(
+                          (reservationPackage) => {
+                            return (
+                              <p key={reservationPackage.optionTitle}>
+                                {reservationPackage.optionTitle}
+                                {'     -      '}
+                                {'[' + reservationPackage.optionValue + ']'}
+                              </p>
+                            );
+                          }
+                        )}
+                      </Cart_Prouct_Option>
+                    </Cart_Prouct_Option_Wrap>
+                  </Cart_Product_Info_Wrap>
+                </Cart_Product_Info>
+                <Cart_Product_Num>
+                  <Cart_Product_Num_Text>
+                    {reservation.productNum + '명'}
+                  </Cart_Product_Num_Text>
+                </Cart_Product_Num>
+                <Cart_Product_Price>
+                  <Cart_Product_Price_Text>
+                    {reservation.totalPrice + '원'}
+                  </Cart_Product_Price_Text>
+                </Cart_Product_Price>
+              </Cart_Product_Wrap>
+            ))}
+          </Cart_Product>
           <Cart_Delete_Btn
             onClick={() => {
               isAdded.map((add) => {
@@ -165,6 +167,10 @@ const Cart_Text = styled.p`
   font-size: 25px;
   font-weight: 500;
   height: 100px;
+`;
+const Cart_Product = styled.section`
+  overflow-y: auto;
+  height: 400px;
 `;
 const Cart_Info_Wrap = styled.section`
   display: flex;
