@@ -1,23 +1,24 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../app/hooks';
 import { reservationPackages } from '../../features/userReservation/userReservationSlice';
 
 export default function Reservation_Main() {
   const reservations = useAppSelector(reservationPackages);
-  const totalPrice = useRef<number>(0);
+  // const totalPrice = useRef<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
 
   useEffect(() => {
-    totalPrice.current = 0;
+    setTotalPrice(0);
+    let tempPrice = 0;
     {
       reservations.map(
         (reservation) =>
-          (totalPrice.current += Number(
-            reservation.totalPrice.replaceAll(',', '')
-          ))
+          (tempPrice += Number(reservation.totalPrice.replaceAll(',', '')))
       );
     }
-  }, []);
+    setTotalPrice(tempPrice);
+  }, [reservations]);
 
   return (
     <Wrap>
@@ -51,6 +52,9 @@ export default function Reservation_Main() {
                   <Reservation_Product_Price>
                     {reservation.totalPrice}
                   </Reservation_Product_Price>
+                  <Reservation_Product_ProductNum>
+                    {reservation.productNum + '명'}
+                  </Reservation_Product_ProductNum>
                 </Reservation_Product_Option_Wrap>
               </Reservation_Product_Wrap>
             ))}
@@ -69,7 +73,7 @@ export default function Reservation_Main() {
                 총 예약금액
               </Reservation_Summary_Total_Text>
               <Reservation_Summary_Total_Num>
-                {totalPrice.current
+                {totalPrice
                   .toString()
                   .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',') + '원'}
               </Reservation_Summary_Total_Num>
@@ -188,20 +192,29 @@ const Reservation_Product_Name = styled.p`
 `;
 const Reservation_Product_Option = styled.p`
   width: 300px;
+  height: 40px;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-size: 15px;
+  color: gray;
+  overflow-y: auto;
+`;
+const Reservation_Product_Price = styled.p`
+  width: 300px;
+  height: 20px;
+  margin-top: 5px;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+`;
+const Reservation_Product_ProductNum = styled.p`
+  width: 300px;
   height: 25px;
   font-family: 'Pretendard';
   font-style: normal;
   font-size: 15px;
   color: gray;
-`;
-const Reservation_Product_Price = styled.p`
-  width: 300px;
-  height: 20px;
-  margin-top: 10px;
-  font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
 `;
 const Reservation_User = styled.section`
   position: absolute;
@@ -220,7 +233,7 @@ const Reservation_User_Email = styled.p``;
 const Reservation_Summary = styled.section`
   position: absolute;
   width: 30%;
-  height: 30%;
+  height: 25%;
   right: 30px;
   background: white;
   padding: 25px;
@@ -232,7 +245,6 @@ const Reservation_Summary_TotalWrap = styled.section`
   transform: translate(-50%, -50%);
   height: 35%;
   width: 100%;
-  padding: 5px;
 `;
 const Reservation_Summary_Total_Text = styled.p`
   display: flex;
@@ -258,9 +270,9 @@ const Reservation_Summary_Total_Num = styled.p`
 const Reservation_Payment = styled.section`
   position: absolute;
   width: 30%;
-  height: 30%;
+  height: 35%;
   right: 30px;
-  top: 35%;
+  top: 30%;
   background: white;
   padding: 25px;
 `;
