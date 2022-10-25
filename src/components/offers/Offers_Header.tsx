@@ -8,6 +8,7 @@ import {
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   addProduct,
+  setProductIds,
   setProductImage,
   setProductTitle,
   setTotalPrice,
@@ -37,13 +38,14 @@ export default function Offers_Header() {
   const [datas, setDatas] = useState<offerData>();
   const [options, setOptions] = useState<optionType[]>([]);
   const [clicked, setClicked] = useState<boolean | null>(false);
-  const productNum = useAppSelector(reservationProductNum);
-  const id = localStorage.getItem('WATCHED_PRODUCTS');
   const optionsName = useRef<string[]>([]);
   const optionsPrice = useRef<number>(0);
   const isLoaded = useRef<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const productNum = useAppSelector(reservationProductNum);
+
+  const id = localStorage.getItem('WATCHED_PRODUCTS');
 
   useEffect(() => {
     axios({
@@ -63,6 +65,7 @@ export default function Offers_Header() {
         }
         isLoaded.current = !isLoaded.current;
       }
+      dispatch(setProductIds(id));
     });
   }, []);
 
