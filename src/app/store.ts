@@ -18,6 +18,7 @@ export const store = configureStore({
     groupData: productReducer,
     exhibitionData: productReducer,
     bannerData: productReducer,
+    productId: productReducer,
     adminPage: adminPageSliceReducer,
     userData: userDataSliceReducer,
     page: pageReducer,
