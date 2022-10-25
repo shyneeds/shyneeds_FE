@@ -11,7 +11,7 @@ import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
 import {
   // name,
   // profileImage,
-  // reservationList,
+  reservationList,
   // totalPaymentAmount,
   userInfo,
 } from '../../features/userData/userDataSlice';
@@ -39,7 +39,7 @@ const MypageTab = () => {
       dispatch(userInfo(res.data.data.userInfo));
       // dispatch(name(res.data.data.userInfo.name));
       // dispatch(profileImage(res.data.data.userInfo.profileImage));
-      // dispatch(reservationList(res.data.data.reservationList));
+      dispatch(reservationList(res.data.data.reservationList));
       // dispatch(totalPaymentAmount(res.data.data.userInfo.totalPaymentAmount));
     });
   }, []);

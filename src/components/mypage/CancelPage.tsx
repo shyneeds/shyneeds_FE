@@ -44,9 +44,9 @@ const CancelPage = () => {
   };
   console.log(optio);
   console.log(detail);
+  console.log('유저아이디' + userIdValue);
   return (
     <CancelWrap>
-      {/* <HelloBox /> */}
       <h2>
         예약 취소요청 <p>{ProductData.reservationNumber}</p>
       </h2>

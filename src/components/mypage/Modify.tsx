@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   // userDataName,
@@ -8,10 +9,12 @@ import {
   // userDataGender,
   userUserInfo,
 } from '../../features/userData/userDataSlice';
+import { userToken } from '../../features/kakaoLogin/kakaoLoginSlice';
 
 const Modify = () => {
   const now = new Date();
   const year = now.getFullYear();
+  const token = useAppSelector(userToken);
   const [selectedDate, setSelectedDate] = useState({
     year: (year + '') as any,
     month: '01' as any,
@@ -41,7 +44,20 @@ const Modify = () => {
   // const userGender = useAppSelector(userDataGender);
   const userInfo = useAppSelector<any>(userUserInfo);
   const userImg: any = userInfo.profileImage;
-  console.log(userInfo);
+
+  const modify = () => {
+    axios({
+      method: 'PATCH',
+      url: `http://13.125.151.45:8080/api/user`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      console.log(res);
+    });
+    alert('회원정보 수정이 완료되었습니다.');
+  };
+
   useEffect(() => {
     //only use for Test
     console.log(selectedDate);
@@ -51,12 +67,8 @@ const Modify = () => {
     if (userInfo.gender === 'male') {
       setTab(0);
     }
-    // if (userInfo.name !== null) {
-    // }
-    // if (userInfo.birthday !== null) {
-    // }
   }, []);
-  console.log(InputStyle);
+
   return (
     <div>
       <h2>회원정보수정</h2>
@@ -145,6 +157,7 @@ const Modify = () => {
           <InputBox>
             <NameStyle>이름</NameStyle>
             <InputStyle
+              defaultValue={userInfo.name}
               placeholder="이름"
               style={{ outline: errors.name ? '2px solid red' : '' }}
               {...register('name', {
@@ -159,6 +172,7 @@ const Modify = () => {
             <NameStyle>생년월일</NameStyle>
             <BirthdayBox>
               <BirthSelect
+                defaultValue={userInfo.birthday.substr(0, 4)}
                 {...register('year', { required: true })}
                 onChange={(e) =>
                   setSelectedDate({ ...selectedDate, year: e.target.value })
@@ -171,6 +185,7 @@ const Modify = () => {
                 ))}
               </BirthSelect>
               <BirthSelect
+                defaultValue={userInfo.birthday.substr(5, 7)}
                 {...register('month', { required: true })}
                 onChange={(e) =>
                   setSelectedDate({ ...selectedDate, month: e.target.value })
@@ -183,6 +198,7 @@ const Modify = () => {
                 ))}
               </BirthSelect>
               <BirthSelect
+                defaultValue={userInfo.birthday.substr(8, 10)}
                 {...register('day', { required: true })}
                 onChange={(e) =>
                   setSelectedDate({ ...selectedDate, day: e.target.value })
@@ -225,7 +241,9 @@ const Modify = () => {
           {Object.keys(errors).length !== 0 ? (
             <SubmitFailedButton>수정하기</SubmitFailedButton>
           ) : (
-            <SubmitButton type={'submit'}>수정하기</SubmitButton>
+            <SubmitButton type={'submit'} onClick={() => modify()}>
+              수정하기
+            </SubmitButton>
           )}
         </Form>
       </WrapContainer>

@@ -16,7 +16,7 @@ const CancelDetail = ({ dtTogglePop }: Prop): JSX.Element | any => {
   const reservationList = useAppSelector(userReservationList);
   const cancleNum = useAppSelector(userCancelNum);
   const ProductData: any = reservationList[cancleNum];
-  // console.log(cancelReason);
+  console.log(cancelReason);
   // console.log(cancelReason['cancelReason']);
   return (
     <div>
