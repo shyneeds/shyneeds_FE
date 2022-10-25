@@ -251,6 +251,7 @@ export default function Offers_Header() {
             <ButtonWrap>
               <Button_Reservation
                 onClick={() => {
+                  datas ? dispatch(addProduct()) : '';
                   datas
                     ? dispatch(
                         setProductImage(
