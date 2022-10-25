@@ -17,11 +17,13 @@ const LoginResult = () => {
   const code = searchParams.get('code');
 
   useEffect(() => {
-    if (serverToken === '') {
+    if (serverToken === (undefined||'')) {
       code && dispatch(KakaoLoginAsync(code));
+      console.log(serverToken)
     } else {
+      console.log(serverToken)
       setCookie('token', serverToken, { path: '/', maxAge: 1800 });
-      navigate(-1);
+      navigate(-2);
     }
   }, [serverToken]);
 
