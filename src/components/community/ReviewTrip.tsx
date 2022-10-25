@@ -1,14 +1,28 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { useAppSelector } from '../../app/hooks';
-import { totalElementsNum } from '../../features/communityPage/communityPageSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { searchWord, totalElementsNum } from '../../features/communityPage/communityPageSlice';
 import Pagenation from './Pagination';
 import ReviewContent from './ReviewContent';
 
 const ReviewTrip = () => {
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setValue,
+    reset,
+    // formState: { errors }, 추후 required 사용 예정
+  } = useForm();
+  const dispatch = useAppDispatch();
   const [tab, setTab] = useState<number>(0);
-  const totalNum = useAppSelector(totalElementsNum)
+  const totalNum = useAppSelector(totalElementsNum);
+  const onSubmit = (formData: any) => {
+    console.log(formData)
+    dispatch(searchWord(formData))
+  };
   return (
     <>
       <CategoryWrap>
@@ -31,18 +45,19 @@ const ReviewTrip = () => {
       </CategoryWrap>
       <SearchWrap>
         <SearchBox>
-          <img
-            src={process.env.PUBLIC_URL + '/icons/search.png'}
-            alt="search.png"
-          />
-          <input type="text" placeholder="검색" />
+            <img
+              src={process.env.PUBLIC_URL + '/icons/search.png'}
+              alt="search.png"
+            />
+          <form onSubmit={handleSubmit(onSubmit)}
+          >
+            <input {...register('search')} placeholder="검색" />
+          </form>
         </SearchBox>
-        <WriteButton to='/community/write'>
-          글쓰기
-        </WriteButton>
+        <WriteButton to="/community/write">글쓰기</WriteButton>
       </SearchWrap>
-      <ReviewContent/>
-      <Pagenation/>
+      <ReviewContent />
+      <Pagenation />
     </>
   );
 };
@@ -80,7 +95,7 @@ const CategoryWrap = styled.div`
   width: 1184px;
   margin: 0 auto;
   display: flex;
-  margin-top : 100px;
+  margin-top: 100px;
 `;
 
 const SearchWrap = styled.div`
@@ -89,7 +104,7 @@ const SearchWrap = styled.div`
   margin-top: 80px;
   display: flex;
   justify-content: space-between;
-  margin-bottom:26px;
+  margin-bottom: 26px;
 `;
 const SearchBox = styled.div`
   width: 326px;
@@ -123,14 +138,14 @@ const WriteButton = styled(Link)`
   color: white;
   line-height: 48px;
   text-align: center;
-  
+
   &:hover {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),
       0 2px 10px 0 rgba(0, 0, 0, 0.12);
   }
   cursor: pointer;
-`
+`;
 const ReviewWrap = styled.div`
-  width : 1184px;
-  display : flex;
-`
+  width: 1184px;
+  display: flex;
+`;
