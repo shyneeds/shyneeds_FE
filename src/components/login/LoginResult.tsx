@@ -6,27 +6,30 @@ import {
 } from '../../features/kakaoLogin/kakaoLoginSlice';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
+import { useEffect } from 'react';
 
 const LoginResult = () => {
   const [cookies, setCookie] = useCookies(['token']);
-  const serverToken = useAppSelector(userToken);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const serverToken = useAppSelector(userToken);
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get('code');
-  const onlogin = new Promise(function (resolve) {
-    resolve(code && dispatch(KakaoLoginAsync(code)));
-  });
-  onlogin
-    .then(() => {
+
+  useEffect(() => {
+    if (serverToken === '') {
+      code && dispatch(KakaoLoginAsync(code));
+    } else {
       setCookie('token', serverToken, { path: '/', maxAge: 1800 });
-    })
-    .then(() => navigate(-1));
+      navigate(-1);
+    }
+  }, [serverToken]);
+
   return (
     <>
       <Background>
         <LoadingText>로그인중 입니다...</LoadingText>
-        <img src={process.env.PUBLIC_URL + '/icons/Rolling-2.4S.gif'}/>
+        <img src={process.env.PUBLIC_URL + '/icons/Rolling-2.4S.gif'} />
       </Background>
     </>
   );
@@ -45,9 +48,9 @@ export const Background = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  img{
+  img {
     width: 7%;
-    height : 7%;
+    height: 7%;
   }
 `;
 
