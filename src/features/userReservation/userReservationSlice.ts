@@ -2,62 +2,106 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Action } from '@remix-run/router';
 import { RootState } from '../../app/store';
 
+export interface reservationPackaageType {
+  optionFlg: boolean;
+  optionValue: string;
+  price: string;
+  quantity: number;
+  optionTitle: string;
+  travelPackageId: number;
+}
+export interface reservationProductType {
+  mainImage: string;
+  productTitle: string;
+  totalPrice: string;
+  productNum: number;
+  reservationPackages: reservationPackaageType[];
+}
 export interface userReservationInfo {
   num: number;
-  productInfo: [
-    {
-      productId: number;
-      productImg: string;
-      productName: string;
-      productPrice: number;
-      peopleNum: number;
-      userOption: string[];
-    }
-  ];
+  peopleNum: number;
+  pageIds: (string | null)[];
+  reservationProducts: reservationProductType[];
 }
 
 const initialState: userReservationInfo = {
   num: 0,
-  productInfo: [
-    {
-      productId: 0,
-      productImg: '',
-      productName: '',
-      productPrice: 0,
-      peopleNum: 0,
-      userOption: [],
-    },
-  ],
+  peopleNum: 0,
+  pageIds: [],
+  reservationProducts: [],
 };
 
 export const userReservationSlice = createSlice({
   name: 'userReservation',
   initialState,
-  // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
-    productId: (state, action: PayloadAction<string>) => {
-      state.productInfo[0].productName = action.payload;
+    addProduct: (state) => {
+      state.reservationProducts.push({
+        mainImage: '',
+        productTitle: '',
+        totalPrice: '',
+        productNum: 0,
+        reservationPackages: [],
+      });
     },
-    productPrice: (state, action: PayloadAction<number>) => {
-      state.productInfo[0].productPrice = action.payload;
+    setProductIds: (state, action: PayloadAction<string | null>) => {
+      if (!state.pageIds.includes(action.payload)) {
+        if (state.pageIds.length > 1) {
+          state.pageIds = state.pageIds.reverse();
+          state.pageIds.pop();
+          state.pageIds.push(action.payload);
+        } else state.pageIds.push(action.payload);
+      }
+    },
+    setProductImage: (state, action: PayloadAction<string>) => {
+      state.reservationProducts[state.num].mainImage = action.payload;
+    },
+    setProductTitle: (state, action: PayloadAction<string>) => {
+      state.reservationProducts[state.num].productTitle = action.payload;
+    },
+    setTotalPrice: (state, action: PayloadAction<string>) => {
+      state.reservationProducts[state.num].totalPrice = action.payload;
+    },
+    reservationInfo: (
+      state,
+      action: PayloadAction<reservationPackaageType[]>
+    ) => {
+      state.reservationProducts[state.num].reservationPackages = action.payload;
+      state.reservationProducts[state.num].reservationPackages.map(
+        (reservationPackage) => (reservationPackage.quantity = state.peopleNum)
+      );
+      state.reservationProducts[state.num].productNum = state.peopleNum;
+      state.peopleNum = 0;
+      state.num += 1;
+    },
+    deleteReservationInfo: (state, action: PayloadAction<number>) => {
+      state.reservationProducts.splice(action.payload, 1);
+      state.num -= 1;
     },
     plusNum: (state) => {
-      state.productInfo[state.num].peopleNum += 1;
+      state.peopleNum += 1;
     },
     minusNum: (state) => {
-      if (state.productInfo[state.num].peopleNum > 0)
-        state.productInfo[state.num].peopleNum -= 1;
+      state.peopleNum -= 1;
     },
   },
 });
 
-export const { productId, productPrice, plusNum, minusNum } =
-  userReservationSlice.actions;
-export const reservationProductId = (state: RootState) =>
-  state.userReservation.productInfo[0].productName;
-export const reservationProductPrice = (state: RootState) =>
-  state.userReservation.productInfo[0].productPrice;
+export const {
+  addProduct,
+  setProductIds,
+  setProductImage,
+  setProductTitle,
+  setTotalPrice,
+  reservationInfo,
+  deleteReservationInfo,
+  plusNum,
+  minusNum,
+} = userReservationSlice.actions;
+
 export const reservationProductNum = (state: RootState) =>
-  state.userReservation.productInfo[0].peopleNum;
+  state.userReservation.peopleNum;
+export const reservationPackages = (state: RootState) =>
+  state.userReservation.reservationProducts;
 export default userReservationSlice.reducer;

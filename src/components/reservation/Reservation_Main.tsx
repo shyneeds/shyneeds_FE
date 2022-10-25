@@ -1,18 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import {
-  reservationProductId,
-  reservationProductPrice,
-} from '../../features/userReservation/userReservationSlice';
+import { reservationPackages } from '../../features/userReservation/userReservationSlice';
+import { userUserInfo } from '../../features/userData/userDataSlice';
+import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
+import { userInfo } from '../../features/userData/userDataSlice';
 
 export default function Reservation_Main() {
-  const productId = useAppSelector(reservationProductId);
-  const productPrice = useAppSelector(reservationProductPrice);
-  console.log(productId);
-  console.log(
-    productPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
-  );
+  const reservations = useAppSelector(reservationPackages);
+  const user = useAppSelector(userUserInfo);
+  const token = useAppSelector(userToken);
+  const userIdValue = useAppSelector(userId);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const dispatch = useAppDispatch();
+
+  console.log(user);
+  useEffect(() => {
+    setTotalPrice(0);
+    let tempPrice = 0;
+    {
+      reservations.map(
+        (reservation) =>
+          (tempPrice += Number(reservation.totalPrice.replaceAll(',', '')))
+      );
+    }
+    setTotalPrice(tempPrice);
+  }, [reservations]);
+
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `http://13.125.151.45:8080/api/my/user/${userIdValue}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      console.log(res);
+      dispatch(userInfo(res.data.data.userInfo));
+    });
+  }, []);
+
   return (
     <Wrap>
       <MainWrap>
@@ -22,20 +50,35 @@ export default function Reservation_Main() {
         <ReservationWrap>
           <Reservation_Product>
             <Reservation_Product_Text>예약 상품 정보</Reservation_Product_Text>
-            <Reservation_Product_Wrap>
-              <Reservation_Product_Img src={productId} />
-              <Reservation_Product_Option_Wrap>
-                <Reservation_Product_Name>
-                  5080의 버킷리스트
-                </Reservation_Product_Name>
-                <Reservation_Product_Option>
-                  ㅁㅁㅁㅁㅁㅁ
-                </Reservation_Product_Option>
-                <Reservation_Product_Price>
-                  1,000,000원
-                </Reservation_Product_Price>
-              </Reservation_Product_Option_Wrap>
-            </Reservation_Product_Wrap>
+            {reservations.map((reservation) => (
+              <Reservation_Product_Wrap key={reservation.productTitle}>
+                <Reservation_Product_Img src={reservation.mainImage} />
+                <Reservation_Product_Option_Wrap>
+                  <Reservation_Product_Name>
+                    {reservation.productTitle}
+                  </Reservation_Product_Name>
+                  <Reservation_Product_Option>
+                    {reservation.reservationPackages.map(
+                      (reservationPackage) => {
+                        return (
+                          <p key={reservationPackage.optionTitle}>
+                            {reservationPackage.optionTitle}
+                            {'     -      '}
+                            {'[' + reservationPackage.optionValue + ']'}
+                          </p>
+                        );
+                      }
+                    )}
+                  </Reservation_Product_Option>
+                  <Reservation_Product_Price>
+                    {reservation.totalPrice}
+                  </Reservation_Product_Price>
+                  <Reservation_Product_ProductNum>
+                    {reservation.productNum + '명'}
+                  </Reservation_Product_ProductNum>
+                </Reservation_Product_Option_Wrap>
+              </Reservation_Product_Wrap>
+            ))}
           </Reservation_Product>
           <Reservation_User>
             <Reservation_Product_Text>예약자 정보</Reservation_Product_Text>
@@ -46,31 +89,30 @@ export default function Reservation_Main() {
             </Reservation_User_Wrap>
           </Reservation_User>
           <Reservation_Summary>
-            <Reservation_Product_Text>주문 요약</Reservation_Product_Text>
-            <Reservation_Summary_PriceWrap>
-              <Reservation_Summary_Price_Text>
-                상품가격
-              </Reservation_Summary_Price_Text>
-              <Reservation_Summary_Price_Num>
-                200000000원
-              </Reservation_Summary_Price_Num>
-            </Reservation_Summary_PriceWrap>
             <Reservation_Summary_TotalWrap>
               <Reservation_Summary_Total_Text>
                 총 예약금액
               </Reservation_Summary_Total_Text>
               <Reservation_Summary_Total_Num>
-                200000000원
+                {totalPrice
+                  .toString()
+                  .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',') + '원'}
               </Reservation_Summary_Total_Num>
             </Reservation_Summary_TotalWrap>
           </Reservation_Summary>
           <Reservation_Payment>
-            <Reservation_Product_Text>결제 수단</Reservation_Product_Text>
+            <Reservation_Product_Text className="payment">
+              결제 수단
+            </Reservation_Product_Text>
             <Reservation_Payment_Wrap>
               <Reservation_Payment_Btn type="checkbox" />
               <Reservation_Payment_Text>무통장입금</Reservation_Payment_Text>
-              <Reservation_Payment_Bank></Reservation_Payment_Bank>
-              <Reservation_Payment_Name></Reservation_Payment_Name>
+              <Reservation_Payment_Bank>
+                <option value="신한은행 100-035-493389 (주)더샤이니">
+                  {'신한은행 100-035-493389 (주)더샤이니'}
+                </option>
+              </Reservation_Payment_Bank>
+              <Reservation_Payment_Name placeholder="입금자명 (미입력시 예약자명)"></Reservation_Payment_Name>
             </Reservation_Payment_Wrap>
           </Reservation_Payment>
           <Reservation_Agree></Reservation_Agree>
@@ -82,15 +124,6 @@ export default function Reservation_Main() {
     </Wrap>
   );
 }
-
-const Reservation_Product_Text = styled.p`
-  width: 100%;
-  height: 30%;
-  font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 800;
-  font-size: 25px;
-`;
 
 const Wrap = styled.section`
   width: 100vw;
@@ -127,16 +160,36 @@ const ReservationWrap = styled.section`
 const Reservation_Product = styled.section`
   position: absolute;
   width: 60%;
-  height: 30%;
+  height: 65%;
   left: 30px;
   padding: 25px;
   background: white;
+  overflow-x: hidden;
+  overflow-y: auto;
+`;
+const Reservation_Product_Text = styled.p`
+  width: 100%;
+  height: 10%;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 25px;
+  &.price {
+    height: 30%;
+  }
+  &.payment {
+    height: 30%;
+  }
 `;
 const Reservation_Product_Wrap = styled.section`
   display: flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
   width: 100%;
-  height: 70%;
+  height: 100px;
+  margin: 10px;
+  border-bottom: 1px solid rgba(33, 33, 33, 0.15);
 `;
 const Reservation_Product_Img = styled.img`
   width: 100px;
@@ -144,6 +197,9 @@ const Reservation_Product_Img = styled.img`
 `;
 const Reservation_Product_Option_Wrap = styled.section`
   display: flex;
+  width: 100%;
+  height: 100px;
+  justify-content: center;
   flex-direction: column;
   padding-left: 20px;
 `;
@@ -157,26 +213,36 @@ const Reservation_Product_Name = styled.p`
 `;
 const Reservation_Product_Option = styled.p`
   width: 300px;
+  height: 40px;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-size: 15px;
+  color: gray;
+  overflow-y: auto;
+`;
+const Reservation_Product_Price = styled.p`
+  width: 300px;
+  height: 20px;
+  margin-top: 5px;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+`;
+const Reservation_Product_ProductNum = styled.p`
+  width: 300px;
   height: 25px;
   font-family: 'Pretendard';
   font-style: normal;
   font-size: 15px;
   color: gray;
 `;
-const Reservation_Product_Price = styled.p`
-  width: 300px;
-  height: 25px;
-  font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 20px;
-`;
 const Reservation_User = styled.section`
   position: absolute;
   width: 60%;
   height: 30%;
   left: 30px;
-  top: 35%;
+  bottom: 0;
   background: white;
   padding: 25px;
 `;
@@ -188,30 +254,46 @@ const Reservation_User_Email = styled.p``;
 const Reservation_Summary = styled.section`
   position: absolute;
   width: 30%;
-  height: 30%;
+  height: 25%;
   right: 30px;
   background: white;
   padding: 25px;
 `;
-const Reservation_Summary_PriceWrap = styled.section`
-  height: 35%;
-  display: flex;
-`;
-const Reservation_Summary_Price_Text = styled.p``;
-const Reservation_Summary_Price_Num = styled.p``;
-
 const Reservation_Summary_TotalWrap = styled.section`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   height: 35%;
-  display: flex;
+  width: 100%;
 `;
-const Reservation_Summary_Total_Text = styled.p``;
-const Reservation_Summary_Total_Num = styled.p``;
+const Reservation_Summary_Total_Text = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-family: 'Pretendard';
+  font-weight: 600;
+  font-style: normal;
+  font-size: 20px;
+`;
+const Reservation_Summary_Total_Num = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  color: #0080c6;
+`;
 const Reservation_Payment = styled.section`
   position: absolute;
   width: 30%;
-  height: 30%;
+  height: 35%;
   right: 30px;
-  top: 35%;
+  top: 30%;
   background: white;
   padding: 25px;
 `;
@@ -260,8 +342,9 @@ const Reservation_Button = styled.button`
   height: 10%;
   right: 30px;
   color: white;
-  background: skyblue;
+  background: #4286f4;
   bottom: 0%;
+  cursor: pointer;
   p {
     font-family: 'Pretendard';
     font-style: normal;

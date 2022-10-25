@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
@@ -8,7 +9,7 @@ import {
   blockNum,
   prevPage,
   totalPageData,
-} from '../../features/page/page';
+} from '../../features/communityPage/communityPageSlice';
 
 
 const Pagenation = () => {
@@ -39,7 +40,7 @@ const Pagenation = () => {
             onClick={() => dispatch(setPage(n))}
             ariaCurrent={page === n}
           >
-            {n}
+            <Link to={`/community/${n}`}>{n}</Link>
           </NumButton>
         ))}
         <Button

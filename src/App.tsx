@@ -9,7 +9,6 @@ import LoginResult from './components/login/LoginResult';
 import MyPage from './pages/myPage/MyPage';
 import LoginPage from './pages/login/LoginPage';
 import Community from './pages/community/Community';
-import LoginRequest from './components/login/LoginRequest';
 import Offers from './pages/offers/Offers';
 import Reservation_Main from './components/reservation/Reservation_Main';
 import { useAppDispatch } from './app/hooks';
@@ -19,11 +18,13 @@ import GroupPage from './pages/groupPage/GroupPageView';
 import DetailPage from './pages/community/Detail';
 import Write from './pages/community/Write';
 import Cancel from './pages/myPage/Cancel';
+import { useCookies } from 'react-cookie';
 
 function App() {
+  const [cookies, setCookie] = useCookies(['token']);
   const dispatch = useAppDispatch();
   const loggedInfo = () => {
-    sessionStorage.getItem('accessToken') && dispatch(isLogin(sessionStorage));
+    sessionStorage.getItem('refreshToken') && dispatch(isLogin(sessionStorage));
   };
   return (
     <>
@@ -38,11 +39,11 @@ function App() {
         <Route path="/mypage/cancel" element={<Cancel />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/loginResult" element={<LoginResult />} />
-        <Route path="/community/" element={<Community />}></Route>
-        <Route path="/community/detail" element={<DetailPage />} />
-        <Route path='/community/write' element={<Write/>}/>
-        <Route path="/loginRequest" element={<LoginRequest />} />
+        <Route path="/community/*" element={<Community />}></Route>
+        <Route path="/community/detail/*" element={<DetailPage />} />
+        <Route path="/community/write" element={<Write />} />
         <Route path="/offers" element={<Offers />} />
+        <Route path="/offers/:id" element={<Offers />} />
         <Route path="/reservation" element={<Reservation_Main />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/subPage" element={<GroupPage />} />

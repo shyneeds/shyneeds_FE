@@ -48,8 +48,15 @@ export const RecommendedByRegion = () => {
       <RecommendedListTitle>어디로 떠나세요?</RecommendedListTitle>
       <CarouselContainer {...settings}>
         {products.map((data: any) => (
-          <Link to={'detail/' + data.id} key={data.id}>
-            <ProductWrap>
+          <Link to={'offers/' + data.id} key={data.id}>
+            <ProductWrap
+              onClick={() =>
+                localStorage.setItem(
+                  'WATCHED_PRODUCTS',
+                  JSON.stringify(data.id)
+                )
+              }
+            >
               <img src={data.imageUrl} alt="product_image" />
               <ProductText>
                 <Title>{data.title}</Title>

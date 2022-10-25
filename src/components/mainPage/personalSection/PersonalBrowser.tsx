@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Dropdown } from '../banner/MainBanner/dropDown/Dropdown';
+import { Dropdown } from './Dropdown';
 
 export const PersonalBrowser = () => {
   const [selected, setSelected] = useState('');

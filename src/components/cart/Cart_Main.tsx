@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { reservationProductId } from '../../features/userReservation/userReservationSlice';
+import {
+  reservationPackages,
+  reservationProductNum,
+  deleteReservationInfo,
+} from '../../features/userReservation/userReservationSlice';
 import { useNavigate } from 'react-router';
 
 export default function Cart_Main() {
-  const productId = useAppSelector(reservationProductId);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [isAdded, setIsAdded] = useState<number[]>([]);
+  const totalPrice = useRef<number>(0);
+  const reservations = useAppSelector(reservationPackages);
+  const productNum = useAppSelector(reservationProductNum);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  console.log(productNum);
+  console.log(reservations);
 
   return (
     <>
@@ -14,34 +26,116 @@ export default function Cart_Main() {
         <Cart_Wrap>
           <Cart_Text>관심상품</Cart_Text>
           <Cart_Info_Wrap>
-            <Cart_SelectBtn type="checkbox"></Cart_SelectBtn>
+            <Cart_SelectBtn
+              onClick={() => {
+                reservations.map((reservation, i) => {
+                  if (!isChecked) {
+                    if (!isAdded.includes(i)) {
+                      totalPrice.current += Number(
+                        reservation.totalPrice.replaceAll(',', '')
+                      );
+                      setIsAdded((isAdded) => [...isAdded, i]);
+                    }
+                  } else {
+                    totalPrice.current = 0;
+                    setIsAdded([]);
+                  }
+                  setIsChecked(!isChecked);
+                });
+              }}
+              type="checkbox"
+              readOnly
+            ></Cart_SelectBtn>
             <Cart_Info_Text>상품 정보</Cart_Info_Text>
             <Cart_Info_Num>인원</Cart_Info_Num>
             <Cart_Info_Price>예약금액</Cart_Info_Price>
           </Cart_Info_Wrap>
-          <Cart_Product_Wrap>
-            <Cart_SelectBtn type="checkbox"></Cart_SelectBtn>
-            <Cart_Product_Info>
-              <Cart_Product_Img src="https://shyneeds.s3.ap-northeast-2.amazonaws.com/package/그리스2/main/greece_thumb_6fcb7202-edff-4057-90e3-a7f66a04d6dd.jpeg"></Cart_Product_Img>
-              <Cart_Product_Info_Wrap>
-                <Cart_Prouct_Name>5070의 버킷리스트</Cart_Prouct_Name>
-                <Cart_Prouct_Option>0000000000000</Cart_Prouct_Option>
-              </Cart_Product_Info_Wrap>
-            </Cart_Product_Info>
-            <Cart_Product_Num>
-              <Cart_Product_Num_Text>1</Cart_Product_Num_Text>
-            </Cart_Product_Num>
-            <Cart_Product_Price>
-              <Cart_Product_Price_Text>2000</Cart_Product_Price_Text>
-            </Cart_Product_Price>
-          </Cart_Product_Wrap>
-          <Cart_Delete_Btn>선택상품 삭제</Cart_Delete_Btn>
+          <Cart_Product>
+            {reservations.map((reservation, i) => (
+              <Cart_Product_Wrap key={i}>
+                <Cart_SelectBtn
+                  onClick={() => {
+                    if (!isAdded.includes(i)) {
+                      totalPrice.current += Number(
+                        reservation.totalPrice.replaceAll(',', '')
+                      );
+                      setIsAdded((isAdded) => [...isAdded, i]);
+                    } else {
+                      totalPrice.current -= Number(
+                        reservation.totalPrice.replaceAll(',', '')
+                      );
+                      setIsAdded(isAdded.filter((add) => add != i));
+                    }
+                  }}
+                  type="checkbox"
+                  checked={isAdded.includes(i)}
+                  readOnly
+                ></Cart_SelectBtn>
+                <Cart_Product_Info>
+                  <Cart_Product_Img
+                    src={reservation.mainImage}
+                  ></Cart_Product_Img>
+                  <Cart_Product_Info_Wrap>
+                    <Cart_Prouct_Name>
+                      {reservation.productTitle}
+                    </Cart_Prouct_Name>
+                    <Cart_Prouct_Option_Wrap>
+                      <Cart_Prouct_Option>
+                        {reservation.reservationPackages.map(
+                          (reservationPackage) => {
+                            return (
+                              <p key={reservationPackage.optionTitle}>
+                                {reservationPackage.optionTitle}
+                                {'     -      '}
+                                {'[' + reservationPackage.optionValue + ']'}
+                              </p>
+                            );
+                          }
+                        )}
+                      </Cart_Prouct_Option>
+                    </Cart_Prouct_Option_Wrap>
+                  </Cart_Product_Info_Wrap>
+                </Cart_Product_Info>
+                <Cart_Product_Num>
+                  <Cart_Product_Num_Text>
+                    {reservation.productNum + '명'}
+                  </Cart_Product_Num_Text>
+                </Cart_Product_Num>
+                <Cart_Product_Price>
+                  <Cart_Product_Price_Text>
+                    {reservation.totalPrice + '원'}
+                  </Cart_Product_Price_Text>
+                </Cart_Product_Price>
+              </Cart_Product_Wrap>
+            ))}
+          </Cart_Product>
+          <Cart_Delete_Btn
+            onClick={() => {
+              isAdded.map((add) => {
+                dispatch(deleteReservationInfo(add));
+                console.log(add);
+              });
+              isAdded.map((add) => {
+                setIsAdded(isAdded.filter((isAdd) => isAdd !== add));
+                totalPrice.current -= Number(
+                  reservations[add].totalPrice.replaceAll(',', '')
+                );
+              });
+            }}
+          >
+            선택상품 삭제
+          </Cart_Delete_Btn>
           <Cart_Price_Wrap>
             <Cart_Total_Num>
               <p>총 주문 상품</p>
             </Cart_Total_Num>
             <Cart_Total_Price>
-              <Cart_Total_Price_Num>1111111원</Cart_Total_Price_Num>
+              <Cart_Total_Price_Num>
+                {totalPrice.current
+                  .toString()
+                  .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
+                원
+              </Cart_Total_Price_Num>
               <Cart_Total_Price_Text>총 예약금액</Cart_Total_Price_Text>
             </Cart_Total_Price>
           </Cart_Price_Wrap>
@@ -73,6 +167,10 @@ const Cart_Text = styled.p`
   font-size: 25px;
   font-weight: 500;
   height: 100px;
+`;
+const Cart_Product = styled.section`
+  overflow-y: auto;
+  height: 400px;
 `;
 const Cart_Info_Wrap = styled.section`
   display: flex;
@@ -123,13 +221,28 @@ const Cart_Prouct_Name = styled.p`
   padding: 10px;
   width: 100%;
   height: 40%;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 20px;
+  color: #666666;
 `;
-const Cart_Prouct_Option = styled.p`
+const Cart_Prouct_Option_Wrap = styled.section`
   padding: 10px;
   width: 100%;
   height: 40%;
 `;
-
+const Cart_Prouct_Option = styled.section`
+  p {
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    color: #666666;
+  }
+`;
 const Cart_Product_Num = styled.section`
   display: flex;
   justify-content: center;
@@ -144,6 +257,7 @@ const Cart_Product_Num_Text = styled.p`
   font-weight: 540;
   font-size: 20px;
   line-height: 24px;
+  color: #666666;
 `;
 const Cart_Product_Price = styled.section`
   display: flex;

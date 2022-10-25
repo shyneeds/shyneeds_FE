@@ -2,23 +2,40 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import axios from 'axios';
 import { REDIRECT_URL } from '../../constants/KAKAO_AUTH_URL';
+import { API_URL } from '../../constants/API_URL';
 
-// export const TOKEN_TIME_OUT = 600*1000;
-// export const KakaoLoginAsync = createAsyncThunk(
-//   'GET_ACCESS_CODE',
-//   async (AccessCode: string) => {
-//     console.log("돌아가니?")
-//     await axios({
-//       url: `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.REACT_APP_KAKAO_API_KEY}&redirect_uri=${REDIRECT_URL}&code=${AccessCode}`,
-//       method: 'POST',
-//       headers: {
-//         'Content-type': 'application/x-www-form-urlencoded',
-//       },
-//     }).then((res) => {
-//       console.log(res);
-//     });
-//   }
-// );
+export const KakaoLoginAsync = createAsyncThunk(
+  'GET_ACCESS_CODE',
+  async (AccessCode: string, thunkAPI) => {
+    return await axios({
+      url: `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${process.env.REACT_APP_KAKAO_API_KEY}&redirect_uri=${REDIRECT_URL}&code=${AccessCode}`,
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded',
+      },
+    }).then((res) => {
+      thunkAPI.dispatch(getServerToken(res.data.access_token));
+    });
+  }
+);
+export const getServerToken = createAsyncThunk(
+  'GET_SEVER_ACCESS_CODE',
+  async (KakaoToken: string, thunkAPI) => {
+    return await axios({
+      url: API_URL.POST.KAKAO_LOGIN,
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded',
+        Authorization: KakaoToken,
+      },
+    }).then((res) => {
+      const state: any = thunkAPI.getState();
+      // console.log(res.data.data.accessToken)
+      thunkAPI.dispatch(userLogin(res.data.data))
+      return res.data.data;
+    });
+  }
+);
 
 export interface LoginState {
   kakaoToken: string;
@@ -50,20 +67,16 @@ export const KakaoLoginSlice = createSlice({
       console.log(state.kakaoToken);
     },
     userLogin: (state, { payload }) => {
+      console.log('슬라이스 실행');
       const { accessToken, userId, refreshToken } = payload;
-      state.userToken = accessToken; // 백엔드에서 발급받은 토큰
-      state.refreshToken = refreshToken;
       state.userId = userId;
-      // state.expireTime = new Date().getTime() + TOKEN_TIME_OUT; // 만료시간 설정
+      state.userToken = accessToken
+      state.refreshToken = refreshToken;
+      sessionStorage.setItem('refreshToken', refreshToken);
       state.authenticated = true; // 로그인 상태 확인
-      sessionStorage.setItem('accessToken', state.userToken); // 세션에 저장
-      sessionStorage.setItem('refreshToken', state.refreshToken); // 세션에 저장
-      sessionStorage.setItem('userId', state.userId + ''); // 세션에 저장
-      console.log(payload);
     },
     userLogout: (state, action: PayloadAction<boolean>) => {
       state.authenticated = action.payload;
-      sessionStorage.removeItem('accessToken');
       sessionStorage.removeItem('refreshToken');
       sessionStorage.removeItem('userId');
     },
@@ -75,18 +88,13 @@ export const KakaoLoginSlice = createSlice({
       state.userId = userId;
     },
   },
-  // extraReducers: {
-  //   [(KakaoLoginAsync.pending as any)]: (state, action) => {
-  //     console.log("pending");
-  //   },
-  //   [(KakaoLoginAsync.fulfilled as any)]: (state, action) => {
-  //     state.kakaoToken = action.payload;
-  //     console.log(state.kakaoToken);
-  //   },
-  //   [(KakaoLoginAsync.rejected as any)]: (state, action) => {
-  //     console.log("rejected");
-  //   },
-  // },
+  extraReducers: (builder) => {
+    builder.addCase(getServerToken.fulfilled, (state) => {
+      state.authenticated = true; // 로그인 상태 확인
+      // const {accessToken} = payload
+      // state.userToken = accessToken;
+    });
+  },
 });
 
 export const { kakaoToken, userLogin, userLogout, isLogin } =
