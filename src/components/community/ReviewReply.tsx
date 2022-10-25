@@ -1,8 +1,27 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import {
+  getReviewListAsync,
+  modifyReplyAsync,
+  postReplyAsync,
+  replyData,
+} from '../../features/communityPage/replySlice';
+import { useCookies } from 'react-cookie';
+import { useParams } from 'react-router-dom';
+
+type replyDataType = {
+  data: [];
+  userId: number;
+  reviewId: number;
+  userName: string;
+  comment: string;
+  updatedAt: string;
+  id : number
+};
 
 const ReviewReply = () => {
   const {
@@ -10,13 +29,17 @@ const ReviewReply = () => {
     handleSubmit,
     getValues,
     setValue,
+    reset,
     // formState: { errors }, 추후 required 사용 예정
   } = useForm();
+  const [cookies, setCookie] = useCookies(['token']);
   const onSubmit = (formData: any) => {
-    console.log(formData);
+    reset({comment: ""})
+    dispatch(postReplyAsync(formData));
   };
-  const [modify , setModify] = useState(false);
+  const [modify, setModify] = useState(false);
   const [emojiClick, setEmojiClick] = useState(false);
+  const [commentId, setCommentId] = useState<number>(0);
   const isEmojiClick = () => {
     emojiClick === false ? setEmojiClick(true) : setEmojiClick(false);
   };
@@ -28,91 +51,121 @@ const ReviewReply = () => {
     setValue('modifyReply', getValues('modifyReply') + emojiData.emoji);
     setEmojiClick(false);
   };
-  const toggleModify = () =>{
+  const toggleModify = (id: number) => {
     setModify(!modify);
+    setCommentId(id);
+  };
+
+  const dispatch = useAppDispatch();
+  const getReplyData = useAppSelector<any>(replyData);
+  useEffect(() => {
+    dispatch(getReviewListAsync());
+  }, []);
+  const modifyReply = useRef<HTMLTextAreaElement | null>(null);
+  
+  const onReplyModify = () =>{
+    const data = {comment : modifyReply.current?.value,commentid : commentId}
+    // console.log(modifyReply.current?.value)
+    dispatch(modifyReplyAsync(data))
+    console.log (data)
   }
+  const reviewNumber = useParams().id;
+
+  
+
   return (
     <>
-      {!modify&&
-      <NewReplyWrap>
-      <NewReply>
-        <NewReplyAuthorWrap>
-          <NewReplyAuthor>권영민</NewReplyAuthor>
-          <NewReplyDate>2022.10.21</NewReplyDate>
-        </NewReplyAuthorWrap>
-        <NewReplyContent>안녕하세요 반갑습니다.</NewReplyContent>
-        <NewReplyButtonWrap>
-          <button>댓글</button> <p>/</p>
-          <button onClick={()=>toggleModify()}>수정</button> <p>/</p>
-          <button>삭제</button>
-        </NewReplyButtonWrap>
-      </NewReply>
-      </NewReplyWrap>
-      }
-      {!modify&&<NewReply>
-        <NewReplyAuthorWrap>
-          <NewReplyAuthor>권영민</NewReplyAuthor>
-          <NewReplyDate>2022.10.21</NewReplyDate>
-        </NewReplyAuthorWrap>
-        <NewReplyContent>안녕하세요 반갑습니다.</NewReplyContent>
-        <NewReplyButtonWrap>
-          <button>댓글</button> <p>/</p>
-          <button onClick={()=>toggleModify()}>수정</button> <p>/</p>
-          <button>삭제</button>
-        </NewReplyButtonWrap>
-      </NewReply>}
-      {modify && <ModifyReplyWrap>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <ReplyContent
-            placeholder="수정사항을 남겨주세요."
-            {...register('modifyReply')}
-          ></ReplyContent>
-          <ReplySubmitWrap>
-            <img
-              src={process.env.PUBLIC_URL + '/icons/smile.svg'}
-              alt="EmptyLoveIcon"
-              onClick={() => isEmojiClick()}
-            />
-            <ModifyReplySubmitWrap>
-              <ReplyCancelButton onClick={()=>toggleModify()}>취소</ReplyCancelButton>
-              <ReplyModiftyButton onClick={()=>toggleModify()}>등록</ReplyModiftyButton>
-            </ModifyReplySubmitWrap>
-          </ReplySubmitWrap>
-          {emojiClick && (
-            <EmojiPicker
-              height={350}
-              width="40%"
-              autoFocusSearch={false}
-              onEmojiClick={onModifyClick}
-            />
-          )}
-        </form>
-      </ModifyReplyWrap>}
+      {!modify &&
+        getReplyData.map((reply: replyDataType, i:any) => {
+          return (
+            <NewReply key={i}>
+              <NewReplyAuthorWrap>
+                <NewReplyAuthor>{reply.userName}</NewReplyAuthor>
+                <NewReplyDate>
+                  {reply.updatedAt
+                    .slice(0, 16)
+                    .replace('T', '')
+                    .replace(/(\d{4})-(\d{2})-(\d{2})/, `$1.$2.$3 `)}
+                </NewReplyDate>
+              </NewReplyAuthorWrap>
+              <NewReplyContent>{reply.comment}</NewReplyContent>
+              <NewReplyButtonWrap>
+                <button>댓글</button> <p>/</p>
+                <button onClick={() => toggleModify(reply.id)}>
+                  수정
+                </button>
+                <p>/</p>
+                <button>삭제</button>
+              </NewReplyButtonWrap>
+            </NewReply>
+          );
+        })}
+      {modify && (
+        <ModifyReplyWrap>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <ReplyContent
+              placeholder="수정사항을 남겨주세요."
+              ref={modifyReply}
+              // {...register('modifyReply')}
+            ></ReplyContent>
+            <ReplySubmitWrap>
+              <img
+                src={process.env.PUBLIC_URL + '/icons/smile.svg'}
+                alt="smileIcon"
+                onClick={() => isEmojiClick()}
+              />
+              <ModifyReplySubmitWrap>
+                <ReplyCancelButton onClick={() => setModify(!modify)}>
+                  취소
+                </ReplyCancelButton>
+                <ReplyModiftyButton type="button" onClick={() => {toggleModify(commentId)
+                onReplyModify()
+                }}>
+                  등록
+                </ReplyModiftyButton>
+              </ModifyReplySubmitWrap>
+            </ReplySubmitWrap>
+            {emojiClick && (
+              <EmojiPicker
+                height={350}
+                width="40%"
+                autoFocusSearch={false}
+                onEmojiClick={onModifyClick}
+              />
+            )}
+          </form>
+        </ModifyReplyWrap>
+      )}
 
-      {!modify&&<ReplyWrap>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <ReplyContent
-            placeholder="댓글을 남겨주세요."
-            {...register('reply')}
-          ></ReplyContent>
-          <ReplySubmitWrap>
-            <img
-              src={process.env.PUBLIC_URL + '/icons/smile.svg'}
-              alt="EmptyLoveIcon"
-              onClick={() => isEmojiClick()}
-            />
-            <ReplySubmitButton>등록</ReplySubmitButton>
-          </ReplySubmitWrap>
-          {emojiClick && (
-            <EmojiPicker
-              height={350}
-              width="40%"
-              autoFocusSearch={false}
-              onEmojiClick={onClick}
-            />
-          )}
-        </form>
-      </ReplyWrap>}
+      {!modify && (
+        <ReplyWrap>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <ReplyContent
+              placeholder="댓글을 남겨주세요."
+              {...register('comment')}
+            ></ReplyContent>
+            <ReplySubmitWrap>
+              <img
+                src={process.env.PUBLIC_URL + '/icons/smile.svg'}
+                alt="EmptyLoveIcon"
+                onClick={() => isEmojiClick()}
+              />
+              <ReplySubmitButton onClick={()=>{
+                setValue('token', cookies)
+                setValue('reviewId', reviewNumber )
+                }}>등록</ReplySubmitButton>
+            </ReplySubmitWrap>
+            {emojiClick && (
+              <EmojiPicker
+                height={350}
+                width="40%"
+                autoFocusSearch={false}
+                onEmojiClick={onClick}
+              />
+            )}
+          </form>
+        </ReplyWrap>
+      )}
     </>
   );
 };
@@ -162,7 +215,7 @@ const ReplySubmitButton = styled.button`
   font-size: 16px;
   line-height: 24px;
   border-radius: 6px;
-  margin-right : 30px;
+  margin-right: 30px;
   cursor: pointer;
   transition: box-shadow 400ms ease;
   &:hover {
@@ -188,9 +241,9 @@ const ReplyCancelButton = styled.button`
       0 2px 10px 0 rgba(0, 0, 0, 0.12);
   }
 `;
-const NewReplyWrap =styled.div`
+const NewReplyWrap = styled.div`
   margin-top: 40px;
-`
+`;
 
 const NewReply = styled.div`
   width: 1000px;
@@ -274,11 +327,11 @@ const ReplyModiftyButton = styled.button`
   font-size: 16px;
   line-height: 24px;
   border-radius: 6px;
-  margin-right : 20px;
+  margin-right: 20px;
   cursor: pointer;
   transition: box-shadow 400ms ease;
   &:hover {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),
       0 2px 10px 0 rgba(0, 0, 0, 0.12);
   }
-`
+`;

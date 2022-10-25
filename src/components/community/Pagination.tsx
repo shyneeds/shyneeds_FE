@@ -9,7 +9,7 @@ import {
   blockNum,
   prevPage,
   totalPageData,
-} from '../../features/page/page';
+} from '../../features/communityPage/communityPageSlice';
 
 
 const Pagenation = () => {

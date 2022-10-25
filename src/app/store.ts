@@ -5,8 +5,9 @@ import userReservationSliceReducer from '../features/userReservation/userReserva
 import productReducer from '../features/main/productSlice';
 import adminPageSliceReducer from '../features/adminPage/adminPageSlice';
 import userDataSliceReducer from '../features/userData/userDataSlice';
-import pageReducer from '../features/page/page';
+import pageReducer from '../features/communityPage/communityPageSlice';
 import { useDispatch } from 'react-redux';
+import replySliceReducer from '../features/communityPage/replySlice';
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     adminPage: adminPageSliceReducer,
     userData: userDataSliceReducer,
     page: pageReducer,
+    reply : replySliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

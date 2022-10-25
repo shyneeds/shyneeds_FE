@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppSelector } from '../../app/hooks';
-import { totalElementsNum } from '../../features/page/page';
+import { totalElementsNum } from '../../features/communityPage/communityPageSlice';
 import Pagenation from './Pagination';
 import ReviewContent from './ReviewContent';
 
