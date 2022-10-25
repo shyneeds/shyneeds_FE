@@ -18,23 +18,24 @@ export const getReviewListAsync = createAsyncThunk(
     });
   }
 );
-export const postReplyAsync = createAsyncThunk( // 완성
+export const postReplyAsync = createAsyncThunk(
+  // 완성
   'POST_COMMENT',
   async (formData: any, thunkAPI) => {
-    const {comment, reviewId, token} = formData 
+    const { comment, reviewId, token } = formData;
     return await axios({
       url: `http://13.125.151.45:8080/api/comment/register`,
       method: 'POST',
       headers: {
-       Authorization : `Bearer ${token.token}`,
+        Authorization: `Bearer ${token.token}`,
         'Content-type': 'application/json',
       },
-      data : {
-        comment : comment,
-        reviewId : reviewId
-      }
+      data: {
+        comment: comment,
+        reviewId: reviewId,
+      },
     }).then((res) => {
-      thunkAPI.dispatch(getReviewListAsync())
+      thunkAPI.dispatch(getReviewListAsync());
       return res;
     });
   }
@@ -42,48 +43,94 @@ export const postReplyAsync = createAsyncThunk( // 완성
 export const modifyReplyAsync = createAsyncThunk(
   'MODIFY_REVIEW',
   async (data: any, thunkAPI) => {
-    const {comment,commentid} = data
-    return await axios.put(`http://13.125.151.45:8080/api/comment/update`,data)
-    .then((res) => {
-      // thunkAPI.dispatch(getReply(res.data.data));
+    const { comment, commentid, token } = data;
+    console.log(comment)
+    // const test = { comment: 'comment', commentid: commentid };
+    // const headers = {
+    //   Authorization: `Bearer ${token.token}`,
+    //   'Content-type': 'application/json',
+    // };
+    return await axios(
+      // .put(
+      //   `http://13.125.151.45:8080/api/comment/update`,
+      //   { comment: 'test', commentid: '17' },
+      //   { headers }
+      // )
+      {
+        url: `http://13.125.151.45:8080/api/comment/update`,
+        method: 'put',
+        headers: {
+          Authorization: `Bearer ${token.token}`,
+          'Content-type': 'application/json',
+        },
+        data: {
+          comment: comment,
+          commentid: commentid,
+        },
+      }
+    ).then((res) => {
+      thunkAPI.dispatch(getReviewListAsync());
       console.log(res);
       return res;
     });
   }
 );
-// export const getServerToken = createAsyncThunk(
-//   'GET_SEVER_ACCESS_CODE',
-//   async (KakaoToken: string, thunkAPI) => {
-//     return await axios({
-//       url: API_URL.POST.KAKAO_LOGIN,
-//       method: 'POST',
-//       headers: {
-//         'Content-type': 'application/x-www-form-urlencoded',
-//         Authorization: KakaoToken,
-//       },
-//     }).then((res) => {
-//       thunkAPI.dispatch(userLogin(res.data.data));
-//       return res.data.data;
-//     });
-//   }
-// );
+export const getReplyContentAsync = createAsyncThunk(
+  // 됨
+  'GET_REPLY_CONTENT',
+  async (data: any, thunkAPI) => {
+    const { commentid, token } = data;
+    return await axios({
+      url: `http://13.125.151.45:8080/api/comment/${commentid}`,
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token.token}`,
+        'Content-type': 'application/x-www-form-urlencoded',
+      },
+    }).then((res) => {
+      thunkAPI.dispatch(setReply(res.data.data.comment));
+      console.log(res.data.data.comment);
+      return res;
+    });
+  }
+);
+export const delReplyAsync = createAsyncThunk(
+  'DELETE_REPLY_CONTENT',
+  async (data: any, thunkAPI) => {
+    const { commentid, token } = data;
+    return await axios({
+      url: `http://13.125.151.45:8080/api/comment/${commentid}`,
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token.token}`,
+        'Content-type': 'application/x-www-form-urlencoded',
+      },
+    }).then((res) => {
+      thunkAPI.dispatch(getReviewListAsync());
+      console.log(res);
+      return res;
+    });
+  }
+);
 
 export interface LoginState {
-  data : []
+  data: [];
   userId: number;
   reviewId: number;
   userName: string;
   comment: string;
   updatedAt: string;
+  setReply: string;
 }
 
 const initialState: LoginState = {
-  data : [],
+  data: [],
   userId: 0,
   reviewId: 0,
   userName: '',
   comment: '',
   updatedAt: '',
+  setReply: '',
 };
 
 export const replySlice = createSlice({
@@ -93,21 +140,25 @@ export const replySlice = createSlice({
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
     getReply: (state, action) => {
-      state.data = action.payload
+      state.data = action.payload;
+    },
+    setReply: (state, action) => {
+      state.setReply = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
-    .addCase(getReviewListAsync.fulfilled, (state, action) => {
-      // console.log(action.payload);
-    })
-    .addCase(postReplyAsync.pending, (state) => {
-      // console.log("테스트")
-    });
+      .addCase(getReviewListAsync.fulfilled, (state, action) => {
+        // console.log(action.payload);
+      })
+      .addCase(postReplyAsync.pending, (state) => {
+        // console.log("테스트")
+      });
   },
 });
 
-export const { getReply } = replySlice.actions;
+export const { getReply, setReply } = replySlice.actions;
 export const replyData = (state: RootState) => state.reply.data;
+export const setReplyData = (state: RootState) => state.reply.setReply;
 
 export default replySlice.reducer;

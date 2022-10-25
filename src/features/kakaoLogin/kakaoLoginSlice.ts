@@ -30,7 +30,6 @@ export const getServerToken = createAsyncThunk(
       },
     }).then((res) => {
       const state: any = thunkAPI.getState();
-      // console.log(res.data.data.accessToken)
       thunkAPI.dispatch(userLogin(res.data.data))
       return res.data.data;
     });
@@ -68,11 +67,14 @@ export const KakaoLoginSlice = createSlice({
     },
     userLogin: (state, { payload }) => {
       console.log('슬라이스 실행');
+      console.log('이건 아직 넣기전 : '+state.userToken);
       const { accessToken, userId, refreshToken } = payload;
+      console.log(payload);
       state.userId = userId;
       state.userToken = accessToken
       state.refreshToken = refreshToken;
-      sessionStorage.setItem('refreshToken', refreshToken);
+      console.log('이건 넣은후 : '+state.userToken);
+      
       state.authenticated = true; // 로그인 상태 확인
     },
     userLogout: (state, action: PayloadAction<boolean>) => {
@@ -82,16 +84,17 @@ export const KakaoLoginSlice = createSlice({
     },
     isLogin: (state, { payload }) => {
       state.authenticated = true;
-      const { accessToken, userId, refreshToken } = payload;
-      state.userToken = accessToken; // 백엔드에서 발급받은 토큰
-      state.refreshToken = refreshToken;
-      state.userId = userId;
+      // const { accessToken, userId, refreshToken } = payload;
+      // state.userToken = accessToken; // 백엔드에서 발급받은 토큰
+      // state.refreshToken = refreshToken;
+      // state.userId = userId;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getServerToken.fulfilled, (state) => {
+    builder.addCase(getServerToken.fulfilled, (state,{payload}) => {
       state.authenticated = true; // 로그인 상태 확인
-      // const {accessToken} = payload
+      // const {refreshToken} = payload
+      // sessionStorage.setItem('refreshToken', refreshToken);
       // state.userToken = accessToken;
     });
   },
