@@ -1,13 +1,21 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
-import { useAppSelector } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { reservationPackages } from '../../features/userReservation/userReservationSlice';
+import { userUserInfo } from '../../features/userData/userDataSlice';
+import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
+import { userInfo } from '../../features/userData/userDataSlice';
 
 export default function Reservation_Main() {
   const reservations = useAppSelector(reservationPackages);
-  // const totalPrice = useRef<number>(0);
+  const user = useAppSelector(userUserInfo);
+  const token = useAppSelector(userToken);
+  const userIdValue = useAppSelector(userId);
   const [totalPrice, setTotalPrice] = useState<number>(0);
+  const dispatch = useAppDispatch();
 
+  console.log(user);
   useEffect(() => {
     setTotalPrice(0);
     let tempPrice = 0;
@@ -19,6 +27,19 @@ export default function Reservation_Main() {
     }
     setTotalPrice(tempPrice);
   }, [reservations]);
+
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `http://13.125.151.45:8080/api/my/user/${userIdValue}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      console.log(res);
+      dispatch(userInfo(res.data.data.userInfo));
+    });
+  }, []);
 
   return (
     <Wrap>
