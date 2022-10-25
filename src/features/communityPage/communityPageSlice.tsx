@@ -3,8 +3,8 @@ import axios from 'axios';
 import { RootState } from '../../app/store';
 import { API_URL } from '../../constants/API_URL';
 
-export const getReviewList = createAsyncThunk(
-  'GET_REVIEW_LIST',
+export const getPageList = createAsyncThunk(
+  'GET_PAGE_LIST',
   async (page: number) => {
     return await axios({
       headers: {
@@ -68,8 +68,9 @@ export const page = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getReviewList.fulfilled, (state, action) => {
+    builder.addCase(getPageList.fulfilled, (state, action) => {
       const data = action.payload;
+      console.log(data)
       state.totalPages = data.pagination.totalPages;
       state.ReviewData = data.data;
       state.totalElements = data.pagination.totalElements;

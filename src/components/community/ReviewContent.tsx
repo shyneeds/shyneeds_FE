@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { pageNum, getReviewList, ReviewData } from '../../features/page/page';
+import { pageNum, getPageList, ReviewData } from '../../features/communityPage/communityPageSlice';
 import { Link } from 'react-router-dom';
 
 type reviewDataType = {
@@ -17,7 +17,7 @@ const ReviewContent = () => {
   const page = useAppSelector(pageNum);
   const reviewDatas = useAppSelector(ReviewData);
   useEffect(() => {
-    dispatch(getReviewList(page));
+    dispatch(getPageList(page));
   }, [page]);
   // /^\d{4}.-(0[1-9]|1[012]).(0[1-9]|[12][0-9]|3[01])$/
   return (
@@ -25,7 +25,7 @@ const ReviewContent = () => {
       {reviewDatas.map((review: reviewDataType,i) => {
         return (
           <ReviewCont key={review.id}>
-            <Link to={`/community/detail/${i}`} >
+            <Link to={`/community/detail/${review.id}`} >
             <ReviewImg src={review.mainImage} alt="" />
             <ReviewContentWrap>
               <ReviewContentTitle>{review.title}</ReviewContentTitle>

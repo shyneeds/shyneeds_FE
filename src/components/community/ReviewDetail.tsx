@@ -69,7 +69,7 @@ const ReviewDetail = () => {
             <ShowProduct>상품 보기</ShowProduct>
           </div>
         </RelateProduct>
-        <ReviewReply />
+        <ReviewReply /> {/*댓글 기능*/} 
       </ReviewContentWrap>
     </Wrap>
   );
