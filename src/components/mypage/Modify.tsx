@@ -37,12 +37,18 @@ const Modify = () => {
       method: 'PATCH',
       url: `http://13.125.151.45:8080/api/user`,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTIzQGdtYWlsL…cxMH0.SRJ3C_yByriY59SQfXOKfuLh2FDlJk1SV37Y5VcYrFc`,
+        'Content-type': 'application/json',
       },
       data: data,
-    }).then((res) => {
-      console.log(res);
-    });
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((errors) => {
+        console.log(errors);
+      });
+
     alert('회원정보 수정이 완료되었습니다.');
   };
 
@@ -77,7 +83,7 @@ const Modify = () => {
       <h2>회원정보수정</h2>
       <WrapContainer>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <InputImgBox>
+          {/* <InputImgBox>
             <ImgButton
               src={
                 userImg.includes('null')
@@ -94,7 +100,7 @@ const Modify = () => {
               type="file"
               accept="image/*"
             />
-          </InputImgBox>
+          </InputImgBox> */}
 
           <InputBox>
             <NameStyle>새로운 비밀번호</NameStyle>
