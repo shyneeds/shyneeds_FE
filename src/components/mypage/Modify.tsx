@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import {
+  // userDataName,
+  // userDataImage,
+  // userDataGender,
+  userUserInfo,
+} from '../../features/userData/userDataSlice';
 
 const Modify = () => {
   const now = new Date();
@@ -29,13 +36,27 @@ const Modify = () => {
   };
   const imgRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
-
+  // const userName = useAppSelector(userDataName);
+  // const userImage = useAppSelector(userDataImage);
+  // const userGender = useAppSelector(userDataGender);
+  const userInfo = useAppSelector<any>(userUserInfo);
+  const userImg: any = userInfo.profileImage;
+  console.log(userInfo);
   useEffect(() => {
     //only use for Test
     console.log(selectedDate);
     console.log(passwordRef.current?.value);
   }, [selectedDate]);
-
+  useEffect(() => {
+    if (userInfo.gender === 'male') {
+      setTab(0);
+    }
+    // if (userInfo.name !== null) {
+    // }
+    // if (userInfo.birthday !== null) {
+    // }
+  }, []);
+  console.log(InputStyle);
   return (
     <div>
       <h2>회원정보수정</h2>
@@ -44,9 +65,9 @@ const Modify = () => {
           <InputImgBox>
             <ImgButton
               src={
-                imgRef.current
-                  ? myImage
-                  : process.env.PUBLIC_URL + '/icons/ic-member.svg'
+                userImg.includes('null')
+                  ? process.env.PUBLIC_URL + '/icons/ic-member.svg'
+                  : userImg
               }
               onClick={() => imgRef.current?.click()}
             />
@@ -73,6 +94,23 @@ const Modify = () => {
           </InputBox>
           <InputBox>
             <NameStyle>비밀번호</NameStyle>
+            <InputStyle
+              type="password"
+              placeholder="비밀번호"
+              {...register('password', {
+                required: true,
+                pattern: /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/,
+              })}
+            />
+            {errors.password && (
+              <ErrorMessage>
+                비밀번호는 영문자+숫자+특수문자 조합으로 8~25자리 사용해야
+                합니다.
+              </ErrorMessage>
+            )}
+          </InputBox>
+          <InputBox>
+            <NameStyle>새로운 비밀번호</NameStyle>
             <InputStyle
               type="password"
               placeholder="비밀번호"
