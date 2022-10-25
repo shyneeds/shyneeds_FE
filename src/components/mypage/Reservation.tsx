@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import {
-  userReservationList,
-  userCancelReason,
-} from '../../features/userData/userDataSlice';
+import { userReservationList } from '../../features/userData/userDataSlice';
 import { Link } from 'react-router-dom';
 import { cancelNum } from '../../features/userData/userDataSlice';
+import CancelDetail from './CancelDetail';
 
 const Reservation = () => {
   const dispatch = useAppDispatch();
   const reservationList = useAppSelector(userReservationList);
-  const cancelReason = useAppSelector(userCancelReason);
-  // console.log(reservationList);
-  const cancelDtPop = () => {
-    console.log(cancelReason);
+  const [dtpopup, setDtPopup] = useState<boolean>(false);
+  const dtTogglePop = () => {
+    setDtPopup(!dtpopup);
   };
   return (
     <ReservationBox>
@@ -72,11 +69,14 @@ const Reservation = () => {
                   }
                 >
                   {data.reservationStatus.includes('예약취소') ? (
-                    <CancelDt onClick={() => cancelDtPop()}>취소상세</CancelDt>
+                    <CancelDt onClick={() => setDtPopup(!dtpopup)}>
+                      취소상세
+                    </CancelDt>
                   ) : (
                     <Link to="/mypage/cancel">취소</Link>
                   )}
                 </Cancel>
+                {dtpopup === true && <CancelDetail dtTogglePop={dtTogglePop} />}
               </ProductMain>
             </Product>
           );

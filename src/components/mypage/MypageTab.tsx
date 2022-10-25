@@ -9,9 +9,11 @@ import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
 import {
-  name,
-  profileImage,
-  reservationList,
+  // name,
+  // profileImage,
+  // reservationList,
+  // totalPaymentAmount,
+  userInfo,
 } from '../../features/userData/userDataSlice';
 
 const MypageTab = () => {
@@ -34,27 +36,13 @@ const MypageTab = () => {
       },
     }).then((res) => {
       console.log(res);
-      dispatch(name(res.data.data.userInfo.name));
-      dispatch(profileImage(res.data.data.userInfo.profileImage));
-
-      dispatch(reservationList(res.data.data.reservationList));
+      dispatch(userInfo(res.data.data.userInfo));
+      // dispatch(name(res.data.data.userInfo.name));
+      // dispatch(profileImage(res.data.data.userInfo.profileImage));
+      // dispatch(reservationList(res.data.data.reservationList));
+      // dispatch(totalPaymentAmount(res.data.data.userInfo.totalPaymentAmount));
     });
   }, []);
-  // useEffect(() => {
-  //   axios({
-  //     method: 'get',
-  //     url: `http://13.125.151.45:8080/api/reservation/user/${userIdValue}`,
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   }).then((res) => {
-  //     console.log(res);
-  //     setBooking(res);
-  //     // dispatch(email(datas.userInfo.email));
-  //     // dispatch(name(datas.userInfo.name));
-  //   });
-  // }, []);
-  // console.log(booking);
 
   return (
     <div>
