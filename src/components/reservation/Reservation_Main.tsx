@@ -1,11 +1,23 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import { reservationPackages } from '../../features/userReservation/userReservationSlice';
 
 export default function Reservation_Main() {
   const reservations = useAppSelector(reservationPackages);
   const totalPrice = useRef<number>(0);
+
+  useEffect(() => {
+    totalPrice.current = 0;
+    {
+      reservations.map(
+        (reservation) =>
+          (totalPrice.current += Number(
+            reservation.totalPrice.replaceAll(',', '')
+          ))
+      );
+    }
+  }, []);
 
   return (
     <Wrap>
@@ -127,6 +139,8 @@ const Reservation_Product = styled.section`
   left: 30px;
   padding: 25px;
   background: white;
+  overflow-x: hidden;
+  overflow-y: auto;
 `;
 const Reservation_Product_Text = styled.p`
   width: 100%;
@@ -217,17 +231,24 @@ const Reservation_Summary_TotalWrap = styled.section`
   top: 50%;
   transform: translate(-50%, -50%);
   height: 35%;
+  width: 100%;
   padding: 5px;
 `;
 const Reservation_Summary_Total_Text = styled.p`
-  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   font-family: 'Pretendard';
   font-weight: 600;
   font-style: normal;
   font-size: 20px;
 `;
 const Reservation_Summary_Total_Num = styled.p`
-  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 600;
