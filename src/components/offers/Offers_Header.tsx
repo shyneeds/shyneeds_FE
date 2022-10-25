@@ -16,6 +16,7 @@ import {
   reservationProductNum,
   reservationInfo,
 } from '../../features/userReservation/userReservationSlice';
+import { productId } from '../../features/main/productSlice';
 import { useNavigate } from 'react-router';
 
 type offerData = {
@@ -37,6 +38,7 @@ export default function Offers_Header() {
   const [options, setOptions] = useState<optionType[]>([]);
   const [clicked, setClicked] = useState<boolean | null>(false);
   const productNum = useAppSelector(reservationProductNum);
+  const id = localStorage.getItem('WATCHED_PRODUCTS');
   const optionsName = useRef<string[]>([]);
   const optionsPrice = useRef<number>(0);
   const isLoaded = useRef<boolean>(false);
@@ -46,7 +48,7 @@ export default function Offers_Header() {
   useEffect(() => {
     axios({
       method: 'get',
-      url: 'http://13.125.151.45:8080/api/package/25',
+      url: `http://13.125.151.45:8080/api/package/${id}`,
       headers: {
         Authorization:
           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjAwMDBAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxOTgxMzcwMTAyfQ.85ucBpU6BU7KbXYOOAl1-GdBYTn117SVu5rtTiUQPts',
@@ -85,7 +87,7 @@ export default function Offers_Header() {
                   navigator.share({
                     title: datas?.travelPackageResponseDto.title,
                     text: datas?.travelPackageResponseDto.summary,
-                    url: 'http://localhost:3000/offers',
+                    url: `http://localhost:3000/offers/${productId}`,
                   });
                 } else {
                   alert('공유하기가 지원되지 않는 환경 입니다.');
