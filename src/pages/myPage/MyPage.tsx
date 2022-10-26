@@ -7,7 +7,7 @@ const MyPage = () => {
   return (
     <div>
       <Header />
-      <MypageTab />
+      <MypageTab popup={popup} />
       <Footer />
     </div>
   );

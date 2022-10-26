@@ -244,7 +244,6 @@ export const Navbar = () => {
                           </SubUl_second>
                         </SubBox_second>
                       </SubBox>
-
                       <SubBox>
                         <SubLi_first>
                           <Link to="/subPage_theme">휴양지</Link>
