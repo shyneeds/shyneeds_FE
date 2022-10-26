@@ -80,7 +80,7 @@ export default function Offers_Header() {
     <>
       <ProductWrap>
         <Product_Img
-          src={process.env.PUBLIC_URL + '/icons/3-sub-banner-1920x960.png'}
+          src={datas?.travelPackageResponseDto.mainImage}
         ></Product_Img>
         <InfoWrap>
           <Info>
