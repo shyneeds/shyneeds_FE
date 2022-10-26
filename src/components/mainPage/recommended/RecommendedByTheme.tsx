@@ -48,7 +48,7 @@ export const RecommendedByTheme = () => {
       </RecommendedListTitle>
       <CarouselContainer {...settings}>
         {products.map((data: any) => (
-          <Link to={'detail/' + data.id} key={data.id}>
+          <Link to={'offers/' + data.id} key={data.id}>
             <ProductWrap>
               <img src={data.imageUrl} alt="product_image" />
               <ProductText>
