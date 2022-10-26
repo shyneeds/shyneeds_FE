@@ -19,6 +19,7 @@ import DetailPage from './pages/community/Detail';
 import Write from './pages/community/Write';
 import Cancel from './pages/myPage/Cancel';
 import { useCookies } from 'react-cookie';
+import { SubPage } from './components/subPage/SubPage';
 
 function App() {
   const [cookies, setCookie] = useCookies(['token']);
@@ -47,6 +48,7 @@ function App() {
         <Route path="/reservation" element={<Reservation_Main />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/subPage" element={<GroupPage />} />
+        <Route path="/subPage_group" element={<SubPage />} />
       </Routes>
     </>
   );
