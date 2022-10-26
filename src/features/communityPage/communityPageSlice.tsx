@@ -5,13 +5,17 @@ import { API_URL } from '../../constants/API_URL';
 
 export const getPageList = createAsyncThunk(
   'GET_PAGE_LIST',
-  async (page: number, thunkAPI) => {
+  async (data :any, thunkAPI) => {
+    const { page } = data
+    let {searchWord} = data
+    searchWord === "" ? searchWord="all" : ""
+    console.log(searchWord)
     return await axios({
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
       },
-      url: API_URL.GET.REVIEW_LIST + `?search=all&page=` + (page - 1),
+      url: API_URL.GET.REVIEW_LIST + `?search=${searchWord}&page=` + (page - 1),
       method: 'get',
     })
       .then((response) => {
@@ -89,5 +93,6 @@ export const pageNum = (state: RootState) => state.page.page;
 export const blockNum = (state: RootState) => state.page.blockNum;
 export const ReviewData = (state: RootState) => state.page.ReviewData;
 export const totalElementsNum = (state: RootState) => state.page.totalElements;
+export const seacrchWordData = (state: RootState) => state.page.searchWord;
 
 export default page.reducer;
