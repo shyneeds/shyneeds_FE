@@ -1,10 +1,18 @@
 export interface ResponseType {
   data: {
-    bestReviewList: string[];
+    bestReviewList: {
+      author: string;
+      contents: string;
+      id: number;
+      mainImage: string;
+      title: string;
+      updatedAt: string;
+    };
     mainBannerList: {
       id: number;
       imageUrl: string;
       keyword: string;
+      price: string;
       title: string;
     };
     mainCategoryPackageList: {
