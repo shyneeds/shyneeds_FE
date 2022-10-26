@@ -35,6 +35,7 @@ const ReviewReply = () => {
     reset,
     // formState: { errors }, 추후 required 사용 예정
   } = useForm();
+  const reviewNumber = useParams().id;
   const [cookies, setCookie] = useCookies(['token']);
   const onSubmit = (formData: any) => {
     reset({ comment: '' });
@@ -67,26 +68,26 @@ const ReviewReply = () => {
     setValue('modifyReply' , setReply)
   },[setReply])
   const onDeleteReply = (id: number) => {
-    const data = { commentid: id, token: cookies };
+    const data = { commentid: id, token: cookies , reviewId : reviewNumber};
     dispatch(delReplyAsync(data));
   };
-
+  
   const dispatch = useAppDispatch();
   const getReplyData = useAppSelector<any>(replyData);
   useEffect(() => {
-    dispatch(getReviewListAsync());
+    dispatch(getReviewListAsync(reviewNumber));
   }, []);
 
   const onReplyModify = () => {
     const data = {
       comment: getValues('modifyReply'),
-      commentid: commentId,
+      commentId: commentId,
       token: cookies,
+      reviewId : reviewNumber,
     };
     dispatch(modifyReplyAsync(data));
     console.log(data);
   };
-  const reviewNumber = useParams().id;
 
   return (
     <>

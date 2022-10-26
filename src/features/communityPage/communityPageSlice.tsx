@@ -11,7 +11,7 @@ export const getPageList = createAsyncThunk(
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
       },
-      url: API_URL.GET.REVIEW_LIST + `?search=test&page=` + (page - 1),
+      url: API_URL.GET.REVIEW_LIST + `?search=all&page=` + (page - 1),
       method: 'get',
     })
       .then((response) => {
