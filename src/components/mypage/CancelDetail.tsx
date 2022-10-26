@@ -16,7 +16,10 @@ const CancelDetail = ({ dtTogglePop }: Prop): JSX.Element | any => {
   const reservationList = useAppSelector(userReservationList);
   const cancleNum = useAppSelector(userCancelNum);
   const ProductData: any = reservationList[cancleNum];
-  // console.log(cancelReason);
+  console.log(cancelReason);
+  // const a: any = [...cancelReason];
+  // console.log(JSON.parse(a));
+
   // console.log(cancelReason['cancelReason']);
   return (
     <div>
@@ -63,7 +66,7 @@ const CancelDetail = ({ dtTogglePop }: Prop): JSX.Element | any => {
               <ReasonWrap>
                 <ReasonList>
                   <ListTit>취소요청사유</ListTit>
-                  <ListCon>{}</ListCon>
+                  <ListCon>{cancelReason}</ListCon>
                 </ReasonList>
                 <ReasonList>
                   <ListTit>상세사유</ListTit>
