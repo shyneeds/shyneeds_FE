@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Action } from '@remix-run/router';
 import { RootState } from '../../app/store';
 
-export interface reservationPackaageType {
+export interface reservationPackageType {
   optionFlg: boolean;
   optionValue: string;
   price: string;
@@ -15,7 +15,7 @@ export interface reservationProductType {
   productTitle: string;
   totalPrice: string;
   productNum: number;
-  reservationPackages: reservationPackaageType[];
+  reservationPackages: reservationPackageType[];
 }
 export interface userReservationInfo {
   num: number;
@@ -65,7 +65,7 @@ export const userReservationSlice = createSlice({
     },
     reservationInfo: (
       state,
-      action: PayloadAction<reservationPackaageType[]>
+      action: PayloadAction<reservationPackageType[]>
     ) => {
       state.reservationProducts[state.num].reservationPackages = action.payload;
       state.reservationProducts[state.num].reservationPackages.map(

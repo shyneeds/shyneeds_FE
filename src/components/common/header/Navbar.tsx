@@ -59,7 +59,7 @@ export const Navbar = () => {
                 setRegionOpen(!regionOpen);
               }}
             >
-              <Link to="/subPage">지역별 여행</Link>
+              <Link to="/subPage_region">지역별 여행</Link>
               {regionOpen && (
                 <SubWrapper>
                   <SubNav_second>

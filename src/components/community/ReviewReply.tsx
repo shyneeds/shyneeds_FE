@@ -53,9 +53,8 @@ const ReviewReply = () => {
     setEmojiClick(false);
   };
 
-  
   const onModifyClick = (emojiData: EmojiClickData) => {
-    setValue('modifyReply' ,getValues('modifyReply')+emojiData.emoji)
+    setValue('modifyReply', getValues('modifyReply') + emojiData.emoji);
     setEmojiClick(false);
   };
   const toggleModify = (id: number) => {
@@ -64,14 +63,14 @@ const ReviewReply = () => {
     setModify(!modify);
     setCommentId(id);
   };
-  useEffect(()=>{
-    setValue('modifyReply' , setReply)
-  },[setReply])
+  useEffect(() => {
+    setValue('modifyReply', setReply);
+  }, [setReply]);
   const onDeleteReply = (id: number) => {
-    const data = { commentid: id, token: cookies , reviewId : reviewNumber};
+    const data = { commentid: id, token: cookies, reviewId: reviewNumber };
     dispatch(delReplyAsync(data));
   };
-  
+
   const dispatch = useAppDispatch();
   const getReplyData = useAppSelector<any>(replyData);
   useEffect(() => {
@@ -83,7 +82,7 @@ const ReviewReply = () => {
       comment: getValues('modifyReply'),
       commentId: commentId,
       token: cookies,
-      reviewId : reviewNumber,
+      reviewId: reviewNumber,
     };
     dispatch(modifyReplyAsync(data));
     console.log(data);

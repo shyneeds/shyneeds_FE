@@ -1,21 +1,69 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { reservationPackages } from '../../features/userReservation/userReservationSlice';
-import { userUserInfo } from '../../features/userData/userDataSlice';
+import { useAppSelector } from '../../app/hooks';
+import {
+  reservationPackages,
+  reservationPackageType,
+} from '../../features/userReservation/userReservationSlice';
 import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
-import { userInfo } from '../../features/userData/userDataSlice';
+
+interface userInfoType {
+  depositorName: string | undefined;
+  paymentAccountBank: string;
+  paymentAccountHolder: string;
+  paymentAccountNumber: string;
+  paymentMethod: string;
+  reservationPackages: reservationPackageType[];
+  reservatorEmail: string | undefined;
+  reservatorName: string | undefined;
+  reservatorPhoneNumber: string | undefined;
+  serviceTerms: boolean;
+  totalReservationAmount: string | undefined;
+}
 
 export default function Reservation_Main() {
-  const reservations = useAppSelector(reservationPackages);
-  const user = useAppSelector(userUserInfo);
-  const token = useAppSelector(userToken);
-  const userIdValue = useAppSelector(userId);
+  const [userName, setUserName] = useState<string>();
+  const [userEmail, setUserEmail] = useState<string>();
+  const [userPhoneNumber, setUserPhoneNumber] = useState<string>();
+  const [submitName, setSubmitName] = useState<string>();
   const [totalPrice, setTotalPrice] = useState<number>(0);
-  const dispatch = useAppDispatch();
 
-  console.log(user);
+  const reservations = useAppSelector(reservationPackages);
+  const token = useAppSelector(userToken);
+
+  const submitSave = () => {
+    const totalReservationPackages: reservationPackageType[] = [];
+    reservations.map((reservation) => {
+      reservation.reservationPackages.map((reservationPackage) => {
+        totalReservationPackages.push(reservationPackage);
+      });
+    });
+    const data: userInfoType = {
+      depositorName: submitName ? submitName : userName,
+      paymentAccountBank: '신한은행',
+      paymentAccountHolder: '더 샤이니',
+      paymentAccountNumber: '100-3333-4444',
+      paymentMethod: '무통장 입금',
+      reservationPackages: totalReservationPackages,
+      reservatorEmail: userEmail,
+      reservatorName: userName,
+      reservatorPhoneNumber: userPhoneNumber,
+      serviceTerms: true,
+      totalReservationAmount: totalPrice.toString(),
+    };
+    axios({
+      method: 'post',
+      url: 'http://13.125.151.45:8080/api/reservation/user',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    }).then((res) => {
+      console.log(res);
+    });
+  };
+
   useEffect(() => {
     setTotalPrice(0);
     let tempPrice = 0;
@@ -31,13 +79,14 @@ export default function Reservation_Main() {
   useEffect(() => {
     axios({
       method: 'get',
-      url: `http://13.125.151.45:8080/api/my/user/${userIdValue}`,
+      url: `http://13.125.151.45:8080/api/my/user`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }).then((res) => {
-      console.log(res);
-      dispatch(userInfo(res.data.data.userInfo));
+      setUserName(res.data.data.userInfo.name);
+      setUserPhoneNumber(res.data.data.userInfo.phoneNumber);
+      setUserEmail(res.data.data.userInfo.email);
     });
   }, []);
 
@@ -83,9 +132,25 @@ export default function Reservation_Main() {
           <Reservation_User>
             <Reservation_Product_Text>예약자 정보</Reservation_Product_Text>
             <Reservation_User_Wrap>
-              <Reservation_User_Name></Reservation_User_Name>
-              <Reservation_User_PhoneNumber></Reservation_User_PhoneNumber>
-              <Reservation_User_Email></Reservation_User_Email>
+              <Reservation_User_Name
+                value={userName}
+                onChange={(e) => {
+                  setUserName(e.target.value);
+                }}
+              ></Reservation_User_Name>
+              <Reservation_User_PhoneNumber
+                value={userPhoneNumber}
+                onChange={(e) => {
+                  setUserPhoneNumber(e.target.value);
+                }}
+              ></Reservation_User_PhoneNumber>
+              <Reservation_User_Email
+                value={userEmail}
+                onChange={(e) => {
+                  setUserEmail(e.target.value);
+                }}
+              ></Reservation_User_Email>
+              <Reservation_User_Save>저장</Reservation_User_Save>
             </Reservation_User_Wrap>
           </Reservation_User>
           <Reservation_Summary>
@@ -112,11 +177,18 @@ export default function Reservation_Main() {
                   {'신한은행 100-035-493389 (주)더샤이니'}
                 </option>
               </Reservation_Payment_Bank>
-              <Reservation_Payment_Name placeholder="입금자명 (미입력시 예약자명)"></Reservation_Payment_Name>
+              <Reservation_Payment_Name
+                onChange={(e) => setSubmitName(e.target.value)}
+                placeholder="입금자명 (미입력시 예약자명)"
+              ></Reservation_Payment_Name>
             </Reservation_Payment_Wrap>
           </Reservation_Payment>
           <Reservation_Agree></Reservation_Agree>
-          <Reservation_Button>
+          <Reservation_Button
+            onClick={() => {
+              submitSave();
+            }}
+          >
             <p>결제하기</p>
           </Reservation_Button>
         </ReservationWrap>
@@ -246,10 +318,61 @@ const Reservation_User = styled.section`
   background: white;
   padding: 25px;
 `;
-const Reservation_User_Wrap = styled.section``;
-const Reservation_User_Name = styled.p``;
-const Reservation_User_PhoneNumber = styled.p``;
-const Reservation_User_Email = styled.p``;
+const Reservation_User_Wrap = styled.section`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  top: 30px;
+  width: 100%;
+  height: 100px;
+`;
+const Reservation_User_Name = styled.input`
+  margin-bottom: 5px;
+  width: 50%;
+  height: 30px;
+  font-family: 'Pretendard';
+  font-weight: 600;
+  font-style: normal;
+  font-size: 15px;
+  border-bottom: 1px solid rgba(33, 33, 33, 0.15);
+`;
+const Reservation_User_PhoneNumber = styled.input`
+  margin-bottom: 5px;
+  width: 50%;
+  height: 30px;
+  font-family: 'Pretendard';
+  font-weight: 600;
+  font-style: normal;
+  font-size: 15px;
+  border-bottom: 1px solid rgba(33, 33, 33, 0.15);
+`;
+const Reservation_User_Email = styled.input`
+  margin-bottom: 5px;
+  width: 50%;
+  height: 30px;
+  font-family: 'Pretendard';
+  font-weight: 600;
+  font-style: normal;
+  font-size: 15px;
+  border-bottom: 1px solid rgba(33, 33, 33, 0.15);
+`;
+const Reservation_User_Save = styled.button`
+  position: absolute;
+  width: 100px;
+  height: 50%;
+  right: 30px;
+  bottom: 30px;
+  color: white;
+  background: #4286f4;
+  cursor: pointer;
+  p {
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+  }
+`;
 
 const Reservation_Summary = styled.section`
   position: absolute;
@@ -308,14 +431,12 @@ const Reservation_Payment_Btn = styled.input`
 `;
 const Reservation_Payment_Text = styled.p`
   position: absolute;
-
   left: 30px;
   width: 100px;
   height: 15px;
 `;
 const Reservation_Payment_Bank = styled.select`
   position: absolute;
-
   top: 40px;
   width: 100%;
   height: 30px;
