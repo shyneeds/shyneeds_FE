@@ -21,6 +21,9 @@ const MypageTab = () => {
   const [tab, setTab] = useState<number>(1);
   const [popup, setPopup] = useState<boolean>(false);
   const [passPopup, setPassPopup] = useState<boolean>(false);
+  const tabReset = () => {
+    setTab(1);
+  };
   const togglePop = () => {
     setPopup(!popup);
   };
@@ -92,7 +95,10 @@ const MypageTab = () => {
               {tab === 2 && <Writing />}
               {/* {tab === 3 && <Modify />} */}
               {tab === 3 && passPopup === false ? (
-                <PasswordPop PassTogglePop={PassTogglePop} />
+                <PasswordPop
+                  PassTogglePop={PassTogglePop}
+                  tabReset={tabReset}
+                />
               ) : null}
               {tab === 3 && passPopup === true ? <Modify /> : null}
               {/* {tab === 4 && <Withdrawal />} */}

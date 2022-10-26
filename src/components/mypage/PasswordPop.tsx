@@ -8,12 +8,14 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { userUserInfo } from '../../features/userData/userDataSlice';
 import { useNavigate } from 'react-router';
 import Modify from './Modify';
+import Reservation from './Reservation';
 
 interface Prop {
   PassTogglePop: () => void;
+  tabReset: () => void;
 }
 
-const PasswordPop = ({ PassTogglePop }: Prop): JSX.Element | any => {
+const PasswordPop = ({ PassTogglePop, tabReset }: Prop): JSX.Element | any => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector<any>(userUserInfo);
@@ -55,7 +57,7 @@ const PasswordPop = ({ PassTogglePop }: Prop): JSX.Element | any => {
   };
   return (
     <PopupBox>
-      <BackGround />
+      <BackGround onClick={() => tabReset()} />
       <Popup>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Title>비밀번호 확인</Title>
