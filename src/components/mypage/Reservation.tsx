@@ -13,6 +13,7 @@ const Reservation = () => {
   const dtTogglePop = () => {
     setDtPopup(!dtpopup);
   };
+  console.log('데이터' + reservationList);
   return (
     <ReservationBox>
       <h2>예약조회</h2>

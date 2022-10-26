@@ -5,10 +5,13 @@ import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
+  delReplyAsync,
+  getReplyContentAsync,
   getReviewListAsync,
   modifyReplyAsync,
   postReplyAsync,
   replyData,
+  setReplyData,
 } from '../../features/communityPage/replySlice';
 import { useCookies } from 'react-cookie';
 import { useParams } from 'react-router-dom';
@@ -20,7 +23,7 @@ type replyDataType = {
   userName: string;
   comment: string;
   updatedAt: string;
-  id : number
+  id: number;
 };
 
 const ReviewReply = () => {
@@ -32,51 +35,64 @@ const ReviewReply = () => {
     reset,
     // formState: { errors }, 추후 required 사용 예정
   } = useForm();
+  const reviewNumber = useParams().id;
   const [cookies, setCookie] = useCookies(['token']);
   const onSubmit = (formData: any) => {
-    reset({comment: ""})
+    reset({ comment: '' });
     dispatch(postReplyAsync(formData));
   };
+  const setReply = useAppSelector(setReplyData);
   const [modify, setModify] = useState(false);
   const [emojiClick, setEmojiClick] = useState(false);
   const [commentId, setCommentId] = useState<number>(0);
   const isEmojiClick = () => {
     emojiClick === false ? setEmojiClick(true) : setEmojiClick(false);
   };
-  const onClick = (emojiData: EmojiClickData, event: MouseEvent) => {
-    setValue('reply', getValues('reply') + emojiData.emoji);
+  const onClick = (emojiData: EmojiClickData) => {
+    setValue('comment', getValues('comment') + emojiData.emoji);
     setEmojiClick(false);
   };
-  const onModifyClick = (emojiData: EmojiClickData, event: MouseEvent) => {
-    setValue('modifyReply', getValues('modifyReply') + emojiData.emoji);
+
+  
+  const onModifyClick = (emojiData: EmojiClickData) => {
+    setValue('modifyReply' ,getValues('modifyReply')+emojiData.emoji)
     setEmojiClick(false);
   };
   const toggleModify = (id: number) => {
+    const data = { commentid: id, token: cookies };
+    dispatch(getReplyContentAsync(data));
     setModify(!modify);
     setCommentId(id);
   };
-
+  useEffect(()=>{
+    setValue('modifyReply' , setReply)
+  },[setReply])
+  const onDeleteReply = (id: number) => {
+    const data = { commentid: id, token: cookies , reviewId : reviewNumber};
+    dispatch(delReplyAsync(data));
+  };
+  
   const dispatch = useAppDispatch();
   const getReplyData = useAppSelector<any>(replyData);
   useEffect(() => {
-    dispatch(getReviewListAsync());
+    dispatch(getReviewListAsync(reviewNumber));
   }, []);
-  const modifyReply = useRef<HTMLTextAreaElement | null>(null);
-  
-  const onReplyModify = () =>{
-    const data = {comment : modifyReply.current?.value,commentid : commentId}
-    // console.log(modifyReply.current?.value)
-    dispatch(modifyReplyAsync(data))
-    console.log (data)
-  }
-  const reviewNumber = useParams().id;
 
-  
+  const onReplyModify = () => {
+    const data = {
+      comment: getValues('modifyReply'),
+      commentId: commentId,
+      token: cookies,
+      reviewId : reviewNumber,
+    };
+    dispatch(modifyReplyAsync(data));
+    console.log(data);
+  };
 
   return (
     <>
       {!modify &&
-        getReplyData.map((reply: replyDataType, i:any) => {
+        getReplyData.map((reply: replyDataType, i: any) => {
           return (
             <NewReply key={i}>
               <NewReplyAuthorWrap>
@@ -91,11 +107,9 @@ const ReviewReply = () => {
               <NewReplyContent>{reply.comment}</NewReplyContent>
               <NewReplyButtonWrap>
                 <button>댓글</button> <p>/</p>
-                <button onClick={() => toggleModify(reply.id)}>
-                  수정
-                </button>
+                <button onClick={() => toggleModify(reply.id)}>수정</button>
                 <p>/</p>
-                <button>삭제</button>
+                <button onClick={() => onDeleteReply(reply.id)}>삭제</button>
               </NewReplyButtonWrap>
             </NewReply>
           );
@@ -105,8 +119,8 @@ const ReviewReply = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <ReplyContent
               placeholder="수정사항을 남겨주세요."
-              ref={modifyReply}
-              // {...register('modifyReply')}
+              // ref={modifyReply}
+              {...register('modifyReply')}
             ></ReplyContent>
             <ReplySubmitWrap>
               <img
@@ -118,9 +132,13 @@ const ReviewReply = () => {
                 <ReplyCancelButton onClick={() => setModify(!modify)}>
                   취소
                 </ReplyCancelButton>
-                <ReplyModiftyButton type="button" onClick={() => {toggleModify(commentId)
-                onReplyModify()
-                }}>
+                <ReplyModiftyButton
+                  type="button"
+                  onClick={() => {
+                    toggleModify(commentId);
+                    onReplyModify();
+                  }}
+                >
                   등록
                 </ReplyModiftyButton>
               </ModifyReplySubmitWrap>
@@ -150,10 +168,14 @@ const ReviewReply = () => {
                 alt="EmptyLoveIcon"
                 onClick={() => isEmojiClick()}
               />
-              <ReplySubmitButton onClick={()=>{
-                setValue('token', cookies)
-                setValue('reviewId', reviewNumber )
-                }}>등록</ReplySubmitButton>
+              <ReplySubmitButton
+                onClick={() => {
+                  setValue('token', cookies);
+                  setValue('reviewId', reviewNumber);
+                }}
+              >
+                등록
+              </ReplySubmitButton>
             </ReplySubmitWrap>
             {emojiClick && (
               <EmojiPicker

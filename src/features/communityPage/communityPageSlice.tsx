@@ -5,13 +5,13 @@ import { API_URL } from '../../constants/API_URL';
 
 export const getPageList = createAsyncThunk(
   'GET_PAGE_LIST',
-  async (page: number) => {
+  async (page: number, thunkAPI) => {
     return await axios({
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
       },
-      url: API_URL.GET.REVIEW_LIST + '?search=test&page=' + (page - 1),
+      url: API_URL.GET.REVIEW_LIST + `?search=all&page=` + (page - 1),
       method: 'get',
     })
       .then((response) => {
@@ -29,6 +29,7 @@ export interface pageState {
   page: number;
   blockNum: number;
   totalElements: number;
+  searchWord: string;
 }
 
 const initialState: pageState = {
@@ -37,6 +38,7 @@ const initialState: pageState = {
   page: 1,
   blockNum: 0,
   totalElements: 0,
+  searchWord: '',
 };
 
 export const page = createSlice({
@@ -66,11 +68,14 @@ export const page = createSlice({
       }
       state.page -= 1;
     },
+    searchWord : (state,action : PayloadAction<string>)=>{
+      state.searchWord = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getPageList.fulfilled, (state, action) => {
       const data = action.payload;
-      console.log(data)
+      console.log(data);
       state.totalPages = data.pagination.totalPages;
       state.ReviewData = data.data;
       state.totalElements = data.pagination.totalElements;
@@ -78,7 +83,7 @@ export const page = createSlice({
   },
 });
 
-export const { getTotal, setPage, nextPage, prevPage } = page.actions;
+export const { getTotal, setPage, nextPage, prevPage,searchWord } = page.actions;
 export const totalPageData = (state: RootState) => state.page.totalPages;
 export const pageNum = (state: RootState) => state.page.page;
 export const blockNum = (state: RootState) => state.page.blockNum;

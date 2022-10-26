@@ -11,18 +11,25 @@ import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
 import {
   // name,
   // profileImage,
-  // reservationList,
+  reservationList,
   // totalPaymentAmount,
   userInfo,
 } from '../../features/userData/userDataSlice';
+import PasswordPop from './PasswordPop';
 
 const MypageTab = () => {
   const [tab, setTab] = useState<number>(1);
   const [popup, setPopup] = useState<boolean>(false);
+  const [passPopup, setPassPopup] = useState<boolean>(false);
+  const tabReset = () => {
+    setTab(1);
+  };
   const togglePop = () => {
     setPopup(!popup);
   };
-
+  const PassTogglePop = () => {
+    setPassPopup(!passPopup);
+  };
   const token = useAppSelector(userToken);
   const userIdValue = useAppSelector(userId);
   const dispatch = useAppDispatch();
@@ -30,7 +37,7 @@ const MypageTab = () => {
   useEffect(() => {
     axios({
       method: 'get',
-      url: `http://13.125.151.45:8080/api/my/user/${userIdValue}`,
+      url: `http://13.125.151.45:8080/api/my/user`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -39,7 +46,7 @@ const MypageTab = () => {
       dispatch(userInfo(res.data.data.userInfo));
       // dispatch(name(res.data.data.userInfo.name));
       // dispatch(profileImage(res.data.data.userInfo.profileImage));
-      // dispatch(reservationList(res.data.data.reservationList));
+      dispatch(reservationList(res.data.data.reservationList));
       // dispatch(totalPaymentAmount(res.data.data.userInfo.totalPaymentAmount));
     });
   }, []);
@@ -86,7 +93,14 @@ const MypageTab = () => {
               2. 트루값을 가지고 있는애면 예약조회 : 면 예약취소 사이트 */}
               {tab === 1 && <Reservation />}
               {tab === 2 && <Writing />}
-              {tab === 3 && <Modify />}
+              {/* {tab === 3 && <Modify />} */}
+              {tab === 3 && passPopup === false ? (
+                <PasswordPop
+                  PassTogglePop={PassTogglePop}
+                  tabReset={tabReset}
+                />
+              ) : null}
+              {tab === 3 && passPopup === true ? <Modify /> : null}
               {/* {tab === 4 && <Withdrawal />} */}
               {/* {popup === true && <Withdrawal (props:propsType)setPopup={setPopup}/>} */}
               {popup === true && <Withdrawal togglePop={togglePop} />}

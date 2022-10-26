@@ -25,7 +25,7 @@ function App() {
   const [cookies, setCookie] = useCookies(['token']);
   const dispatch = useAppDispatch();
   const loggedInfo = () => {
-    sessionStorage.getItem('refreshToken') && dispatch(isLogin(sessionStorage));
+    cookies && dispatch(isLogin(cookies));
   };
   return (
     <>
