@@ -4,16 +4,15 @@ import axios from 'axios';
 
 export const getReviewListAsync = createAsyncThunk(
   'GET_REVIEW_LIST',
-  async (_, thunkAPI) => {
+  async (id: any, thunkAPI) => {
     return await axios({
-      url: `http://13.125.151.45:8080/api/comment/1/list`,
+      url: `http://13.125.151.45:8080/api/comment/${id}/list`,
       method: 'GET',
       headers: {
         'Content-type': 'application/x-www-form-urlencoded',
       },
     }).then((res) => {
       thunkAPI.dispatch(getReply(res.data.data));
-      console.log(res.data.data);
       return res;
     });
   }
@@ -35,7 +34,7 @@ export const postReplyAsync = createAsyncThunk(
         reviewId: reviewId,
       },
     }).then((res) => {
-      thunkAPI.dispatch(getReviewListAsync());
+      thunkAPI.dispatch(getReviewListAsync(reviewId));
       return res;
     });
   }
@@ -43,33 +42,21 @@ export const postReplyAsync = createAsyncThunk(
 export const modifyReplyAsync = createAsyncThunk(
   'MODIFY_REVIEW',
   async (data: any, thunkAPI) => {
-    const { comment, commentid, token } = data;
-    console.log(comment)
-    // const test = { comment: 'comment', commentid: commentid };
-    // const headers = {
-    //   Authorization: `Bearer ${token.token}`,
-    //   'Content-type': 'application/json',
-    // };
-    return await axios(
-      // .put(
-      //   `http://13.125.151.45:8080/api/comment/update`,
-      //   { comment: 'test', commentid: '17' },
-      //   { headers }
-      // )
-      {
-        url: `http://13.125.151.45:8080/api/comment/update`,
-        method: 'put',
-        headers: {
-          Authorization: `Bearer ${token.token}`,
-          'Content-type': 'application/json',
-        },
-        data: {
-          comment: comment,
-          commentid: commentid,
-        },
-      }
-    ).then((res) => {
-      thunkAPI.dispatch(getReviewListAsync());
+    const { comment, commentId, token, reviewId} = data;
+    console.log(comment);
+    return await axios({
+      url: `http://13.125.151.45:8080/api/comment/update/`,
+      method: 'put',
+      headers: {
+        Authorization: `Bearer ${token.token}`,
+        'Content-type': 'application/json',
+      },
+      data: {
+        comment: comment,
+        commentId: commentId,
+      },
+    }).then((res) => {
+      thunkAPI.dispatch(getReviewListAsync(reviewId));
       console.log(res);
       return res;
     });
@@ -97,7 +84,7 @@ export const getReplyContentAsync = createAsyncThunk(
 export const delReplyAsync = createAsyncThunk(
   'DELETE_REPLY_CONTENT',
   async (data: any, thunkAPI) => {
-    const { commentid, token } = data;
+    const { commentid, token ,reviewId } = data;
     return await axios({
       url: `http://13.125.151.45:8080/api/comment/${commentid}`,
       method: 'DELETE',
@@ -106,7 +93,7 @@ export const delReplyAsync = createAsyncThunk(
         'Content-type': 'application/x-www-form-urlencoded',
       },
     }).then((res) => {
-      thunkAPI.dispatch(getReviewListAsync());
+      thunkAPI.dispatch(getReviewListAsync(reviewId));
       console.log(res);
       return res;
     });

@@ -1,26 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   userCancelNum,
   userReservationList,
-  userCancelReason,
 } from '../../features/userData/userDataSlice';
+import { userToken } from '../../features/kakaoLogin/kakaoLoginSlice';
 
 interface Prop {
   dtTogglePop: () => void;
 }
 const CancelDetail = ({ dtTogglePop }: Prop): JSX.Element | any => {
-  const dispatch = useAppDispatch();
-  const cancelReason = useAppSelector<any>(userCancelReason);
+  const [reson, setReason] = useState<string>('');
+  const [resonDetail, setReasonDetail] = useState<string>('');
+  const [payment, setPayment] = useState<string>('');
   const reservationList = useAppSelector(userReservationList);
   const cancleNum = useAppSelector(userCancelNum);
   const ProductData: any = reservationList[cancleNum];
-  console.log(cancelReason);
-  // const a: any = [...cancelReason];
-  // console.log(JSON.parse(a));
+  const token = useAppSelector(userToken);
 
-  // console.log(cancelReason['cancelReason']);
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `http://13.125.151.45:8080/api/reservation/cancel?reservation_number=${ProductData.reservationNumber}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      console.log(res);
+      setReason(res.data.data.cancelReason);
+      setReasonDetail(res.data.data.cancelReasonDetail);
+      setPayment(res.data.data.paymentMethod);
+    });
+  }, []);
+
   return (
     <div>
       <PopupBox>
@@ -66,15 +80,15 @@ const CancelDetail = ({ dtTogglePop }: Prop): JSX.Element | any => {
               <ReasonWrap>
                 <ReasonList>
                   <ListTit>취소요청사유</ListTit>
-                  <ListCon>{cancelReason}</ListCon>
+                  <ListCon>{reson}</ListCon>
                 </ReasonList>
                 <ReasonList>
                   <ListTit>상세사유</ListTit>
-                  <ListCon>{}</ListCon>
+                  <ListCon>{resonDetail}</ListCon>
                 </ReasonList>
                 <ReasonList>
                   <ListTit>환불 방법</ListTit>
-                  <ListCon>무통장 입금</ListCon>
+                  <ListCon>{payment}</ListCon>
                 </ReasonList>
               </ReasonWrap>
             </Reason>

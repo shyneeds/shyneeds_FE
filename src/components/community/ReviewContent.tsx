@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { pageNum, getPageList, ReviewData } from '../../features/communityPage/communityPageSlice';
+import { pageNum, getPageList, ReviewData, seacrchWordData } from '../../features/communityPage/communityPageSlice';
 import { Link } from 'react-router-dom';
 
 type reviewDataType = {
@@ -14,11 +14,14 @@ type reviewDataType = {
 
 const ReviewContent = () => {
   const dispatch = useAppDispatch();
+  const searchWord = useAppSelector(seacrchWordData);
   const page = useAppSelector(pageNum);
   const reviewDatas = useAppSelector(ReviewData);
   useEffect(() => {
-    dispatch(getPageList(page));
-  }, [page]);
+    const data = {page, searchWord}
+    console.log(data)
+    dispatch(getPageList(data));
+  }, [page,searchWord]);
   // /^\d{4}.-(0[1-9]|1[012]).(0[1-9]|[12][0-9]|3[01])$/
   return (
     <ReviewWrap>

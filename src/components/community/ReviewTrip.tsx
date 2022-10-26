@@ -20,8 +20,7 @@ const ReviewTrip = () => {
   const [tab, setTab] = useState<number>(0);
   const totalNum = useAppSelector(totalElementsNum);
   const onSubmit = (formData: any) => {
-    console.log(formData)
-    dispatch(searchWord(formData))
+    dispatch(searchWord(formData.search))
   };
   return (
     <>
