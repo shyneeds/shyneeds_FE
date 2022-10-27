@@ -51,7 +51,12 @@ export const GroupProductCarousel = () => {
           <CardContainer>
             <ProductWrap
               key={data.id}
-              onClick={() => dispatch(getProductIdData(data.id))}
+              onClick={() =>
+                window.localStorage.setItem(
+                  'WATCHED_PRODUCTS',
+                  JSON.stringify(data.id)
+                )
+              }
             >
               <ProductImg src={data.imageUrl} alt="product_image" />
               <ProductText>
