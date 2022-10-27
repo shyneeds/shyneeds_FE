@@ -24,7 +24,7 @@ const Reservation = () => {
         <ContentsResultBox>예약내역이 없습니다.</ContentsResultBox>
       ) : (
         reservationList.map((data: any, i: number) => {
-          // console.log({ data });
+          console.log('data: ' + JSON.stringify(data));
           // console.log('이미지주소' + data.reservationPackage[0].imageUrl);
           return (
             <Product key={data.reservationId}>
@@ -33,17 +33,17 @@ const Reservation = () => {
               </p>
               <ProductMain>
                 <ProductInfo>
-                  {data.reservationPackage[0].imageUrl !== undefined ? (
+                  {data.reservationPackage[0]?.imageUrl !== undefined ? (
                     <img src={data.reservationPackage[0].imageUrl} alt="" />
                   ) : null}
 
                   <ProductText>
                     <Text fontWeight="700">
-                      {data.reservationPackage[0].title}
+                      {data.reservationPackage[0]?.title}
                     </Text>
                     <Text fontWeight="400">
                       {data.reservationPackage[0]
-                        ? data.reservationPackage[0].optionValue
+                        ? data.reservationPackage[0]?.optionValue
                         : null}
                     </Text>
                     <Text fontWeight="400">
