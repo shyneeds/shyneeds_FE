@@ -4,9 +4,10 @@ import ReviewDetailData from './ReviewDetailData';
 import { useState } from 'react';
 import RelatedData from './RelatedData';
 import ReviewReply from './ReviewReply';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
+  DeleteReviewDetail,
   getReviewDetail,
   reviewDetailData,
 } from '../../features/communityPage/reviewWriteSlice';
@@ -14,6 +15,7 @@ import { useCookies } from 'react-cookie';
 
 const ReviewDetail = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const detailData = useAppSelector(reviewDetailData);
   const [cookies, setCookie] = useCookies(['token']);
   const id = useParams().id;
@@ -24,23 +26,30 @@ const ReviewDetail = () => {
   const isChecked = (check: any) => {
     isCheck(check);
   };
+  const onDeleteClick = (id: string) =>{
+    dispatch(DeleteReviewDetail({ id, ...cookies })).then(()=>navigate(-1));
+  }
+  const onModifyClick = () =>{
+    console.log("테스트")
+    navigate('/community/write/modify')
+  }
 
   return (
     <Wrap>
       <TopCategoryWrap>
         <CategoryWrap>
           <TripReviewText>여행후기</TripReviewText>
-          <ReviewTitle>{detailData.title}</ReviewTitle>
+          <ReviewTitle>{detailData?.title}</ReviewTitle>
           <ReviewDate>
             <ReviewLeftTop>
-              <ReviewContentWriter>{detailData.author}</ReviewContentWriter>
+              <ReviewContentWriter>{detailData?.author}</ReviewContentWriter>
               <ReviewContentWriter>
-                {detailData.updatedAt
+                {detailData?.updatedAt
                   ?.slice(0, 10)
                   .replace(/(\d{4})-(\d{2})-(\d{2})/, '$1. $2. $3')}
               </ReviewContentWriter>
               <ReviewContentWriter>
-                조회수 : {detailData.lookupCount}
+                조회수 : {detailData?.lookupCount}
               </ReviewContentWriter>
             </ReviewLeftTop>
             <ReviewRightTop>
@@ -52,7 +61,7 @@ const ReviewDetail = () => {
                     onClick={() => isChecked(true)}
                   />
                   <Like>좋아요</Like>
-                  <p>{detailData.likeCount}</p>
+                  <p>{detailData?.likeCount}</p>
                 </>
               ) : (
                 <>
@@ -62,7 +71,7 @@ const ReviewDetail = () => {
                     onClick={() => isChecked(false)}
                   />
                   <Like>좋아요</Like>
-                  <p>{detailData.likeCount + 1}</p>
+                  <p>{detailData?.likeCount + 1}</p>
                 </>
               )}
             </ReviewRightTop>
@@ -71,21 +80,31 @@ const ReviewDetail = () => {
       </TopCategoryWrap>
       <ReviewContentWrap>
         <ReviewContent
-          dangerouslySetInnerHTML={{ __html: detailData.contents }}
+          dangerouslySetInnerHTML={{ __html: detailData?.contents }}
         ></ReviewContent>
         {/* <ReviewImage src={detailData.img}></ReviewImage> */}
         <RelateProduct>
-          <img src={detailData.visitPackageResponseDto?.mainImage} alt="다녀온 상품" />
+          <img
+            src={detailData?.visitPackageResponseDto?.mainImage}
+            alt="다녀온 상품"
+          />
           <RelateProductMiddleWrap>
             <RelatedProduct>고객님이 다녀온 상품</RelatedProduct>
-            <RelatedContentTitle>{detailData.visitPackageResponseDto?.title}</RelatedContentTitle>
-            <RelatedContentDate>{RelatedData.date}</RelatedContentDate> {/* TODO: 추후 날짜 들어와야함*/}
+            <RelatedContentTitle>
+              {detailData?.visitPackageResponseDto?.title}
+            </RelatedContentTitle>
+            <RelatedContentDate>{RelatedData.date}</RelatedContentDate>{' '}
+            {/* TODO: 추후 날짜 들어와야함*/}
           </RelateProductMiddleWrap>
           <div>
             <ShowProduct>상품 보기</ShowProduct>
           </div>
         </RelateProduct>
         <ReviewReply /> {/*댓글 기능*/}
+        <MenuWrap>
+          <ContentModiftyButton onClick={()=>onModifyClick()}>게시글 수정</ContentModiftyButton>
+          <ContentDeleteButton onClick={()=>onDeleteClick(id as string)}>게시글 삭제</ContentDeleteButton>
+        </MenuWrap>
       </ReviewContentWrap>
     </Wrap>
   );
@@ -237,6 +256,43 @@ const RelatedContentDate = styled.p`
 const RelateProductMiddleWrap = styled.div`
   width: 530px;
 `;
+const MenuWrap = styled.div`
+  margin-top : 10px;
+  float: right;
+`;
+const ContentModiftyButton = styled.button`
+  width: 100px;
+  height: 40px;
+  background-color: #4286f4;
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  border-radius: 6px;
+  margin-right: 2px;
+  cursor: pointer;
+  transition: box-shadow 400ms ease;
+  &:hover {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),
+      0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  }
+`;
+const ContentDeleteButton = styled.button`
+  width: 100px;
+  height: 40px;
+  background-color: #4286f4;
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: box-shadow 400ms ease;
+  &:hover {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),
+      0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  }
+`;
 const ShowProduct = styled.button`
   width: 130px;
   height: 44px;
@@ -254,5 +310,15 @@ const ShowProduct = styled.button`
   &:hover {
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),
       0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  }
+`;
+
+const TopLi = styled.li`
+  color: #222222;
+
+  &:hover {
+    padding-bottom: 1.25rem;
+    margin-top: 1.25rem;
+    color: #4286f4;
   }
 `;
