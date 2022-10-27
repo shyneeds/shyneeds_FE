@@ -50,6 +50,7 @@ export const postContent = createAsyncThunk(
     })
       .then((response) => {
         console.log(response)
+        response.status === 200 ? alert("게시글이 등록 되었습니다.") : alert("게시글 등록이 되지않았습니다.")
         // console.log(response.data)
         // thunkAPI.dispatch(getImgUrl(response.data))
         // return response.data as any
@@ -75,6 +76,48 @@ export const getReviewDetail = createAsyncThunk(
         console.log(response.data.data)
         // thunkAPI.dispatch(getImgUrl(response.data))
         return response.data.data
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  }
+);
+export const ModifyReviewDetail = createAsyncThunk(
+  'MODIFY_REVIEW_DETAIL',
+  async (data :any, thunkAPI) => {
+    const {token, id} = data;
+    return await axios({
+      headers: {
+        'Content-Type': 'aplication/json',
+        Authorization: `Bearer ${token}`
+      },
+      url: `http://13.125.151.45:8080/api/review/${id}/details`,
+      method: 'get',
+    })
+      .then((response) => {
+        console.log(response.data.data)
+        // thunkAPI.dispatch(getImgUrl(response.data))
+        return response.data.data
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  }
+);
+export const DeleteReviewDetail = createAsyncThunk(
+  'DELETE_REVIEW_DETAIL',
+  async (data :any, thunkAPI) => {
+    const {token, id} = data;
+    return await axios({
+      headers: {
+        'Content-Type': 'aplication/json',
+        Authorization: `Bearer ${token}`
+      },
+      url: `http://13.125.151.45:8080/api/review/${id}`,
+      method: 'delete',
+    })
+      .then((response) => {
+        response.status === 200 ? alert("게시글이 삭제 되었습니다.") : alert("게시글이 삭제 되지 않았습니다.")
       })
       .catch((error) => {
         console.log({ error });
