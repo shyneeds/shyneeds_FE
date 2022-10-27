@@ -38,7 +38,6 @@ export interface userDataList {
   userInfo: Array<object>;
   reservationList: Array<object>;
   cancelNum: number;
-  cancelReason: Array<object>;
   // cancle: [
   //   {
   //     cancelReason: string;
@@ -61,7 +60,6 @@ const initialState: userDataList = {
   userInfo: [],
   reservationList: [],
   cancelNum: 0,
-  cancelReason: [],
   // cancle: [
   //   {
   //     cancelReason: '',
@@ -102,9 +100,6 @@ export const userDataSlice = createSlice({
     cancelNum: (state, action: PayloadAction<number>) => {
       state.cancelNum = action.payload;
     },
-    cancelReason: (state, action: PayloadAction<Array<object>>) => {
-      state.cancelReason = action.payload;
-    },
     // cancelReason: (state, action: PayloadAction<string>) => {
     //   state.cancle[0].cancelReason = action.payload;
     //   console.log(state.cancle[0].cancelReason);
@@ -130,7 +125,6 @@ export const {
   userInfo,
   reservationList,
   cancelNum,
-  cancelReason,
   // cancelReasonDetail,
 } = userDataSlice.actions;
 // export const userDataEmail = (state: RootState) =>
@@ -149,8 +143,6 @@ export const userUserInfo = (state: RootState) => state.userData.userInfo;
 export const userReservationList = (state: RootState) =>
   state.userData.reservationList;
 export const userCancelNum = (state: RootState) => state.userData.cancelNum;
-export const userCancelReason = (state: RootState) =>
-  state.userData.cancelReason;
 // export const userCancelReasonDetail = (state: RootState) =>
 //   state.userData.cancle[0].cancelReasonDetail;
 export default userDataSlice.reducer;

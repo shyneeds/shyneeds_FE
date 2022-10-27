@@ -10,11 +10,16 @@ import {
   userUserInfo,
 } from '../../features/userData/userDataSlice';
 import { userToken } from '../../features/kakaoLogin/kakaoLoginSlice';
+import { useNavigate } from 'react-router';
+import { useCookies } from 'react-cookie';
 
 const Modify = () => {
+  const formData = new FormData();
   const now = new Date();
   const year = now.getFullYear();
-  const token = useAppSelector(userToken);
+  const navigate = useNavigate();
+  const token = useAppSelector<any>(userToken);
+  console.log(token);
   const [selectedDate, setSelectedDate] = useState({
     year: (year + '') as any,
     month: '01' as any,
@@ -31,16 +36,22 @@ const Modify = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data: any) => {
+    const copyProfileImage = data.profileImage;
     delete data.password_repeat;
+    delete data.profileImage;
+    console.log(copyProfileImage);
     console.log(data);
+    formData.append('userInfo', data);
+    formData.append('profileImage', copyProfileImage);
     axios({
       method: 'PATCH',
       url: `http://13.125.151.45:8080/api/user`,
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTIzQGdtYWlsL…cxMH0.SRJ3C_yByriY59SQfXOKfuLh2FDlJk1SV37Y5VcYrFc`,
-        'Content-type': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+        // 'Content-type': 'application/json',
       },
-      data: data,
+      data: formData,
     })
       .then((res) => {
         console.log(res);
@@ -67,23 +78,42 @@ const Modify = () => {
 
   // const modify = () => {};
 
-  useEffect(() => {
-    //only use for Test
-    console.log(selectedDate);
-    console.log(passwordRef.current?.value);
-  }, [selectedDate]);
+  // useEffect(() => {
+  //   //only use for Test
+  //   // console.log(selectedDate);
+  //   // console.log(passwordRef.current?.value);
+  // }, [selectedDate]);
   useEffect(() => {
     if (userInfo.gender === 'male') {
       setTab(0);
     }
   }, []);
-
+  const isPhoneNum = () => {
+    if (watch('phoneNumber').length === 13) {
+      setValue(
+        'phoneNumber',
+        watch('phoneNumber').replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3')
+      );
+    }
+    if (watch('phoneNumber') >= 13) {
+      setValue(
+        'phoneNumber',
+        watch('phoneNumber')
+          .replace(/-/g, '')
+          .replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
+      );
+    }
+  };
+  const isError = () => {
+    Object.keys(errors).length === 0 && alert('회원가입이 완료되었습니다.'),
+      navigate(-1);
+  };
   return (
     <div>
       <h2>회원정보수정</h2>
       <WrapContainer>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          {/* <InputImgBox>
+          <InputImgBox>
             <ImgButton
               src={
                 userImg.includes('null')
@@ -100,7 +130,7 @@ const Modify = () => {
               type="file"
               accept="image/*"
             />
-          </InputImgBox> */}
+          </InputImgBox>
 
           <InputBox>
             <NameStyle>새로운 비밀번호</NameStyle>
@@ -108,6 +138,7 @@ const Modify = () => {
               type="password"
               placeholder="비밀번호"
               {...register('password', {
+                onChange: () => isPhoneNum(),
                 required: true,
                 pattern: /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/,
               })}
@@ -148,6 +179,21 @@ const Modify = () => {
               })}
             />
             {errors.name && <ErrorMessage>이름을 입력해주세요.</ErrorMessage>}
+          </InputBox>
+          <InputBox>
+            <NameStyle>연락처</NameStyle>
+            <InputStyle
+              placeholder="연락처를 적어주세요"
+              style={{ outline: errors.phoneNumber ? '2px solid red' : '' }}
+              {...register('phoneNumber', {
+                required: true,
+                pattern: /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/,
+                onChange: () => isPhoneNum(),
+              })}
+            />
+            {errors.phoneNumber && (
+              <ErrorMessage>번호를 입력해주세요.</ErrorMessage>
+            )}
           </InputBox>
           <InputBox>
             <NameStyle>생년월일</NameStyle>
@@ -202,7 +248,8 @@ const Modify = () => {
             <NameStyle>성별</NameStyle>
             <GednerBox>
               <GenderButton
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   setTab(0), setValue('gender', 'male');
                 }}
                 className={tab === 0 ? 'active' : undefined}
@@ -210,7 +257,8 @@ const Modify = () => {
                 남성
               </GenderButton>
               <GenderButton
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   setTab(1), setValue('gender', 'female');
                 }}
                 className={tab === 1 ? 'active' : undefined}

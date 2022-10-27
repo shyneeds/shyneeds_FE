@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import {
   userCancelNum,
   userReservationList,
-  cancelReason,
 } from '../../features/userData/userDataSlice';
 import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
 
@@ -18,8 +17,6 @@ const CancelPage = () => {
   const ProductData: any = reservationList[cancleNum];
   const navigate = useNavigate();
   const token = useAppSelector(userToken);
-  const userIdValue = useAppSelector(userId);
-  const dispatch = useAppDispatch();
   const cancelAlert = () => {
     if (confirm('주문 취소를 진행하시겠습니까?') === true) {
       axios({
@@ -34,7 +31,6 @@ const CancelPage = () => {
         },
       }).then((res) => {
         console.log(res);
-        dispatch(cancelReason(res.config.data));
       });
       alert('주문이 정상적으로 취소되었습니다.');
       navigate(-1);
