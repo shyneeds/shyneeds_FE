@@ -49,14 +49,7 @@ export const RecommendedByRegion = () => {
       <CarouselContainer {...settings}>
         {products.map((data: any) => (
           <Link to={'offers/' + data.id} key={data.id}>
-            <ProductWrap
-              onClick={() =>
-                localStorage.setItem(
-                  'WATCHED_PRODUCTS',
-                  JSON.stringify(data.id)
-                )
-              }
-            >
+            <ProductWrap>
               <img src={data.imageUrl} alt="product_image" />
               <ProductText>
                 <Title>{data.title}</Title>

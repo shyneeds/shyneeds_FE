@@ -1,4 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
 import Reservation from './Reservation';
 import Writing from './Writing';
@@ -36,6 +38,7 @@ const MypageTab = () => {
     axios({
       method: 'get',
       url: `http://13.125.151.45:8080/api/my/user`,
+
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -45,7 +48,6 @@ const MypageTab = () => {
       dispatch(reservationList(res.data.data.reservationList));
     });
   }, []);
-
   return (
     <div>
       <MypageMain>

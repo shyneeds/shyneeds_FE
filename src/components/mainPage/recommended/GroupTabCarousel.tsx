@@ -11,7 +11,7 @@ import {
   getGroupProductData,
   groupData,
 } from '../../../features/main/productSlice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ResponseType } from '../../../utils/ResponseType';
 
 const settings = {
@@ -22,6 +22,10 @@ const settings = {
 export const GroupTabCarousel = () => {
   const dispatch = useAppDispatch();
   const products = useAppSelector(groupData);
+  const [isSelected, setIsSelected] = useState<boolean>(false);
+  const onClick = (): void => {
+    setIsSelected(!isSelected);
+  };
   const getGroupData: any = () => {
     axios
       .post<ResponseType>(API_URL.POST.MAIN, {
@@ -45,20 +49,36 @@ export const GroupTabCarousel = () => {
   return (
     <CarouselContainer {...settings}>
       {products.map((data: any) => (
-        <SliderWrap key={data.id}>
-          <GroupWrap>
-            <GroupImage>
-              <img src={data.imageUrl} alt="group_tab_image" />
-            </GroupImage>
-            <GroupText>
-              <GroupTitle>{data.title}</GroupTitle>
-              <GroupContent>{data.summary}</GroupContent>
-              <StyledLink to={'offers'}>
-                <p>상품 보기</p>
-                <BiChevronRight size="20px" />
-              </StyledLink>
-            </GroupText>
-          </GroupWrap>
+        <SliderWrap onClick={onClick} key={data.id}>
+          {isSelected ? (
+            <GroupWrap1>
+              <GroupImage>
+                <img src={data.imageUrl} alt="group_tab_image" />
+              </GroupImage>
+              <GroupText>
+                <GroupTitle>{data.title}</GroupTitle>
+                <GroupContent>{data.summary}</GroupContent>
+                <StyledLink to={'offers'}>
+                  <p>상품 보기</p>
+                  <BiChevronRight size="20px" />
+                </StyledLink>
+              </GroupText>
+            </GroupWrap1>
+          ) : (
+            <GroupWrap2>
+              <GroupImage>
+                <img src={data.imageUrl} alt="group_tab_image" />
+              </GroupImage>
+              <GroupText>
+                <GroupTitle>{data.title}</GroupTitle>
+                <GroupContent>{data.summary}</GroupContent>
+                <StyledLink to={'offers'}>
+                  <p>상품 보기</p>
+                  <BiChevronRight size="20px" />
+                </StyledLink>
+              </GroupText>
+            </GroupWrap2>
+          )}
         </SliderWrap>
       ))}
     </CarouselContainer>
@@ -84,39 +104,29 @@ const CarouselContainer = styled(Slider)`
   .slick-next {
     background: url('/icons/ic-chevron-right-40x40-050.svg') no-repeat;
   }
-  // .slick-prev:hover {
-  //   box-shadow: 0 8px 15px 4px #f0f0f0;
-  // }
-  // .slick-next:hover {
-  //   box-shadow: 0 8px 15px 4px #f0f0f0;
-  // }
 }
 `;
 
 const SliderWrap = styled.div`
-  background-color: #f6f6f6;
   border-top: 2px solid #ccc;
 `;
 
-const GroupWrap = styled.div`
+const GroupWrap1 = styled.div`
+  background-color: #f5f5f5;
   border-bottom: 2px solid #ccc;
   border-right: 1px solid #ccc;
   border-left: 1px solid #ccc;
   display: flex;
   padding: 20px;
+`;
 
-  &:hover {
-    background-color: #fff;
-    border-bottom: none;
-
-    .slick-next,
-    .slick-prev {
-      width: 40px;
-      height: 40px;
-      z-index: 2;
-      top: 50%;
-    }
-  }
+const GroupWrap2 = styled.div`
+  background-color: #fff;
+  // border-bottom: 2px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  display: flex;
+  padding: 20px;
 `;
 
 const GroupImage = styled.div`
