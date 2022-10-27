@@ -9,6 +9,7 @@ import axios from 'axios';
 import { API_URL } from '../../../constants/API_URL';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
+  getProductIdData,
   getThemeProductData,
   themeData,
 } from '../../../features/main/productSlice';
@@ -49,7 +50,14 @@ export const RecommendedByTheme = () => {
       <CarouselContainer {...settings}>
         {products.map((data: any) => (
           <Link to={'offers/' + data.id} key={data.id}>
-            <ProductWrap>
+            <ProductWrap
+              onClick={() =>
+                window.localStorage.setItem(
+                  'WATCHED_PRODUCTS',
+                  JSON.stringify(data.id)
+                )
+              }
+            >
               <img src={data.imageUrl} alt="product_image" />
               <ProductText>
                 <Title>{data.title}</Title>

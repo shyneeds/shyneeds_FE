@@ -32,7 +32,6 @@ const Review = () => {
       const mainData = res.data.data;
       const reviewData = mainData.bestReviewList;
       dispatch(getReviewData(reviewData));
-      console.log(reviewData);
       return reviewData;
     } catch (e) {
       console.log(e);
