@@ -14,7 +14,6 @@ import { useNavigate } from 'react-router';
 import { useCookies } from 'react-cookie';
 
 const Modify = () => {
-  const formData = new FormData();
   const now = new Date();
   const year = now.getFullYear();
   const navigate = useNavigate();
@@ -36,13 +35,18 @@ const Modify = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data: any) => {
-    const copyProfileImage = data.profileImage;
+    const formData = new FormData();
+    formData.append('profileImage', data.profileImage);
+    console.log(data.profileImage);
     delete data.password_repeat;
     delete data.profileImage;
-    console.log(copyProfileImage);
-    console.log(data);
-    formData.append('userInfo', data);
-    formData.append('profileImage', copyProfileImage);
+    // formData.append('profileImage', data.profileImage);
+    formData.append(
+      'userInfo',
+      new Blob([JSON.stringify(data)], { type: 'application/json' })
+    );
+    console.log(JSON.stringify(data));
+
     axios({
       method: 'PATCH',
       url: `http://13.125.151.45:8080/api/user`,
@@ -55,18 +59,18 @@ const Modify = () => {
     })
       .then((res) => {
         console.log(res);
+        alert('회원정보 수정이 완료되었습니다.');
       })
       .catch((errors) => {
         console.log(errors);
       });
-
-    alert('회원정보 수정이 완료되었습니다.');
   };
 
   const { ref, ...rest } = register('profileImage');
   const uploadImage = (e: any) => {
     setMyImage(URL.createObjectURL(e.target.files[0]));
     setValue('profileImage', e.target.files[0]);
+    console.log(myImage);
   };
   const imgRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -75,6 +79,10 @@ const Modify = () => {
   // const userGender = useAppSelector(userDataGender);
   const userInfo = useAppSelector<any>(userUserInfo);
   const userImg: any = userInfo.profileImage;
+  useEffect(() => {
+    console.log(myImage);
+  }, [myImage]);
+  console.log(userImg);
 
   // const modify = () => {};
 
@@ -116,9 +124,9 @@ const Modify = () => {
           <InputImgBox>
             <ImgButton
               src={
-                userImg.includes('null')
+                userImg.includes('undefined')
                   ? process.env.PUBLIC_URL + '/icons/ic-member.svg'
-                  : userImg
+                  : myImage
               }
               onClick={() => imgRef.current?.click()}
             />

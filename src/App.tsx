@@ -48,7 +48,7 @@ function App() {
         <Route path="/reservation" element={<Reservation_Main />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/subPage" element={<GroupPage />} />
-        <Route path="/subPage_group" element={<SubpageView />} />
+        <Route path="/subPage_region" element={<SubpageView />} />
       </Routes>
     </>
   );

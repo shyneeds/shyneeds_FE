@@ -1,5 +1,28 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { RootState } from '../../app/store';
+
+export const getUserData = createAsyncThunk(
+  'GET_USER_DATA',
+  async (token: string, thunkAPI) => {
+    return await axios({
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      url: `http://13.125.151.45:8080/api/my/user`,
+      method: 'get',
+    })
+      .then((response) => {
+        console.log(response.data.data.reservationList);
+        // thunkAPI.dispatch(reservationList(response.data.data.reservationList));
+        return response.data.data.reservationList;
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  }
+);
 
 export interface userDataList {
   userInfo: Array<object>;
@@ -26,6 +49,11 @@ export const userDataSlice = createSlice({
     cancelNum: (state, action: PayloadAction<number>) => {
       state.cancelNum = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getUserData.fulfilled, (state, action) => {
+      state.reservationList = action.payload;
+    });
   },
 });
 
