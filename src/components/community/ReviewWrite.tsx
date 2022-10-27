@@ -9,8 +9,15 @@ import '@toast-ui/editor/dist/i18n/ko-kr';
 import { Editor } from '@toast-ui/react-editor';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useCookies } from 'react-cookie';
-import { getUserData, userReservationList } from '../../features/userData/userDataSlice';
-import { imgUrl, uploadImg } from '../../features/communityPage/reviewWriteSlice';
+import {
+  getUserData,
+  userReservationList,
+} from '../../features/userData/userDataSlice';
+import {
+  imgUrl,
+  postContent,
+  uploadImg,
+} from '../../features/communityPage/reviewWriteSlice';
 
 const ReviewWrite = () => {
   const {
@@ -22,45 +29,47 @@ const ReviewWrite = () => {
     formState: { errors },
   } = useForm();
   const dispatch = useAppDispatch();
-  const [cookies , setCookies] = useCookies(['token']);
-  const reservationId = useAppSelector(userReservationList)
-  useEffect(()=>{
-    dispatch(getUserData(cookies.token))
-    console.log(reservationId)
-  },[])
+  const [cookies, setCookies] = useCookies(['token']);
+  const reservationList: any = useAppSelector(userReservationList);
+  useEffect(() => {
+    dispatch(getUserData(cookies.token));
+  }, []);
+  console.log(reservationList.length);
+  // reservationId[0]?.map((res: any)=>console.log(res));
 
-  const onSubmit = (title: any) => {
+  const onSubmit = (formData: any) => {
+    console.log('submit 돌아가요');
+    console.log(Object.keys('mainImage').length === 0)
+    Object.keys('mainImage').length === 0
+    ? ""
+    : formData['mainImage'] = responseImgUrl[0]
     const contents = editorRef.current?.getInstance().getHTML();
-    Object.assign(title, { contents });
-    console.log(title);
+    Object.assign(formData, { contents }, { ...cookies });
+    console.log(formData);
+    dispatch(postContent(formData));
   };
   const editorRef = useRef<Editor>(null);
   const onChange = () => {
     // 단순 로그 찍기용 함수
     const data = editorRef.current?.getInstance().getHTML();
-    console.log(data);
+    // console.log(data); // TODO: 지울거
   };
   const imgRef = useRef<HTMLInputElement | null>(null);
   const [myImage, setMyImage] = useState<string>();
   const uploadImage = (e: any) => {
     setMyImage(URL.createObjectURL(e.target.files[0]));
-    setValue('image', e.target.files[0]);
+    const blob = e.target.files[0];
+    const data = { ...cookies, blob };
+    dispatch(uploadImg(data)).then((res) => {
+      setValue('mainImage', res.payload);
+    });
   };
-  
-  const onUploadImage = async (blob : Blob , callback : any) => {
-    const data = {...cookies,blob}
-    dispatch(uploadImg(data)).then((res)=>callback(res.payload, 'test')) //url 콜백에 넣자
-
-    // console.log(callback);
-    // ƒ (url, text2) {
-    //    return _this.props.execCommand("addImage", { 
-    //		imageUrl: url, altText: text2 || altTextEl.value 
-    // 	  });
-    //  }
-    
-    // 백엔드에서 받아온 이미지 url과 alt를 callback 함수에 넣어 호출
-    // callback(url); // => <img src="url" alt="description" />
-    // callback('url', 'hello'); // -> <img src="url" alt="hello" />
+  const responseImgUrl = useAppSelector(imgUrl);
+  const onUploadImage = async (blob: Blob, callback: any) => {
+    const data = { ...cookies, blob };
+    dispatch(uploadImg(data)).then((res) => {
+      callback(res.payload, 'test');
+    }); //url 콜백에 넣자
   };
   return (
     <Wrap>
@@ -82,6 +91,22 @@ const ReviewWrite = () => {
                   required: true,
                 })}
               />
+              <BirthSelect
+                {...register('reservationId', { required: true })} // TODO: 추후 미선택시 선택되게끔 erros 설정해야함
+              >
+                {reservationList.length === 0
+                  ? '예약내역이 없어요'
+                  : reservationList.map((data: any, i: number) => {
+                      if (data.reservationStatus === '예약확정') {
+                        // console.log(data.reservationPackage[0].title , " id= " + data.reservationId);
+                        return (
+                          <option key={i} value={data.reservationId as number}>
+                            {data.reservationPackage[0].title}
+                          </option>
+                        );
+                      }
+                    })}
+              </BirthSelect>
             </InputBox>
             <EditorWrap>
               <Editor
@@ -95,20 +120,19 @@ const ReviewWrite = () => {
                 placeholder="내용을 작성해주세요."
                 onChange={onChange}
                 hooks={{
-                  addImageBlobHook: onUploadImage
+                  addImageBlobHook: onUploadImage,
                 }}
               />
             </EditorWrap>
           </LeftWrap>
           <RightWrap>
             <InputImgBox>
-              <ThunmbMainImg
-                src={
-                  imgRef.current
-                    ? myImage
-                    : process.env.PUBLIC_URL + '/icons/add-img.png'
-                }
-              />
+              {responseImgUrl.length != 0 &&
+                (imgRef.current?.value.length != 0 ? (
+                  <ThunmbMainImg src={myImage} />
+                ) : (
+                  <ThunmbMainImg src={responseImgUrl[0]} />
+                ))}
               <ThunmbImg onClick={() => imgRef.current?.click()}>
                 <img src={process.env.PUBLIC_URL + '/icons/union.svg'} />
                 <p>대표 이미지 변경</p>
@@ -206,6 +230,7 @@ const RightWrap = styled.section`
   border-left: 1px solid #cccccc;
 `;
 const InputBox = styled.div`
+  display: flex;
   width: 960px;
   margin: 0 auto;
 `;
@@ -251,4 +276,11 @@ const ThunmbImg = styled.div`
     text-align: center;
     color: #aaaaaa;
   }
+`;
+const BirthSelect = styled.select`
+  align-items: center;
+  padding: 11px 20px;
+  width: 190px;
+  height: 50px;
+  border: 1px solid #cccccc;
 `;
