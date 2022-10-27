@@ -43,7 +43,6 @@ function App() {
         <Route path="/community/*" element={<Community />}></Route>
         <Route path="/community/detail/:id/*" element={<DetailPage />} />
         <Route path="/community/write" element={<Write />} />
-        <Route path="/offers" element={<Offers />} />
         <Route path="/offers/:id" element={<Offers />} />
         <Route path="/reservation" element={<Reservation_Main />} />
         <Route path="/cart" element={<Cart />} />
