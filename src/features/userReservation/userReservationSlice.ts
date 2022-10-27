@@ -3,11 +3,11 @@ import { Action } from '@remix-run/router';
 import { RootState } from '../../app/store';
 
 export interface reservationPackageType {
-  optionFlg: boolean;
-  optionValue: string;
+  optionFlg: boolean | null;
+  optionValue: string | null;
   price: string;
   quantity: number;
-  optionTitle: string;
+  optionTitle: string | null;
   travelPackageId: number;
 }
 export interface reservationProductType {
@@ -79,6 +79,18 @@ export const userReservationSlice = createSlice({
       state.reservationProducts.splice(action.payload, 1);
       state.num -= 1;
     },
+    deleteClickedReservationInfo: (state, action: PayloadAction<number>) => {
+      state.reservationProducts.map((reservationProduct, i) => {
+        let flg = false;
+        reservationProduct.reservationPackages.map((reservationPackage) => {
+          if (reservationPackage.travelPackageId === action.payload) flg = true;
+        });
+        if (flg) {
+          state.reservationProducts.splice(i, 1);
+          state.num -= 1;
+        }
+      });
+    },
     plusNum: (state) => {
       state.peopleNum += 1;
     },
@@ -96,6 +108,7 @@ export const {
   setTotalPrice,
   reservationInfo,
   deleteReservationInfo,
+  deleteClickedReservationInfo,
   plusNum,
   minusNum,
 } = userReservationSlice.actions;
