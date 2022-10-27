@@ -1,53 +1,11 @@
-import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { useAppSelector } from '../../../../app/hooks';
-import { useAppDispatch } from '../../../../app/store';
-import { productId } from '../../../../features/main/productSlice';
 
 export const WatchedStorage = () => {
-  const dispatch = useAppDispatch();
-
-  // const test: string | null = localStorage.getItem('WATCHED_PRODUCTS');
-  // const testArr: any = useRef<string[]>([]);
-  // useEffect((): void => {
-  //   if (!testArr.current.includes(test)) {
-  //     if (testArr.current.length === 2) {
-  //       testArr.current.shift();
-  //     }
-  //     testArr.current.push(test);
-  //   } else {
-  //     testArr.current = testArr.current.filter((el: any) => {
-  //       return el !== test;
-  //     });
-  //     testArr.current.push(test);
-  //   }
-  // }, [test]);
-
-  // console.log(test);
-  // console.log(testArr);
-  // console.log(testArr.current);
-
-  // useEffect(() => {
-  //   const id = useAppSelector(productId);
-  //   let get_local: any = localStorage.getItem('WATCHED_PRODUCTS');
-
-  //   if (get_local == null) {
-  //     get_local = [];
-  //   } else {
-  //     get_local = JSON.parse(get_local);
-  //   }
-
-  //   get_local.push(id);
-  //   get_local = new Set(get_local);
-  //   get_local = [...get_local];
-  //   localStorage.setItem('WATCHED_PRODUCTS', JSON.stringify(get_local));
-  // }, []);
-
   return (
     <Container>
       <TextWrapper>
         <span>최근 본 상품</span>
-        {/* <Quantity>({localStorage.WATCHED_PRODUCTS.length})</Quantity> */}
+        <Quantity>({length})</Quantity>
       </TextWrapper>
       <StorageWrapper>
         <EmptyDiv>
@@ -56,13 +14,10 @@ export const WatchedStorage = () => {
             <br />
             없습니다.
           </p>
+          {/* <Storage>
+            <Product />
+          </Storage> */}
         </EmptyDiv>
-        {/* <Storage>
-          <Product />
-        </Storage>
-        <Storage>
-          <Product />
-        </Storage> */}
       </StorageWrapper>
     </Container>
   );

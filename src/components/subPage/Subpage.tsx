@@ -1,16 +1,46 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppSelector } from '../../app/hooks';
 import { LAYOUT } from '../../constants/layout';
 import { authenticated } from '../../features/kakaoLogin/kakaoLoginSlice';
+import { API_URL } from '../../constants/API_URL';
 import Footer from '../common/footer/Footer';
 import { Navbar } from '../common/header/Navbar';
 import { LogInView, LogOutView } from '../common/header/UserMenu';
 import Pagination from '../community/Pagination';
+import { useDispatch } from 'react-redux';
+import {
+  CategoryProductData,
+  getCategoryProduct,
+} from '../../features/main/productSlice';
 
 const Subpage = () => {
+  // const [poruducts, setProducts] = useState<any>();
   const userAuthenticated = useAppSelector(authenticated);
+  const categoryProduct = useAppSelector<any>(CategoryProductData);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    axios({
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+      url: API_URL.GET.SUB_CATEGORY,
+      method: 'get',
+    })
+      .then((response) => {
+        console.log({ response });
+        dispatch(getCategoryProduct(response.data.data));
+        // setProducts(res);
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  }, []);
+
   return (
     <>
       <Container>
@@ -39,49 +69,56 @@ const Subpage = () => {
         </Wrapper>
         <Navbar />
       </Container>
-      <PageCategory>
-        <p>그룹별 여행 {'>'} 5070</p>
-      </PageCategory>
-      <PageTitle>그룹별 여행</PageTitle>
-      <div>
-        <SubUl_first>
-          <SubLi_first>
-            <Link to="/subPage">5070끼리</Link>
-          </SubLi_first>
-          <SubLi_first>
-            <Link to="/subPage">2040끼리</Link>
-          </SubLi_first>
-          <SubLi_first>
-            <Link to="/subPage">남자끼리</Link>
-          </SubLi_first>
-          <SubLi_first>
-            <Link to="/subPage">여자끼리</Link>
-          </SubLi_first>
-          <SubLi_first>
-            <Link to="/subPage">자녀동반</Link>
-          </SubLi_first>
-          <SubLi_first>
-            <Link to="/subPage">누구든지</Link>
-          </SubLi_first>
-        </SubUl_first>
-      </div>
-      <ResultBar>
-        <ResultValue>
-          <p>총 37개의 5070 여행</p>
-        </ResultValue>
-        <SortBar>
-          <Sort_New>
-            <p>신상품순</p>
-          </Sort_New>
-          <Sort_High>
-            <p>높은 가격순</p>
-          </Sort_High>
-          <Sort_Low>
-            <p>낮은 가격순</p>
-          </Sort_Low>
-        </SortBar>
-      </ResultBar>
-      <></>
+      <MiddleWrap>
+        <MiddleInner>
+          <PageCategory>
+            그룹별 여행 &nbsp;&nbsp;&gt;&nbsp;&nbsp; 5070
+          </PageCategory>
+          <TitleTab>
+            <PageTitle>그룹별 여행</PageTitle>
+            <SubUl_first>
+              <SubLi_first>
+                <Link to="/subPage">5070끼리</Link>
+              </SubLi_first>
+              <SubLi_first>
+                <Link to="/subPage">2040끼리</Link>
+              </SubLi_first>
+              <SubLi_first>
+                <Link to="/subPage">남자끼리</Link>
+              </SubLi_first>
+              <SubLi_first>
+                <Link to="/subPage">여자끼리</Link>
+              </SubLi_first>
+              <SubLi_first>
+                <Link to="/subPage">자녀동반</Link>
+              </SubLi_first>
+              <SubLi_first>
+                <Link to="/subPage">누구든지</Link>
+              </SubLi_first>
+            </SubUl_first>
+          </TitleTab>
+        </MiddleInner>
+      </MiddleWrap>
+      <ResultWrap>
+        <ResultBar>
+          <ResultValue>총 37개의 5070 여행</ResultValue>
+          <SortBar>
+            <Sort>신상품순</Sort>
+            <Sort>높은 가격순</Sort>
+            <Sort>낮은 가격순</Sort>
+          </SortBar>
+        </ResultBar>
+
+        <ProductWrap>
+          {categoryProduct.map((data: any) => {
+            return (
+              <Product key={data.travelPackageId}>
+                <img src={data.mainImage} alt="" />
+              </Product>
+            );
+          })}
+        </ProductWrap>
+      </ResultWrap>
       <Pagination />
       <Footer></Footer>
     </>
@@ -143,77 +180,98 @@ const UserMenu = styled.div`
   justify-content: space-between;
 `;
 
-const PageCategory = styled.div`
-  max-width: ${LAYOUT.SIZE.WIDTH};
-  height: 24px;
+const MiddleWrap = styled.p`
+  width: 100%;
+  border-bottom: 1px solid #eee;
+`;
+const MiddleInner = styled.p`
+  width: 1184px;
   margin: 0 auto;
-  margin-top: 20px;
-
-  p {
-    color: #666666;
-  }
+`;
+const PageCategory = styled.p`
+  padding: 24px 0;
+  color: #666666;
 `;
 
+const TitleTab = styled.div``;
 const PageTitle = styled.h1`
-  max-width: ${LAYOUT.SIZE.WIDTH};
-  height: 32px;
-  margin: 0 auto;
-  font-size: 32px;
-  margin-top: 24px;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
 `;
 
 const SubUl_first = styled.ul`
-  max-width: ${LAYOUT.SIZE.WIDTH};
-  margin: 0 auto;
-  height: 100%;
-  display: flex;
-  padding: 20px 0;
-  gap: 5rem;
   margin-top: 24px;
+  text-align: left;
 `;
 
 const SubLi_first = styled.li`
+  display: inline-block;
+  height: 64px;
+  line-height: 64px;
+  margin: 0 40px 0 0;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #222222;
+  color: #666;
+  letter-spacing: 1px;
 
-  &:hover a {
-    border-bottom: 2px solid #000000;
-    font-weight: bolder;
-    padding-bottom: 4px;
-    color: #000000;
-    width: 50%;
+  &:hover {
+    border-bottom: 3px solid #4286f4;
+    font-weight: bold;
+    color: #4286f4;
   }
 `;
 
-const ResultBar = styled.div`
-  max-width: ${LAYOUT.SIZE.WIDTH};
-  height: 24px;
+const ResultWrap = styled.div`
+  width: 1184px;
   margin: 0 auto;
+`;
+const ResultBar = styled.div`
+  margin: 32px 0;
   display: flex;
   justify-content: space-between;
   margin-bottom: 24px;
 `;
 
-const ResultValue = styled.div`
-  width: 139px;
+const ResultValue = styled.p`
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #666;
 `;
 
 const SortBar = styled.div`
-  width: 276px;
   display: flex;
-  gap: 16px;
+  gap: 24px;
 `;
 
-const Sort_New = styled.div`
-  width: 56px;
+const Sort = styled.p`
+  position: relative;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #aaa;
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 7px;
+    left: -8px;
+    width: 4px;
+    height: 4px;
+    margin: -1px 5px 0 0;
+    background-color: #cccccc;
+    border-radius: 50%;
+    vertical-align: middle;
+  }
 `;
-
-const Sort_High = styled.div`
-  width: 76px;
-`;
-
-const Sort_Low = styled.div`
-  width: 88px;
+const ProductWrap = styled.div``;
+const Product = styled.div`
+  display: inline-block;
+  width: 284px;
+  margin: 0 16px 0 0;
+  :nth-child(4n) {
+    margin-right: 0px;
+  }
 `;
 
 export default Subpage;
+``;

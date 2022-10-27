@@ -12,7 +12,6 @@ import { API_URL } from '../../../../constants/API_URL';
 import { ResponseType } from '../../../../utils/ResponseType';
 import { BannerSlider } from './BannerSlider';
 import { IoMdHeartEmpty } from 'react-icons/io';
-import Slider from 'react-slick';
 
 export const MainBanner = () => {
   // 백엔드 데이터 작업중으로 현재는 호출 안됨
@@ -48,21 +47,21 @@ export const MainBanner = () => {
   const handleChange1 = (event: {
     target: { value: SetStateAction<string> };
   }) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setSelected1(event.target.value);
   };
 
   const handleChange2 = (event: {
     target: { value: SetStateAction<string> };
   }) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setSelected2(event.target.value);
   };
 
   const handleChange3 = (event: {
     target: { value: SetStateAction<string> };
   }) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setSelected3(event.target.value);
   };
 
@@ -96,7 +95,7 @@ export const MainBanner = () => {
       return data;
     }
   });
-  console.log(inquiries);
+  // console.log(inquiries);
 
   const [isResult, setIsResult] = useState<boolean>(false);
   const settings = {

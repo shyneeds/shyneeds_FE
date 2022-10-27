@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
 import Reservation from './Reservation';
 import Writing from './Writing';
@@ -9,10 +10,7 @@ import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
 import {
-  // name,
-  // profileImage,
   reservationList,
-  // totalPaymentAmount,
   userInfo,
 } from '../../features/userData/userDataSlice';
 import PasswordPop from './PasswordPop';
@@ -35,22 +33,20 @@ const MypageTab = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    console.log(token);
     axios({
       method: 'get',
       url: `http://13.125.151.45:8080/api/my/user`,
+
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }).then((res) => {
       console.log(res);
       dispatch(userInfo(res.data.data.userInfo));
-      // dispatch(name(res.data.data.userInfo.name));
-      // dispatch(profileImage(res.data.data.userInfo.profileImage));
       dispatch(reservationList(res.data.data.reservationList));
-      // dispatch(totalPaymentAmount(res.data.data.userInfo.totalPaymentAmount));
     });
   }, []);
-
   return (
     <div>
       <MypageMain>
