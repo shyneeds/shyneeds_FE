@@ -3,6 +3,7 @@ import { RootState } from '../../app/store';
 import axios from 'axios';
 import { REDIRECT_URL } from '../../constants/KAKAO_AUTH_URL';
 import { API_URL } from '../../constants/API_URL';
+import session from 'redux-persist/lib/storage/session';
 
 export const KakaoLoginAsync = createAsyncThunk(
   'GET_ACCESS_CODE',
@@ -74,7 +75,7 @@ export const KakaoLoginSlice = createSlice({
       state.userToken = accessToken
       state.refreshToken = refreshToken;
       console.log('이건 넣은후 : '+state.userToken);
-      
+      sessionStorage.setItem('refreshToken', refreshToken);
       state.authenticated = true; // 로그인 상태 확인
     },
     userLogout: (state, action: PayloadAction<boolean>) => {

@@ -3,6 +3,7 @@ import counterReducer from '../features/counter/counterSlice';
 import kakaoLoginSliceReducer from '../features/kakaoLogin/kakaoLoginSlice';
 import userReservationSliceReducer from '../features/userReservation/userReservationSlice';
 import productReducer from '../features/main/productSlice';
+import reviewReducer from '../features/main/reviewSlice';
 import adminPageSliceReducer from '../features/adminPage/adminPageSlice';
 import userDataSliceReducer from '../features/userData/userDataSlice';
 import pageReducer from '../features/communityPage/communityPageSlice';
@@ -19,6 +20,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import writeSliceReducer from '../features/communityPage/reviewWriteSlice';
 
 const persistConfig = {
   key: 'root',
@@ -42,10 +44,13 @@ export const store = configureStore({
     exhibitionData: productReducer,
     bannerData: productReducer,
     productId: productReducer,
+    productIds: productReducer,
+    reviewData: reviewReducer,
     adminPage: adminPageSliceReducer,
     userData: userDataSliceReducer,
     page: pageReducer,
     reply: replySliceReducer,
+    write : writeSliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

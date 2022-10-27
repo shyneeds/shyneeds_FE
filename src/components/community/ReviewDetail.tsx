@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import ReviewDetailData from './ReviewDetailData';
 import { useState } from 'react';
 import RelatedData from './RelatedData';
 import ReviewReply from './ReviewReply';
+import { useParams } from 'react-router';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import {
+  getReviewDetail,
+  reviewDetailData,
+} from '../../features/communityPage/reviewWriteSlice';
+import { useCookies } from 'react-cookie';
 
 const ReviewDetail = () => {
+  const dispatch = useAppDispatch();
+  const detailData = useAppSelector(reviewDetailData);
+  const [cookies, setCookie] = useCookies(['token']);
+  const id = useParams().id;
+  useEffect(() => {
+    dispatch(getReviewDetail({ id, ...cookies }));
+  }, []);
   const [check, isCheck] = useState(false);
   const isChecked = (check: any) => {
     isCheck(check);
@@ -16,15 +30,17 @@ const ReviewDetail = () => {
       <TopCategoryWrap>
         <CategoryWrap>
           <TripReviewText>여행후기</TripReviewText>
-          <ReviewTitle>{ReviewDetailData.title}</ReviewTitle>
+          <ReviewTitle>{detailData.title}</ReviewTitle>
           <ReviewDate>
             <ReviewLeftTop>
+              <ReviewContentWriter>{detailData.author}</ReviewContentWriter>
               <ReviewContentWriter>
-                {ReviewDetailData.writer}
+                {detailData.updatedAt
+                  ?.slice(0, 10)
+                  .replace(/(\d{4})-(\d{2})-(\d{2})/, '$1. $2. $3')}
               </ReviewContentWriter>
-              <ReviewContentWriter>{ReviewDetailData.date}</ReviewContentWriter>
               <ReviewContentWriter>
-                조회수 : {ReviewDetailData.views}
+                조회수 : {detailData.lookupCount}
               </ReviewContentWriter>
             </ReviewLeftTop>
             <ReviewRightTop>
@@ -36,7 +52,7 @@ const ReviewDetail = () => {
                     onClick={() => isChecked(true)}
                   />
                   <Like>좋아요</Like>
-                  <p>{ReviewDetailData.like}</p>
+                  <p>{detailData.likeCount}</p>
                 </>
               ) : (
                 <>
@@ -46,7 +62,7 @@ const ReviewDetail = () => {
                     onClick={() => isChecked(false)}
                   />
                   <Like>좋아요</Like>
-                  <p>{ReviewDetailData.like + 1}</p>
+                  <p>{detailData.likeCount + 1}</p>
                 </>
               )}
             </ReviewRightTop>
@@ -55,21 +71,21 @@ const ReviewDetail = () => {
       </TopCategoryWrap>
       <ReviewContentWrap>
         <ReviewContent
-          dangerouslySetInnerHTML={{ __html: ReviewDetailData.content }}
+          dangerouslySetInnerHTML={{ __html: detailData.contents }}
         ></ReviewContent>
-        <ReviewImage src={ReviewDetailData.img}></ReviewImage>
+        {/* <ReviewImage src={detailData.img}></ReviewImage> */}
         <RelateProduct>
-          <img src={RelatedData.img} alt="RelatedImg" />
+          <img src={detailData.visitPackageResponseDto?.mainImage} alt="다녀온 상품" />
           <RelateProductMiddleWrap>
             <RelatedProduct>고객님이 다녀온 상품</RelatedProduct>
-            <RelatedContentTitle>{RelatedData.title}</RelatedContentTitle>
-            <RelatedContentDate>{RelatedData.date}</RelatedContentDate>
+            <RelatedContentTitle>{detailData.visitPackageResponseDto?.title}</RelatedContentTitle>
+            <RelatedContentDate>{RelatedData.date}</RelatedContentDate> {/* TODO: 추후 날짜 들어와야함*/}
           </RelateProductMiddleWrap>
           <div>
             <ShowProduct>상품 보기</ShowProduct>
           </div>
         </RelateProduct>
-        <ReviewReply /> {/*댓글 기능*/} 
+        <ReviewReply /> {/*댓글 기능*/}
       </ReviewContentWrap>
     </Wrap>
   );
@@ -79,12 +95,11 @@ export default ReviewDetail;
 
 const Wrap = styled.div`
   width: 1184px;
-  margin : 0 auto;
+  margin: 0 auto;
 `;
 
 const TopCategoryWrap = styled.div`
   width: 1184px;
-  
 `;
 const CategoryWrap = styled.div`
   width: 1000px;
@@ -167,7 +182,7 @@ const ReviewContentWrap = styled.div`
   width: 1184px;
   margin-bottom: 58px;
   border-top: 1px solid #eeeeee;
-  padding : 40px 92px 0;
+  padding: 40px 92px 0;
 `;
 
 const ReviewContent = styled.pre`

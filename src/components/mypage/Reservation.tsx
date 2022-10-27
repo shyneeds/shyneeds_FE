@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { userReservationList } from '../../features/userData/userDataSlice';
@@ -7,13 +7,16 @@ import { cancelNum } from '../../features/userData/userDataSlice';
 import CancelDetail from './CancelDetail';
 
 const Reservation = () => {
-  const dispatch = useAppDispatch();
-  const reservationList = useAppSelector(userReservationList);
+  const reservationList = useAppSelector<any>(userReservationList);
   const [dtpopup, setDtPopup] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   const dtTogglePop = () => {
     setDtPopup(!dtpopup);
   };
-  console.log('데이터' + reservationList);
+  // useEffect(() => {
+  //   console.log(reservationList);
+  // }, []);
+  // console.log('예약상품리스트' + reservationList);
   return (
     <ReservationBox>
       <h2>예약조회</h2>
@@ -21,21 +24,26 @@ const Reservation = () => {
         <ContentsResultBox>예약내역이 없습니다.</ContentsResultBox>
       ) : (
         reservationList.map((data: any, i: number) => {
+          console.log('data: ' + JSON.stringify(data));
+          // console.log('이미지주소' + data.reservationPackage[0].imageUrl);
           return (
-            <Product key={data.reservationNumber + i}>
+            <Product key={data.reservationId}>
               <p>
                 예약번호 <span>{data.reservationNumber}</span>
               </p>
               <ProductMain>
                 <ProductInfo>
-                  <img src={data.reservationPackage[0].imageUrl} alt="" />
+                  {data.reservationPackage[0]?.imageUrl !== undefined ? (
+                    <img src={data.reservationPackage[0].imageUrl} alt="" />
+                  ) : null}
+
                   <ProductText>
                     <Text fontWeight="700">
-                      {data.reservationPackage[0].title}
+                      {data.reservationPackage[0]?.title}
                     </Text>
                     <Text fontWeight="400">
                       {data.reservationPackage[0]
-                        ? data.reservationPackage[0].optionValue
+                        ? data.reservationPackage[0]?.optionValue
                         : null}
                     </Text>
                     <Text fontWeight="400">

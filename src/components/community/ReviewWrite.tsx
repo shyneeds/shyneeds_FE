@@ -7,6 +7,17 @@ import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import '@toast-ui/editor/dist/i18n/ko-kr';
 import { Editor } from '@toast-ui/react-editor';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useCookies } from 'react-cookie';
+import {
+  getUserData,
+  userReservationList,
+} from '../../features/userData/userDataSlice';
+import {
+  imgUrl,
+  postContent,
+  uploadImg,
+} from '../../features/communityPage/reviewWriteSlice';
 
 const ReviewWrite = () => {
   const {
@@ -17,22 +28,48 @@ const ReviewWrite = () => {
     watch,
     formState: { errors },
   } = useForm();
-  const onSubmit = (title: any) => {
-    const contentData = editorRef.current?.getInstance().getHTML();
-    Object.assign(title, { contentData });
-    console.log(title);
+  const dispatch = useAppDispatch();
+  const [cookies, setCookies] = useCookies(['token']);
+  const reservationList: any = useAppSelector(userReservationList);
+  useEffect(() => {
+    dispatch(getUserData(cookies.token));
+  }, []);
+  console.log(reservationList.length);
+  // reservationId[0]?.map((res: any)=>console.log(res));
+
+  const onSubmit = (formData: any) => {
+    console.log('submit 돌아가요');
+    console.log(Object.keys('mainImage').length === 0)
+    Object.keys('mainImage').length === 0
+    ? ""
+    : formData['mainImage'] = responseImgUrl[0]
+    const contents = editorRef.current?.getInstance().getHTML();
+    Object.assign(formData, { contents }, { ...cookies });
+    console.log(formData);
+    dispatch(postContent(formData));
   };
   const editorRef = useRef<Editor>(null);
   const onChange = () => {
     // 단순 로그 찍기용 함수
     const data = editorRef.current?.getInstance().getHTML();
-    console.log(data);
+    // console.log(data); // TODO: 지울거
   };
   const imgRef = useRef<HTMLInputElement | null>(null);
   const [myImage, setMyImage] = useState<string>();
   const uploadImage = (e: any) => {
     setMyImage(URL.createObjectURL(e.target.files[0]));
-    setValue('image', e.target.files[0]);
+    const blob = e.target.files[0];
+    const data = { ...cookies, blob };
+    dispatch(uploadImg(data)).then((res) => {
+      setValue('mainImage', res.payload);
+    });
+  };
+  const responseImgUrl = useAppSelector(imgUrl);
+  const onUploadImage = async (blob: Blob, callback: any) => {
+    const data = { ...cookies, blob };
+    dispatch(uploadImg(data)).then((res) => {
+      callback(res.payload, 'test');
+    }); //url 콜백에 넣자
   };
   return (
     <Wrap>
@@ -54,6 +91,22 @@ const ReviewWrite = () => {
                   required: true,
                 })}
               />
+              <BirthSelect
+                {...register('reservationId', { required: true })} // TODO: 추후 미선택시 선택되게끔 erros 설정해야함
+              >
+                {reservationList.length === 0
+                  ? '예약내역이 없어요'
+                  : reservationList.map((data: any, i: number) => {
+                      if (data.reservationStatus === '예약확정') {
+                        // console.log(data.reservationPackage[0].title , " id= " + data.reservationId);
+                        return (
+                          <option key={i} value={data.reservationId as number}>
+                            {data.reservationPackage[0].title}
+                          </option>
+                        );
+                      }
+                    })}
+              </BirthSelect>
             </InputBox>
             <EditorWrap>
               <Editor
@@ -66,18 +119,20 @@ const ReviewWrite = () => {
                 language="ko-KR"
                 placeholder="내용을 작성해주세요."
                 onChange={onChange}
+                hooks={{
+                  addImageBlobHook: onUploadImage,
+                }}
               />
             </EditorWrap>
           </LeftWrap>
           <RightWrap>
             <InputImgBox>
-              <ThunmbMainImg
-                src={
-                  imgRef.current
-                    ? myImage
-                    : process.env.PUBLIC_URL + '/icons/ic-member.svg'
-                }
-              />
+              {responseImgUrl.length != 0 &&
+                (imgRef.current?.value.length != 0 ? (
+                  <ThunmbMainImg src={myImage} />
+                ) : (
+                  <ThunmbMainImg src={responseImgUrl[0]} />
+                ))}
               <ThunmbImg onClick={() => imgRef.current?.click()}>
                 <img src={process.env.PUBLIC_URL + '/icons/union.svg'} />
                 <p>대표 이미지 변경</p>
@@ -175,6 +230,7 @@ const RightWrap = styled.section`
   border-left: 1px solid #cccccc;
 `;
 const InputBox = styled.div`
+  display: flex;
   width: 960px;
   margin: 0 auto;
 `;
@@ -220,4 +276,11 @@ const ThunmbImg = styled.div`
     text-align: center;
     color: #aaaaaa;
   }
+`;
+const BirthSelect = styled.select`
+  align-items: center;
+  padding: 11px 20px;
+  width: 190px;
+  height: 50px;
+  border: 1px solid #cccccc;
 `;
