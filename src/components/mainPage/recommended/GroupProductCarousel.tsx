@@ -9,6 +9,7 @@ import { API_URL } from '../../../constants/API_URL';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   getGroupProductData,
+  getProductIdData,
   groupData,
 } from '../../../features/main/productSlice';
 import { useEffect } from 'react';
@@ -48,7 +49,15 @@ export const GroupProductCarousel = () => {
       {products.map((data: any) => (
         <Link to={'offers/' + data.id} key={data.id}>
           <CardContainer>
-            <ProductWrap key={data.id}>
+            <ProductWrap
+              key={data.id}
+              onClick={() =>
+                window.localStorage.setItem(
+                  'WATCHED_PRODUCTS',
+                  JSON.stringify(data.id)
+                )
+              }
+            >
               <ProductImg src={data.imageUrl} alt="product_image" />
               <ProductText>
                 <Title>{data.title}</Title>

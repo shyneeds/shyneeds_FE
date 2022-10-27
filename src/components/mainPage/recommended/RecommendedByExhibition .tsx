@@ -48,7 +48,14 @@ export const RecommendedByExhibition = () => {
       <CarouselContainer {...settings}>
         {products.map((data: any) => (
           <Link to={'offers/' + data.id} key={data.id}>
-            <ProductWrap onClick={() => dispatch(getProductIdData(data.id))}>
+            <ProductWrap
+              onClick={() =>
+                window.localStorage.setItem(
+                  'WATCHED_PRODUCTS',
+                  JSON.stringify(data.id)
+                )
+              }
+            >
               <img src={data.imageUrl} alt="product_image" />
               <ProductText>
                 <Title>{data.title}</Title>
