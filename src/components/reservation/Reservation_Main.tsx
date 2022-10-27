@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { useAppSelector } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   reservationPackages,
   reservationPackageType,
+  deleteClickedReservationInfo,
 } from '../../features/userReservation/userReservationSlice';
-import { userToken, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
+import { userToken } from '../../features/kakaoLogin/kakaoLoginSlice';
 
 interface userInfoType {
   depositorName: string | undefined;
@@ -31,6 +32,7 @@ export default function Reservation_Main() {
 
   const reservations = useAppSelector(reservationPackages);
   const token = useAppSelector(userToken);
+  const dispatch = useAppDispatch();
 
   const submitSave = () => {
     const totalReservationPackages: reservationPackageType[] = [];
@@ -50,8 +52,11 @@ export default function Reservation_Main() {
       reservatorName: userName,
       reservatorPhoneNumber: userPhoneNumber,
       serviceTerms: true,
-      totalReservationAmount: totalPrice.toString(),
+      totalReservationAmount: totalPrice
+        .toString()
+        .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ','),
     };
+    console.log(data);
     axios({
       method: 'post',
       url: 'http://13.125.151.45:8080/api/reservation/user',
@@ -109,13 +114,15 @@ export default function Reservation_Main() {
                   <Reservation_Product_Option>
                     {reservation.reservationPackages.map(
                       (reservationPackage) => {
-                        return (
-                          <p key={reservationPackage.optionTitle}>
-                            {reservationPackage.optionTitle}
-                            {'     -      '}
-                            {'[' + reservationPackage.optionValue + ']'}
-                          </p>
-                        );
+                        if (reservationPackage.optionTitle !== null) {
+                          return (
+                            <p key={reservationPackage.optionTitle}>
+                              {reservationPackage.optionTitle}
+                              {'     -      '}
+                              {'[' + reservationPackage.optionValue + ']'}
+                            </p>
+                          );
+                        }
                       }
                     )}
                   </Reservation_Product_Option>
@@ -126,6 +133,29 @@ export default function Reservation_Main() {
                     {reservation.productNum + '명'}
                   </Reservation_Product_ProductNum>
                 </Reservation_Product_Option_Wrap>
+                <Reservation_Product_Option_Btn>
+                  {reservation.reservationPackages.map(
+                    (reservationPackage, i) => {
+                      if (i < 1) {
+                        return (
+                          <button
+                            key={i}
+                            onClick={() => {
+                              console.log(reservationPackage.travelPackageId);
+                              dispatch(
+                                deleteClickedReservationInfo(
+                                  reservationPackage.travelPackageId
+                                )
+                              );
+                            }}
+                          >
+                            <p>X</p>
+                          </button>
+                        );
+                      }
+                    }
+                  )}
+                </Reservation_Product_Option_Btn>
               </Reservation_Product_Wrap>
             ))}
           </Reservation_Product>
@@ -258,7 +288,7 @@ const Reservation_Product_Wrap = styled.section`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 90%;
   height: 100px;
   margin: 10px;
   border-bottom: 1px solid rgba(33, 33, 33, 0.15);
@@ -291,6 +321,25 @@ const Reservation_Product_Option = styled.p`
   font-size: 15px;
   color: gray;
   overflow-y: auto;
+`;
+const Reservation_Product_Option_Btn = styled.section`
+  position:absolute
+  align-items: center;
+  justify-content: center;
+  width: 10%;
+  button {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  p {
+    display: flex;
+    font-size: 20px;
+  }
 `;
 const Reservation_Product_Price = styled.p`
   width: 300px;
