@@ -13,12 +13,8 @@ export default function Cart_Main() {
   const [isAdded, setIsAdded] = useState<number[]>([]);
   const totalPrice = useRef<number>(0);
   const reservations = useAppSelector(reservationPackages);
-  const productNum = useAppSelector(reservationProductNum);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  console.log(productNum);
-  console.log(reservations);
 
   return (
     <>
@@ -83,13 +79,15 @@ export default function Cart_Main() {
                       <Cart_Prouct_Option>
                         {reservation.reservationPackages.map(
                           (reservationPackage) => {
-                            return (
-                              <p key={reservationPackage.optionTitle}>
-                                {reservationPackage.optionTitle}
-                                {'     -      '}
-                                {'[' + reservationPackage.optionValue + ']'}
-                              </p>
-                            );
+                            if (reservationPackage.optionFlg !== null) {
+                              return (
+                                <p key={reservationPackage.optionTitle}>
+                                  {reservationPackage.optionTitle}
+                                  {'     -      '}
+                                  {'[' + reservationPackage.optionValue + ']'}
+                                </p>
+                              );
+                            }
                           }
                         )}
                       </Cart_Prouct_Option>
