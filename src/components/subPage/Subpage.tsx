@@ -1,16 +1,46 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppSelector } from '../../app/hooks';
 import { LAYOUT } from '../../constants/layout';
 import { authenticated } from '../../features/kakaoLogin/kakaoLoginSlice';
+import { API_URL } from '../../constants/API_URL';
 import Footer from '../common/footer/Footer';
 import { Navbar } from '../common/header/Navbar';
 import { LogInView, LogOutView } from '../common/header/UserMenu';
 import Pagination from '../community/Pagination';
+import { useDispatch } from 'react-redux';
+import {
+  CategoryProductData,
+  getCategoryProduct,
+} from '../../features/main/productSlice';
 
 const Subpage = () => {
+  // const [poruducts, setProducts] = useState<any>();
   const userAuthenticated = useAppSelector(authenticated);
+  const categoryProduct = useAppSelector<any>(CategoryProductData);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    axios({
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+      url: API_URL.GET.SUB_CATEGORY,
+      method: 'get',
+    })
+      .then((response) => {
+        console.log({ response });
+        dispatch(getCategoryProduct(response.data.data));
+        // setProducts(res);
+      })
+      .catch((error) => {
+        console.log({ error });
+      });
+  }, []);
+
   return (
     <>
       <Container>
@@ -78,8 +108,17 @@ const Subpage = () => {
             <Sort>낮은 가격순</Sort>
           </SortBar>
         </ResultBar>
+
+        <ProductWrap>
+          {categoryProduct.map((data: any) => {
+            return (
+              <Product key={data.travelPackageId}>
+                <img src={data.mainImage} alt="" />
+              </Product>
+            );
+          })}
+        </ProductWrap>
       </ResultWrap>
-      <></>
       <Pagination />
       <Footer></Footer>
     </>
@@ -224,5 +263,15 @@ const Sort = styled.p`
     vertical-align: middle;
   }
 `;
+const ProductWrap = styled.div``;
+const Product = styled.div`
+  display: inline-block;
+  width: 284px;
+  margin: 0 16px 0 0;
+  :nth-child(4n) {
+    margin-right: 0px;
+  }
+`;
 
 export default Subpage;
+``;
