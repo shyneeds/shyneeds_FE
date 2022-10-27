@@ -7,6 +7,10 @@ import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import '@toast-ui/editor/dist/i18n/ko-kr';
 import { Editor } from '@toast-ui/react-editor';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useCookies } from 'react-cookie';
+import { getUserData, userReservationList } from '../../features/userData/userDataSlice';
+import { imgUrl, uploadImg } from '../../features/communityPage/reviewWriteSlice';
 
 const ReviewWrite = () => {
   const {
@@ -17,9 +21,17 @@ const ReviewWrite = () => {
     watch,
     formState: { errors },
   } = useForm();
+  const dispatch = useAppDispatch();
+  const [cookies , setCookies] = useCookies(['token']);
+  const reservationId = useAppSelector(userReservationList)
+  useEffect(()=>{
+    dispatch(getUserData(cookies.token))
+    console.log(reservationId)
+  },[])
+
   const onSubmit = (title: any) => {
-    const contentData = editorRef.current?.getInstance().getHTML();
-    Object.assign(title, { contentData });
+    const contents = editorRef.current?.getInstance().getHTML();
+    Object.assign(title, { contents });
     console.log(title);
   };
   const editorRef = useRef<Editor>(null);
@@ -33,6 +45,22 @@ const ReviewWrite = () => {
   const uploadImage = (e: any) => {
     setMyImage(URL.createObjectURL(e.target.files[0]));
     setValue('image', e.target.files[0]);
+  };
+  
+  const onUploadImage = async (blob : Blob , callback : any) => {
+    const data = {...cookies,blob}
+    dispatch(uploadImg(data)).then((res)=>callback(res.payload, 'test')) //url 콜백에 넣자
+
+    // console.log(callback);
+    // ƒ (url, text2) {
+    //    return _this.props.execCommand("addImage", { 
+    //		imageUrl: url, altText: text2 || altTextEl.value 
+    // 	  });
+    //  }
+    
+    // 백엔드에서 받아온 이미지 url과 alt를 callback 함수에 넣어 호출
+    // callback(url); // => <img src="url" alt="description" />
+    // callback('url', 'hello'); // -> <img src="url" alt="hello" />
   };
   return (
     <Wrap>
@@ -66,6 +94,9 @@ const ReviewWrite = () => {
                 language="ko-KR"
                 placeholder="내용을 작성해주세요."
                 onChange={onChange}
+                hooks={{
+                  addImageBlobHook: onUploadImage
+                }}
               />
             </EditorWrap>
           </LeftWrap>
@@ -75,7 +106,7 @@ const ReviewWrite = () => {
                 src={
                   imgRef.current
                     ? myImage
-                    : process.env.PUBLIC_URL + '/icons/ic-member.svg'
+                    : process.env.PUBLIC_URL + '/icons/add-img.png'
                 }
               />
               <ThunmbImg onClick={() => imgRef.current?.click()}>
