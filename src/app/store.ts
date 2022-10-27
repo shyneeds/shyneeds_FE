@@ -20,6 +20,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import writeSliceReducer from '../features/communityPage/reviewWriteSlice';
 
 const persistConfig = {
   key: 'root',
@@ -49,6 +50,7 @@ export const store = configureStore({
     userData: userDataSliceReducer,
     page: pageReducer,
     reply: replySliceReducer,
+    write : writeSliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

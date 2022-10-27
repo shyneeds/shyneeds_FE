@@ -9,7 +9,6 @@ export const getPageList = createAsyncThunk(
     const { page } = data
     let {searchWord} = data
     searchWord === "" ? searchWord="all" : ""
-    console.log(searchWord)
     return await axios({
       headers: {
         'Content-Type': 'application/json',
@@ -79,7 +78,6 @@ export const page = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getPageList.fulfilled, (state, action) => {
       const data = action.payload;
-      console.log(data);
       state.totalPages = data.pagination.totalPages;
       state.ReviewData = data.data;
       state.totalElements = data.pagination.totalElements;
