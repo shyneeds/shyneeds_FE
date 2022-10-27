@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
   getExhibitionProductData,
   exhibitionData,
+  getProductIdData,
 } from '../../../features/main/productSlice';
 import { useEffect } from 'react';
 import { ResponseType } from '../../../utils/ResponseType';
@@ -47,7 +48,7 @@ export const RecommendedByExhibition = () => {
       <CarouselContainer {...settings}>
         {products.map((data: any) => (
           <Link to={'offers/' + data.id} key={data.id}>
-            <ProductWrap>
+            <ProductWrap onClick={() => dispatch(getProductIdData(data.id))}>
               <img src={data.imageUrl} alt="product_image" />
               <ProductText>
                 <Title>{data.title}</Title>

@@ -9,6 +9,7 @@ import axios from 'axios';
 import { API_URL } from '../../../constants/API_URL';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
+  getProductIdData,
   getRegionProductData,
   regionData,
 } from '../../../features/main/productSlice';
@@ -49,7 +50,7 @@ export const RecommendedByRegion = () => {
       <CarouselContainer {...settings}>
         {products.map((data: any) => (
           <Link to={'offers/' + data.id} key={data.id}>
-            <ProductWrap>
+            <ProductWrap onClick={() => dispatch(getProductIdData(data.id))}>
               <img src={data.imageUrl} alt="product_image" />
               <ProductText>
                 <Title>{data.title}</Title>
