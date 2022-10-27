@@ -40,6 +40,8 @@ const ReviewWrite = () => {
   useEffect(() => {
     dispatch(getUserData(cookies.token));
     getUrlCode === 'modify' ? (
+      console.log(reviewDetail),
+      setValue("title", reviewDetail.title),
       editorRef.current?.getInstance().setHTML(reviewDetail.contents)
     )
     : '';
@@ -87,7 +89,7 @@ const ReviewWrite = () => {
         <HeaderWrap>
           <span>여행후기</span>
           <WriteSubmitWrap>
-            <CancelButton type={'reset'}>취소</CancelButton>
+            <CancelButton type={'reset'} onClick={()=>navigate(-1)}>취소</CancelButton>
             <WriteButton type={'submit'}>작성</WriteButton>
           </WriteSubmitWrap>
         </HeaderWrap>
