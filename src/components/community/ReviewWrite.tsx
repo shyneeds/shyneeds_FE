@@ -16,8 +16,10 @@ import {
 import {
   imgUrl,
   postContent,
+  reviewDetailData,
   uploadImg,
 } from '../../features/communityPage/reviewWriteSlice';
+import { useNavigate, useParams } from 'react-router';
 
 const ReviewWrite = () => {
   const {
@@ -29,26 +31,34 @@ const ReviewWrite = () => {
     formState: { errors },
   } = useForm();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const getUrlCode = useParams().modify;
   const [cookies, setCookies] = useCookies(['token']);
   const reservationList: any = useAppSelector(userReservationList);
+  const reviewDetail = useAppSelector(reviewDetailData);
+  const editorRef = useRef<Editor>(null);
   useEffect(() => {
     dispatch(getUserData(cookies.token));
+    getUrlCode === 'modify' ? (
+      editorRef.current?.getInstance().setHTML(reviewDetail.contents)
+    )
+    : '';
   }, []);
   console.log(reservationList.length);
   // reservationId[0]?.map((res: any)=>console.log(res));
 
   const onSubmit = (formData: any) => {
     console.log('submit 돌아가요');
-    console.log(Object.keys('mainImage').length === 0)
+    console.log(Object.keys('mainImage').length === 0);
     Object.keys('mainImage').length === 0
-    ? ""
-    : formData['mainImage'] = responseImgUrl[0]
+      ? ''
+      : (formData['mainImage'] = responseImgUrl[0]);
     const contents = editorRef.current?.getInstance().getHTML();
     Object.assign(formData, { contents }, { ...cookies });
     console.log(formData);
-    dispatch(postContent(formData));
+    dispatch(postContent(formData)).then(() => navigate(-1));
   };
-  const editorRef = useRef<Editor>(null);
+  
   const onChange = () => {
     // 단순 로그 찍기용 함수
     const data = editorRef.current?.getInstance().getHTML();
