@@ -16,6 +16,8 @@ import {
   plusNum,
   reservationProductNum,
   reservationInfo,
+  reservationPayInfo,
+  reservationPackageType,
 } from '../../features/userReservation/userReservationSlice';
 import { productId } from '../../features/main/productSlice';
 import { useNavigate } from 'react-router';
@@ -25,28 +27,18 @@ type offerData = {
   travelPackageResponseDto: getProductData;
 };
 
-interface optionType {
-  optionFlg: boolean;
-  optionValue: string;
-  price: string;
-  quantity: number;
-  optionTitle: string;
-  travelPackageId: number;
-}
-
 export default function Offers_Header() {
   const [datas, setDatas] = useState<offerData>();
-  const [options, setOptions] = useState<optionType[]>([]);
+  const [options, setOptions] = useState<reservationPackageType[]>([]);
   const [clicked, setClicked] = useState<boolean | null>(false);
+  const emptyOption = useRef<reservationPackageType[]>([]);
   const optionsName = useRef<string[]>([]);
   const optionsPrice = useRef<number>(0);
   const isLoaded = useRef<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const productNum = useAppSelector(reservationProductNum);
-
   const id = localStorage.getItem('WATCHED_PRODUCTS');
-
   useEffect(() => {
     axios({
       method: 'get',
@@ -75,6 +67,23 @@ export default function Offers_Header() {
       optionsPrice.current += Number(option.price.replace(/,/g, ''));
     });
   }, [options]);
+
+  useEffect(() => {
+    emptyOption.current.push({
+      optionFlg: null,
+      optionValue: null,
+      price: (
+        (optionsPrice.current +
+          Number(datas?.travelPackageResponseDto?.price.replace(/,/g, ''))) *
+        productNum
+      )
+        .toString()
+        .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ','),
+      quantity: productNum,
+      optionTitle: null,
+      travelPackageId: Number(id),
+    });
+  }, [productNum]);
 
   return (
     <>
@@ -288,8 +297,11 @@ export default function Offers_Header() {
                           )
                         )
                       : '';
-                    datas ? dispatch(reservationInfo(options)) : '';
+                    datas && options.length > 0
+                      ? dispatch(reservationInfo(options))
+                      : dispatch(reservationInfo(emptyOption.current));
                     navigate('/reservation');
+                    datas ? dispatch(reservationPayInfo(-1)) : '';
                   } else {
                     alert('인원이 0명입니다.');
                   }
@@ -331,7 +343,9 @@ export default function Offers_Header() {
                           )
                         )
                       : '';
-                    datas ? dispatch(reservationInfo(options)) : '';
+                    datas && options.length > 0
+                      ? dispatch(reservationInfo(options))
+                      : dispatch(reservationInfo(emptyOption.current));
                     navigate('/cart');
                   } else {
                     alert('인원이 0명입니다.');
