@@ -14,6 +14,7 @@ import { BannerSlider } from './BannerSlider';
 import { IoMdHeartEmpty } from 'react-icons/io';
 
 export const MainBanner = () => {
+  const [checked, setChecked] = useState<boolean>(false);
   // 백엔드 데이터 작업중으로 현재는 호출 안됨
   const options_group = [
     { value: '5070', text: '5070' },
@@ -162,7 +163,29 @@ export const MainBanner = () => {
                       {/* <Content>{inquiry.summary}</Content> */}
                       {/* <Price>{inquiry.price} 원</Price> */}
                     </ProductText>
-                    <IoMdHeartEmpty size="20px" className="wish-icon" />
+                    {checked === false ? (
+                      <WishIcon
+                        onClick={() => {
+                          setChecked(true);
+                        }}
+                      >
+                        <img
+                          src={
+                            process.env.PUBLIC_URL + '/icons/EmptyLoveIcon.svg'
+                          }
+                        />
+                      </WishIcon>
+                    ) : (
+                      <WishIcon
+                        onClick={() => {
+                          setChecked(false);
+                        }}
+                      >
+                        <img
+                          src={process.env.PUBLIC_URL + '/icons/LoveIcon.svg'}
+                        />
+                      </WishIcon>
+                    )}
                   </ProductWrap>
                 </Link>
               )
@@ -365,4 +388,11 @@ const Price = styled.p`
   margin: 20px 0 0;
   font-size: 1.18rem;
   font-weight: bold;
+`;
+
+const WishIcon = styled.div`
+  width: 20px;
+  position: absolute;
+  top: 19px;
+  right: 20px;
 `;

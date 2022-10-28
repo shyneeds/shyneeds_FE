@@ -16,5 +16,6 @@ export const API_URL = {
     ADMIN_PACKAGE_DELETE: 'http://13.125.151.45:8080/api/package/admin/delete', // delete/{id} 이용하여 삭제
     REVIEW_LIST: 'http://13.125.151.45:8080/api/review',
     SUB_CATEGORY: 'http://13.125.151.45:8080/api/group/sub?name=문화&sortFlg=',
+    MAIN_CATEGORY: 'http://13.125.151.45:8080/api/main/category', // 메인 배너에 활용되는 카테고리
   },
 };

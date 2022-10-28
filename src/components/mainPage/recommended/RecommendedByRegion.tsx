@@ -9,10 +9,11 @@ import axios from 'axios';
 import { API_URL } from '../../../constants/API_URL';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import {
+  getProductIdData,
   getRegionProductData,
   regionData,
 } from '../../../features/main/productSlice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ResponseType } from '../../.././utils/ResponseType';
 
 const settings = {
@@ -21,6 +22,7 @@ const settings = {
 };
 
 export const RecommendedByRegion = () => {
+  const [checked, setChecked] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const products = useAppSelector(regionData);
   const getRegionData: any = () => {
@@ -49,14 +51,39 @@ export const RecommendedByRegion = () => {
       <CarouselContainer {...settings}>
         {products.map((data: any) => (
           <Link to={'offers/' + data.id} key={data.id}>
-            <ProductWrap>
+            <ProductWrap
+              onClick={() =>
+                window.localStorage.setItem(
+                  'WATCHED_PRODUCTS',
+                  JSON.stringify(data.id)
+                )
+              }
+            >
               <img src={data.imageUrl} alt="product_image" />
               <ProductText>
                 <Title>{data.title}</Title>
                 <Content>{data.summary}</Content>
                 <Price>{data.price} 원</Price>
               </ProductText>
-              <IoMdHeartEmpty size="20px" className="wish-icon" />
+              {checked === false ? (
+                <WishIcon
+                  onClick={() => {
+                    setChecked(true);
+                  }}
+                >
+                  <img
+                    src={process.env.PUBLIC_URL + '/icons/EmptyLoveIcon.svg'}
+                  />
+                </WishIcon>
+              ) : (
+                <WishIcon
+                  onClick={() => {
+                    setChecked(false);
+                  }}
+                >
+                  <img src={process.env.PUBLIC_URL + '/icons/LoveIcon.svg'} />
+                </WishIcon>
+              )}
             </ProductWrap>
           </Link>
         ))}
@@ -160,4 +187,11 @@ const Price = styled.p`
   margin: 20px 0 0;
   font-size: 1.18rem;
   font-weight: bold;
+`;
+
+const WishIcon = styled.div`
+  width: 20px;
+  position: absolute;
+  top: 19px;
+  right: 20px;
 `;

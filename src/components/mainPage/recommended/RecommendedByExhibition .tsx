@@ -13,7 +13,7 @@ import {
   exhibitionData,
   getProductIdData,
 } from '../../../features/main/productSlice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ResponseType } from '../../../utils/ResponseType';
 
 const settings = {
@@ -22,6 +22,7 @@ const settings = {
 };
 
 export const RecommendedByExhibition = () => {
+  const [checked, setChecked] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const products = useAppSelector(exhibitionData);
   const getExhibitionData: any = async () => {
@@ -48,7 +49,14 @@ export const RecommendedByExhibition = () => {
       <CarouselContainer {...settings}>
         {products.map((data: any) => (
           <Link to={'offers/' + data.id} key={data.id}>
-            <ProductWrap onClick={() => dispatch(getProductIdData(data.id))}>
+            <ProductWrap
+              onClick={() =>
+                window.localStorage.setItem(
+                  'WATCHED_PRODUCTS',
+                  JSON.stringify(data.id)
+                )
+              }
+            >
               <img src={data.imageUrl} alt="product_image" />
               <ProductText>
                 <Title>{data.title}</Title>
@@ -58,7 +66,25 @@ export const RecommendedByExhibition = () => {
               <ProductTag>
                 <TagTitle>{data.keyword}</TagTitle>
               </ProductTag>
-              <IoMdHeartEmpty size="20px" className="wish-icon" />
+              {checked === false ? (
+                <WishIcon
+                  onClick={() => {
+                    setChecked(true);
+                  }}
+                >
+                  <img
+                    src={process.env.PUBLIC_URL + '/icons/EmptyLoveIcon.svg'}
+                  />
+                </WishIcon>
+              ) : (
+                <WishIcon
+                  onClick={() => {
+                    setChecked(false);
+                  }}
+                >
+                  <img src={process.env.PUBLIC_URL + '/icons/LoveIcon.svg'} />
+                </WishIcon>
+              )}
             </ProductWrap>
           </Link>
         ))}
@@ -180,4 +206,11 @@ const ProductTag = styled.div`
 
 const TagTitle = styled.p`
   font-size: 0.9rem;
+`;
+
+const WishIcon = styled.div`
+  width: 20px;
+  position: absolute;
+  top: 19px;
+  right: 20px;
 `;

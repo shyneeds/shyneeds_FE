@@ -32,7 +32,6 @@ const Review = () => {
       const mainData = res.data.data;
       const reviewData = mainData.bestReviewList;
       dispatch(getReviewData(reviewData));
-      console.log(reviewData);
       return reviewData;
     } catch (e) {
       console.log(e);
@@ -53,7 +52,7 @@ const Review = () => {
               <img src={review.mainImage} alt="review_image" />
               <div>
                 <p>{review.title}</p>
-                <span>{review.contents}</span>
+                <pre>{review.contents}</pre>
                 <ReviewDate>
                   <p>{review.updatedAt}</p>
                   <p>{review.author}</p>
