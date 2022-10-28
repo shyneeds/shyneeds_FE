@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Action } from '@remix-run/router';
 import { RootState } from '../../app/store';
 
 export interface reservationPackageType {
@@ -104,4 +103,6 @@ export const reservationProductNum = (state: RootState) =>
   state.userReservation.peopleNum;
 export const reservationPackages = (state: RootState) =>
   state.userReservation.reservationProducts;
+export const productIds = (state: RootState) => state.userReservation.pageIds;
+
 export default userReservationSlice.reducer;
