@@ -10,11 +10,10 @@ import { Navbar } from './Navbar';
 import { LogInView, LogOutView } from './UserMenu';
 
 const Header = () => {
-  const userAuthenticated = useAppSelector(authenticated);
   const [openBanner, setOpenBanner] = useState<boolean>(true);
   const [hasCookies, setHasCookies] = useState<boolean>(true);
   const [appCookies, setAppCookies] = useCookies<string>([]);
-
+  const [cookies, setCookie] = useCookies(['token']);
   const getExpiredData = (days: number) => {
     const date = new Date();
     date.setDate(date.getDate() + days);
@@ -69,7 +68,7 @@ const Header = () => {
             />
           </InputBox>
           <UserMenu>
-            {userAuthenticated ? <LogOutView /> : <LogInView />}
+            {Object.keys(cookies).length === 0 ? <LogInView /> : <LogOutView />}
           </UserMenu>
         </Wrapper>
         <Navbar />

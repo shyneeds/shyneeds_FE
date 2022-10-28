@@ -35,7 +35,7 @@ export const LogOutView = () => {
         <p>관심상품</p>
       </StyleLink>
       <StyleLink onClick={() => {
-        removeCookie('token')
+        removeCookie('token'),
         dispatch(userLogout(false))}} to="/">
         <BiLogOut size="1.5rem" />
         <p>로그아웃</p>
