@@ -16,6 +16,7 @@ import {
   plusNum,
   reservationProductNum,
   reservationInfo,
+  reservationPayInfo,
   reservationPackageType,
 } from '../../features/userReservation/userReservationSlice';
 import { productId } from '../../features/main/productSlice';
@@ -37,7 +38,6 @@ export default function Offers_Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const productNum = useAppSelector(reservationProductNum);
-
   const id = localStorage.getItem('WATCHED_PRODUCTS');
   useEffect(() => {
     axios({
@@ -301,6 +301,7 @@ export default function Offers_Header() {
                       ? dispatch(reservationInfo(options))
                       : dispatch(reservationInfo(emptyOption.current));
                     navigate('/reservation');
+                    datas ? dispatch(reservationPayInfo(-1)) : '';
                   } else {
                     alert('인원이 0명입니다.');
                   }

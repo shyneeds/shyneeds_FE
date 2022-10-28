@@ -19,16 +19,20 @@ export interface reservationProductType {
 }
 export interface userReservationInfo {
   num: number;
+  productNum: number;
   peopleNum: number;
   pageIds: (string | null)[];
   reservationProducts: reservationProductType[];
+  reservationPayInfos: reservationProductType[];
 }
 
 const initialState: userReservationInfo = {
   num: 0,
+  productNum: 0,
   peopleNum: 0,
   pageIds: [],
   reservationProducts: [],
+  reservationPayInfos: [],
 };
 
 export const userReservationSlice = createSlice({
@@ -75,19 +79,31 @@ export const userReservationSlice = createSlice({
       state.peopleNum = 0;
       state.num += 1;
     },
+    reservationPayInfo: (state, action: PayloadAction<number>) => {
+      if (action.payload === -1) {
+        state.reservationPayInfos = state.reservationPayInfos.concat(
+          state.reservationProducts[state.reservationProducts.length - 1]
+        );
+      } else {
+        state.reservationPayInfos = state.reservationPayInfos.concat(
+          state.reservationProducts[action.payload]
+        );
+      }
+      state.productNum += 1;
+    },
     deleteReservationInfo: (state, action: PayloadAction<number>) => {
       state.reservationProducts.splice(action.payload, 1);
       state.num -= 1;
     },
     deleteClickedReservationInfo: (state, action: PayloadAction<number>) => {
-      state.reservationProducts.map((reservationProduct, i) => {
+      state.reservationPayInfos.map((reservationPayInfo, i) => {
         let flg = false;
-        reservationProduct.reservationPackages.map((reservationPackage) => {
+        reservationPayInfo.reservationPackages.map((reservationPackage) => {
           if (reservationPackage.travelPackageId === action.payload) flg = true;
         });
         if (flg) {
-          state.reservationProducts.splice(i, 1);
-          state.num -= 1;
+          state.reservationPayInfos.splice(i, 1);
+          state.productNum -= 1;
         }
       });
     },
@@ -107,6 +123,7 @@ export const {
   setProductTitle,
   setTotalPrice,
   reservationInfo,
+  reservationPayInfo,
   deleteReservationInfo,
   deleteClickedReservationInfo,
   plusNum,
@@ -117,4 +134,6 @@ export const reservationProductNum = (state: RootState) =>
   state.userReservation.peopleNum;
 export const reservationPackages = (state: RootState) =>
   state.userReservation.reservationProducts;
+export const reservationPayInfos = (state: RootState) =>
+  state.userReservation.reservationPayInfos;
 export default userReservationSlice.reducer;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   reservationPackages,
-  reservationProductNum,
+  reservationPayInfo,
   deleteReservationInfo,
 } from '../../features/userReservation/userReservationSlice';
 import { useNavigate } from 'react-router';
@@ -111,7 +111,6 @@ export default function Cart_Main() {
             onClick={() => {
               isAdded.map((add) => {
                 dispatch(deleteReservationInfo(add));
-                console.log(add);
               });
               isAdded.map((add) => {
                 setIsAdded(isAdded.filter((isAdd) => isAdd !== add));
@@ -138,7 +137,14 @@ export default function Cart_Main() {
             </Cart_Total_Price>
           </Cart_Price_Wrap>
           <Cart_Price_Btn_Wrap>
-            <Cart_Reservation_Btn onClick={() => navigate('/reservation')}>
+            <Cart_Reservation_Btn
+              onClick={() => {
+                isAdded.map((add) => {
+                  dispatch(reservationPayInfo(add));
+                });
+                navigate('/reservation');
+              }}
+            >
               <p>예약하기</p>
             </Cart_Reservation_Btn>
           </Cart_Price_Btn_Wrap>

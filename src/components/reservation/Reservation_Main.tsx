@@ -5,6 +5,7 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   reservationPackages,
   reservationPackageType,
+  reservationPayInfos,
   deleteClickedReservationInfo,
 } from '../../features/userReservation/userReservationSlice';
 import { userToken } from '../../features/kakaoLogin/kakaoLoginSlice';
@@ -30,9 +31,13 @@ export default function Reservation_Main() {
   const [submitName, setSubmitName] = useState<string>();
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
-  const reservations = useAppSelector(reservationPackages);
+  const reservations = useAppSelector(reservationPayInfos);
+  const reserv = useAppSelector(reservationPackages);
   const token = useAppSelector(userToken);
   const dispatch = useAppDispatch();
+
+  console.log(reservations);
+  console.log(reserv);
 
   const submitSave = () => {
     const totalReservationPackages: reservationPackageType[] = [];
@@ -228,6 +233,9 @@ export default function Reservation_Main() {
 }
 
 const Wrap = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100vw;
   height: 100vh;
 `;
@@ -235,9 +243,6 @@ const MainWrap = styled.section`
   position: absolute;
   width: 70vw;
   height: 90vh;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
   background: #f5f5f5;
 `;
 const TextWrap = styled.section`
