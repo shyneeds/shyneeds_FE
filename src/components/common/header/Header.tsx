@@ -32,7 +32,7 @@ const Header = () => {
 
   useEffect(() => {
     if (appCookies['HEADER_BANNER_EXPIRES']) return;
-    console.log(appCookies['HEADER_BANNER_EXPIRES']);
+    // console.log(appCookies['HEADER_BANNER_EXPIRES']);
     setHasCookies(false);
   }, []);
 
