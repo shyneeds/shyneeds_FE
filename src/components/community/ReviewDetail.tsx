@@ -10,6 +10,7 @@ import {
   DeleteReviewDetail,
   getReviewDetail,
   reviewDetailData,
+  reviewLikePost,
 } from '../../features/communityPage/reviewWriteSlice';
 import { useCookies } from 'react-cookie';
 
@@ -22,16 +23,14 @@ const ReviewDetail = () => {
   useEffect(() => {
     dispatch(getReviewDetail({ id, ...cookies }));
   }, []);
-  const [check, isCheck] = useState(false);
-  const isChecked = (check: any) => {
-    isCheck(check);
-  };
   const onDeleteClick = (id: string) =>{
     dispatch(DeleteReviewDetail({ id, ...cookies })).then(()=>navigate(-1));
   }
   const onModifyClick = () =>{
-    console.log("테스트")
     navigate('/community/write/modify')
+  }
+  const onLikeClick = (review_id: string) =>{
+    dispatch(reviewLikePost({review_id,...cookies})).then(()=>dispatch(getReviewDetail({ id, ...cookies })))
   }
 
   return (
@@ -53,12 +52,12 @@ const ReviewDetail = () => {
               </ReviewContentWriter>
             </ReviewLeftTop>
             <ReviewRightTop>
-              {check === false ? (
+              {detailData?.like === false ? (
                 <>
                   <img
                     src={process.env.PUBLIC_URL + '/icons/EmptyLoveIcon.svg'}
                     alt="EmptyLoveIcon"
-                    onClick={() => isChecked(true)}
+                    onClick={() => onLikeClick(id as string)}
                   />
                   <Like>좋아요</Like>
                   <p>{detailData?.likeCount}</p>
@@ -68,10 +67,10 @@ const ReviewDetail = () => {
                   <img
                     src={process.env.PUBLIC_URL + '/icons/LoveIcon.svg'}
                     alt="EmptyLoveIcon"
-                    onClick={() => isChecked(false)}
+                    onClick={() => onLikeClick(id as string)}
                   />
                   <Like>좋아요</Like>
-                  <p>{detailData?.likeCount + 1}</p>
+                  <p>{detailData?.likeCount}</p>
                 </>
               )}
             </ReviewRightTop>
