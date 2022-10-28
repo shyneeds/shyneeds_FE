@@ -97,12 +97,23 @@ export interface CurationResponse {
   statusCode: number;
 }
 
-export interface Test {
-  id: number;
-  imageUrl: string;
-  keyword: string;
-  price: string;
-  summary: string;
-  tag: string;
-  title: string;
+export interface CategoryType {
+  data: {
+    그룹별상품: {
+      subCategoryTitle: string;
+      title: string;
+    };
+    기획전상품: {
+      subCategoryTitle: string;
+      title: string;
+    };
+    지역별상품: {
+      subCategoryTitle: string;
+      title: string;
+    };
+    테마별상품: {
+      subCategoryTitle: string;
+      title: string;
+    };
+  };
 }

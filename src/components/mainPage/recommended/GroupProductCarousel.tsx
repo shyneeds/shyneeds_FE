@@ -12,7 +12,7 @@ import {
   getProductIdData,
   groupData,
 } from '../../../features/main/productSlice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ResponseType } from '../../../utils/ResponseType';
 
 const settings = {
@@ -22,6 +22,7 @@ const settings = {
 };
 
 export const GroupProductCarousel = () => {
+  const [checked, setChecked] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const products = useAppSelector(groupData);
   const getGroupData: any = () => {
@@ -67,7 +68,25 @@ export const GroupProductCarousel = () => {
               <ProductTag>
                 <TagTitle>{data.keyword}</TagTitle>
               </ProductTag>
-              <IoMdHeartEmpty size="20px" className="wish-icon" />
+              {checked === false ? (
+                <WishIcon
+                  onClick={() => {
+                    setChecked(true);
+                  }}
+                >
+                  <img
+                    src={process.env.PUBLIC_URL + '/icons/EmptyLoveIcon.svg'}
+                  />
+                </WishIcon>
+              ) : (
+                <WishIcon
+                  onClick={() => {
+                    setChecked(false);
+                  }}
+                >
+                  <img src={process.env.PUBLIC_URL + '/icons/LoveIcon.svg'} />
+                </WishIcon>
+              )}
             </ProductWrap>
           </CardContainer>
         </Link>
@@ -176,4 +195,11 @@ const ProductTag = styled.div`
 
 const TagTitle = styled.p`
   font-size: 0.8rem;
+`;
+
+const WishIcon = styled.div`
+  width: 20px;
+  position: absolute;
+  top: 19px;
+  right: 20px;
 `;

@@ -1,23 +1,30 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+// localStorage.clear();
 export const WatchedStorage = () => {
   return (
     <Container>
       <TextWrapper>
         <span>최근 본 상품</span>
-        <Quantity>({length})</Quantity>
+        <Quantity>({localStorage.length - 1})</Quantity>
       </TextWrapper>
       <StorageWrapper>
-        <EmptyDiv>
-          <p>
-            최근 본 상품이
-            <br />
-            없습니다.
-          </p>
-          {/* <Storage>
-            <Product />
-          </Storage> */}
-        </EmptyDiv>
+        {localStorage.length === 0 ? (
+          <EmptyDiv>
+            <p>
+              최근 본 상품이
+              <br />
+              없습니다.
+            </p>
+          </EmptyDiv>
+        ) : (
+          <Storage>
+            <Link to="/offers/">
+              <Product />
+            </Link>
+          </Storage>
+        )}
       </StorageWrapper>
     </Container>
   );
@@ -51,7 +58,6 @@ const Quantity = styled.span`
 
 const StorageWrapper = styled.div`
   width: 120px;
-  height: 80px;
   background-color: #f9f9f9;
   text-align: center;
   padding: 16px;
@@ -69,7 +75,6 @@ const EmptyDiv = styled.div`
 
 const Storage = styled.div`
   border-top: 1px solid #eeeeee;
-  padding: 8px 10px;
 
   &:hover {
     cursor: pointer;
@@ -77,10 +82,7 @@ const Storage = styled.div`
 `;
 
 const Product = styled.div`
-  width: 100px;
   height: 60px;
   border-radius: 4px;
   background-color: #666;
-  margin: auto;
-  padding: 4px 8px;
 `;
