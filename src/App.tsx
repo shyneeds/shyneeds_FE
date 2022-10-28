@@ -10,7 +10,7 @@ import MyPage from './pages/myPage/MyPage';
 import LoginPage from './pages/login/LoginPage';
 import Community from './pages/community/Community';
 import Offers from './pages/offers/Offers';
-import Reservation_Main from './components/reservation/Reservation_Main';
+import Reservation from './pages/reservation/Reservation';
 import { useAppDispatch } from './app/hooks';
 import { isLogin } from './features/kakaoLogin/kakaoLoginSlice';
 import Cart from './pages/cart/Cart';
@@ -44,7 +44,7 @@ function App() {
         <Route path="/community/detail/:id/*" element={<DetailPage />} />
         <Route path="/community/write" element={<Write />} />
         <Route path="/offers/:id" element={<Offers />} />
-        <Route path="/reservation" element={<Reservation_Main />} />
+        <Route path="/reservation" element={<Reservation />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/subPage" element={<GroupPage />} />
         <Route path="/subPage_region" element={<SubpageView />} />
