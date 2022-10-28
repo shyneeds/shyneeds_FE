@@ -84,29 +84,38 @@ export const getReviewDetail = createAsyncThunk(
       });
   }
 );
-export const ModifyReviewDetail = createAsyncThunk(
+export const modifyReviewDetail = createAsyncThunk(
   'MODIFY_REVIEW_DETAIL',
   async (data: any, thunkAPI) => {
-    const { token, id } = data;
+    const { token, id , contents, mainImage, title, reservationId} = data;
+    console.log(data)
     return await axios({
+      url: `http://13.125.151.45:8080/api/review/update`,
+      method: 'put',
       headers: {
-        'Content-Type': 'aplication/json',
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'aplication/json',
       },
-      url: `http://13.125.151.45:8080/api/review/${id}/details`,
-      method: 'get',
+      data : {
+        contents : contents,
+        id : id,
+        mainImage : mainImage,
+        reservationId : reservationId,
+        title : title,
+      }
     })
       .then((response) => {
-        console.log(response.data.data);
-        // thunkAPI.dispatch(getImgUrl(response.data))
-        return response.data.data;
+        console.log(response);
+        response.status === 200
+          ? alert('게시글이 수정 되었습니다.')
+          : alert('게시글이 수정 되지 않았습니다.');
       })
       .catch((error) => {
         console.log({ error });
       });
   }
 );
-export const DeleteReviewDetail = createAsyncThunk(
+export const deleteReviewDetail = createAsyncThunk(
   'DELETE_REVIEW_DETAIL',
   async (data: any, thunkAPI) => {
     const { token, id } = data;

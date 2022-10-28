@@ -7,7 +7,7 @@ import ReviewReply from './ReviewReply';
 import { useNavigate, useParams } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  DeleteReviewDetail,
+  deleteReviewDetail,
   getReviewDetail,
   reviewDetailData,
   reviewLikePost,
@@ -24,7 +24,7 @@ const ReviewDetail = () => {
     dispatch(getReviewDetail({ id, ...cookies }));
   }, []);
   const onDeleteClick = (id: string) =>{
-    dispatch(DeleteReviewDetail({ id, ...cookies })).then(()=>navigate(-1));
+    dispatch(deleteReviewDetail({ id, ...cookies })).then(()=>navigate(-1));
   }
   const onModifyClick = () =>{
     navigate('/community/write/modify')
