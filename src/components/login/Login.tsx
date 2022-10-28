@@ -17,7 +17,7 @@ import axios from 'axios';
 const { Kakao } = window;
 
 function Login() {
-  const [cookies, setCookie] = useCookies(['accessToken']);
+  const [cookies, setCookie] = useCookies(['token']);
   useEffect(() => {
     if (!Kakao.isInitialized()) {
       Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
@@ -44,9 +44,9 @@ function Login() {
     })
       .then((response) => {
         console.log({ response });
+        setCookie('token', response.data.data.refreshToken)
         dispatch(userLogin(response.data.data));
-        // setCookie('accessToken',response.data.data.accessToken)
-        navigate('/');
+        navigate(-1);
       })
       .catch((error) => {
         console.log({ error });
