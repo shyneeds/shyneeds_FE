@@ -34,6 +34,7 @@ const ReviewWrite = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const getUrlCode = useParams().modify;
+  const writeCode = useParams().write
   const responseImgUrl = useAppSelector(imgUrl);
   const [cookies, setCookies] = useCookies(['token']);
   const reservationList: any = useAppSelector(userReservationList);
@@ -90,6 +91,7 @@ const ReviewWrite = () => {
       callback(res.payload, 'test');
     }); //url 콜백에 넣자
   };
+
   return (
     <Wrap>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -156,6 +158,7 @@ const ReviewWrite = () => {
                   <ThunmbMainImg src={responseImgUrl[0]} />
                 )
               ) : (
+                writeCode != 'write' &&
                 <ThunmbMainImg src={reviewDetail.mainImage} />
               )}
               <ThunmbImg onClick={() => imgRef.current?.click()}>

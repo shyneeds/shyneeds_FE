@@ -87,15 +87,15 @@ export const getReviewDetail = createAsyncThunk(
 export const modifyReviewDetail = createAsyncThunk(
   'MODIFY_REVIEW_DETAIL',
   async (data: any, thunkAPI) => {
-    const { token, id , contents, mainImage, title, reservationId} = data;
-    console.log(data)
+    const { token, id, reservationId, mainImage, contents, title } = data;
+    console.log(data);
     return await axios({
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
       url: `http://13.125.151.45:8080/api/review/update`,
       method: 'put',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'aplication/json',
-      },
       data : {
         contents : contents,
         id : id,
@@ -108,13 +108,47 @@ export const modifyReviewDetail = createAsyncThunk(
         console.log(response);
         response.status === 200
           ? alert('게시글이 수정 되었습니다.')
-          : alert('게시글이 수정 되지 않았습니다.');
+          : alert('게시글 수정이 되지않았습니다.');
+        // console.log(response.data)
+        // thunkAPI.dispatch(getImgUrl(response.data))
+        // return response.data as any
       })
       .catch((error) => {
         console.log({ error });
       });
   }
 );
+// export const modifyReviewDetail = createAsyncThunk(
+//   'MODIFY_REVIEW_DETAIL',
+//   async (data: any, thunkAPI) => {
+//     const { token, id , contents, mainImage, title, reservationId} = data;
+//     console.log(data)
+//     return await axios({
+//       url: `http://13.125.151.45:8080/api/review/update/`,
+//       method: 'put',
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         'Content-Type': 'aplication/json',
+//       },
+//       data : {
+//         contents : contents,
+//         id : id,
+//         mainImage : mainImage,
+//         reservationId : reservationId,
+//         title : title,
+//       }
+//     })
+//       .then((response) => {
+//         console.log(response);
+//         response.status === 200
+//           ? alert('게시글이 수정 되었습니다.')
+//           : alert('게시글이 수정 되지 않았습니다.');
+//       })
+//       .catch((error) => {
+//         console.log({ error });
+//       });
+//   }
+// );
 export const deleteReviewDetail = createAsyncThunk(
   'DELETE_REVIEW_DETAIL',
   async (data: any, thunkAPI) => {
