@@ -34,7 +34,7 @@ const ReviewContent = () => {
               <ReviewDate>
                 <ReviewContentWriter>{(review.updatedAt).slice(0,10).replace(/(\d{4})-(\d{2})-(\d{2})/ , "$1. $2. $3" )}</ReviewContentWriter>
                 <ReviewContentWriter>{review.author}</ReviewContentWriter>
-                <ReviewContentWriter>{review.id}</ReviewContentWriter>
+                {/* <ReviewContentWriter>{review.id}</ReviewContentWriter> */}
               </ReviewDate>
             </ReviewContentWrap>
             </Link>

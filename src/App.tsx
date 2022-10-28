@@ -42,7 +42,9 @@ function App() {
         <Route path="/loginResult" element={<LoginResult />} />
         <Route path="/community/*" element={<Community />}></Route>
         <Route path="/community/detail/:id/*" element={<DetailPage />} />
-        <Route path="/community/write" element={<Write />} />
+        <Route path="/community/write/" element={<Write />} />
+        <Route path="/community/write/:modify" element={<Write />} />
+        <Route path="/offers" element={<Offers />} />
         <Route path="/offers/:id" element={<Offers />} />
         <Route path="/reservation" element={<Reservation />} />
         <Route path="/cart" element={<Cart />} />

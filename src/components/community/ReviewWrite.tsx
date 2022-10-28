@@ -15,6 +15,7 @@ import {
 } from '../../features/userData/userDataSlice';
 import {
   imgUrl,
+  modifyReviewDetail,
   postContent,
   reviewDetailData,
   uploadImg,
@@ -33,21 +34,22 @@ const ReviewWrite = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const getUrlCode = useParams().modify;
+  const responseImgUrl = useAppSelector(imgUrl);
   const [cookies, setCookies] = useCookies(['token']);
   const reservationList: any = useAppSelector(userReservationList);
   const reviewDetail = useAppSelector(reviewDetailData);
   const editorRef = useRef<Editor>(null);
   useEffect(() => {
     dispatch(getUserData(cookies.token));
-    getUrlCode === 'modify' ? (
-      console.log(reviewDetail),
-      setValue("title", reviewDetail.title),
-      editorRef.current?.getInstance().setHTML(reviewDetail.contents)
-    )
-    : '';
+    getUrlCode === 'modify'
+      ? (console.log(reviewDetail),
+        setValue('title', reviewDetail.title),
+        setValue('mainImage', reviewDetail.mainImage),
+        setValue('reservationId', reviewDetail.reservationId),
+        editorRef.current?.getInstance().setHTML(reviewDetail.contents))
+      : '';
   }, []);
   console.log(reservationList.length);
-  // reservationId[0]?.map((res: any)=>console.log(res));
 
   const onSubmit = (formData: any) => {
     console.log('submit 돌아가요');
@@ -57,10 +59,15 @@ const ReviewWrite = () => {
       : (formData['mainImage'] = responseImgUrl[0]);
     const contents = editorRef.current?.getInstance().getHTML();
     Object.assign(formData, { contents }, { ...cookies });
-    console.log(formData);
-    dispatch(postContent(formData)).then(() => navigate(-1));
+    getUrlCode === 'modify'
+      ? ((formData['mainImage'] = reviewDetail.mainImage),
+        (formData['id'] = reviewDetail.id),
+        Object.assign(formData, { contents }, { ...cookies }),
+        console.log(formData),
+        dispatch(modifyReviewDetail(formData)).then(() => navigate(-1)))
+      : dispatch(postContent(formData)).then(() => navigate(-1));
   };
-  
+
   const onChange = () => {
     // 단순 로그 찍기용 함수
     const data = editorRef.current?.getInstance().getHTML();
@@ -76,7 +83,7 @@ const ReviewWrite = () => {
       setValue('mainImage', res.payload);
     });
   };
-  const responseImgUrl = useAppSelector(imgUrl);
+
   const onUploadImage = async (blob: Blob, callback: any) => {
     const data = { ...cookies, blob };
     dispatch(uploadImg(data)).then((res) => {
@@ -89,7 +96,9 @@ const ReviewWrite = () => {
         <HeaderWrap>
           <span>여행후기</span>
           <WriteSubmitWrap>
-            <CancelButton type={'reset'} onClick={()=>navigate(-1)}>취소</CancelButton>
+            <CancelButton type={'reset'} onClick={() => navigate(-1)}>
+              취소
+            </CancelButton>
             <WriteButton type={'submit'}>작성</WriteButton>
           </WriteSubmitWrap>
         </HeaderWrap>
@@ -104,6 +113,7 @@ const ReviewWrite = () => {
                 })}
               />
               <BirthSelect
+                defaultValue={reviewDetail?.reservationId}
                 {...register('reservationId', { required: true })} // TODO: 추후 미선택시 선택되게끔 erros 설정해야함
               >
                 {reservationList.length === 0
@@ -139,12 +149,15 @@ const ReviewWrite = () => {
           </LeftWrap>
           <RightWrap>
             <InputImgBox>
-              {responseImgUrl.length != 0 &&
-                (imgRef.current?.value.length != 0 ? (
+              {responseImgUrl.length != 0 ? (
+                imgRef.current?.value.length != 0 ? (
                   <ThunmbMainImg src={myImage} />
                 ) : (
                   <ThunmbMainImg src={responseImgUrl[0]} />
-                ))}
+                )
+              ) : (
+                <ThunmbMainImg src={reviewDetail.mainImage} />
+              )}
               <ThunmbImg onClick={() => imgRef.current?.click()}>
                 <img src={process.env.PUBLIC_URL + '/icons/union.svg'} />
                 <p>대표 이미지 변경</p>
