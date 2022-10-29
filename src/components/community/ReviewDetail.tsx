@@ -101,8 +101,8 @@ const ReviewDetail = () => {
         </RelateProduct>
         <ReviewReply /> {/*댓글 기능*/}
         <MenuWrap>
-          <ContentModiftyButton onClick={()=>onModifyClick()}>게시글 수정</ContentModiftyButton>
-          <ContentDeleteButton onClick={()=>onDeleteClick(id as string)}>게시글 삭제</ContentDeleteButton>
+          <ContentModiftyButton onClick={()=>onModifyClick()}>수정</ContentModiftyButton>
+          <ContentDeleteButton onClick={()=>onDeleteClick(id as string)}>삭제</ContentDeleteButton>
         </MenuWrap>
       </ReviewContentWrap>
     </Wrap>
@@ -262,13 +262,13 @@ const MenuWrap = styled.div`
 const ContentModiftyButton = styled.button`
   width: 100px;
   height: 40px;
-  background-color: #4286f4;
-  color: white;
+  color: #666666;
   font-weight: 500;
   font-size: 16px;
   line-height: 24px;
   border-radius: 6px;
   margin-right: 2px;
+  border: 1px solid #CCCCCC;
   cursor: pointer;
   transition: box-shadow 400ms ease;
   &:hover {
@@ -279,8 +279,8 @@ const ContentModiftyButton = styled.button`
 const ContentDeleteButton = styled.button`
   width: 100px;
   height: 40px;
-  background-color: #4286f4;
-  color: white;
+  border: 1px solid #CCCCCC;
+  color: #666666;
   font-weight: 500;
   font-size: 16px;
   line-height: 24px;

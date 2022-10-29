@@ -14,7 +14,7 @@ export const getUserData = createAsyncThunk(
       method: 'get',
     })
       .then((response) => {
-        console.log(response.data.data.reservationList);
+        // console.log(response.data.data.reservationList);
         // thunkAPI.dispatch(reservationList(response.data.data.reservationList));
         return response.data.data.reservationList;
       })
