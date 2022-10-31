@@ -21,6 +21,7 @@ import {
   uploadImg,
 } from '../../features/communityPage/reviewWriteSlice';
 import { useNavigate, useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const ReviewWrite = () => {
   const {
@@ -34,7 +35,7 @@ const ReviewWrite = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const getUrlCode = useParams().modify;
-  const writeCode = useParams()
+  const writeCode = useParams();
   const responseImgUrl = useAppSelector(imgUrl);
   const [cookies, setCookies] = useCookies(['token']);
   const reservationList: any = useAppSelector(userReservationList);
@@ -45,12 +46,12 @@ const ReviewWrite = () => {
     getUrlCode === 'modify'
       ? (console.log(reviewDetail),
         setValue('title', reviewDetail.title),
-        setValue('mainImage', reviewDetail.mainImage),
+        // setValue('mainImage', reviewDetail.mainImage),
         setValue('reservationId', reviewDetail.reservationId),
         editorRef.current?.getInstance().setHTML(reviewDetail.contents))
       : '';
   }, []);
-  console.log(reservationList.length);
+  // console.log(reservationList.length);
 
   const onSubmit = (formData: any) => {
     console.log('submit 돌아가요');
@@ -61,8 +62,10 @@ const ReviewWrite = () => {
     const contents = editorRef.current?.getInstance().getHTML();
     Object.assign(formData, { contents }, { ...cookies });
     getUrlCode === 'modify'
-      ? ((formData['mainImage'] = reviewDetail.mainImage),
-        (formData['id'] = reviewDetail.id),
+      ? // typeof formData.mainImage === undefined &&
+        // console.log(typeof formData.mainImage === undefined),
+        // (formData['mainImage'] = reviewDetail.mainImage),
+        ((formData['id'] = reviewDetail.id),
         Object.assign(formData, { contents }, { ...cookies }),
         console.log(formData),
         dispatch(modifyReviewDetail(formData)).then(() => navigate(-1)))
@@ -92,12 +95,16 @@ const ReviewWrite = () => {
     }); //url 콜백에 넣자
   };
   // console.log(writeCode)
-  console.log(Object.keys(writeCode).length)
+  // console.log(Object.keys(writeCode).length)
+  // console.log("responseImgUrl 의 길이 : "+ responseImgUrl.length)
+  // console.log("upload후 받은 이미지 url : "+responseImgUrl)
+  // console.log("upload후 이미지가 있으면 나오는 Length : " +imgRef.current?.value.length)
+
   return (
     <Wrap>
       <form onSubmit={handleSubmit(onSubmit)}>
         <HeaderWrap>
-          <span>여행후기</span>
+          <ReviewLink to={'/community'}>여행후기</ReviewLink>
           <WriteSubmitWrap>
             <CancelButton type={'reset'} onClick={() => navigate(-1)}>
               취소
@@ -116,7 +123,7 @@ const ReviewWrite = () => {
                 })}
               />
               <BirthSelect
-                defaultValue={reviewDetail?.reservationId}
+                // defaultValue={reviewDetail?.reservationId}
                 {...register('reservationId', { required: true })} // TODO: 추후 미선택시 선택되게끔 erros 설정해야함
               >
                 {reservationList.length === 0
@@ -152,16 +159,66 @@ const ReviewWrite = () => {
           </LeftWrap>
           <RightWrap>
             <InputImgBox>
-              {responseImgUrl.length != 0 ? (
-                imgRef.current?.value.length != 0 ? (
-                  <ThunmbMainImg src={myImage} />
+              {responseImgUrl.length == 0 ? (
+                imgRef.current?.value.length == 0 &&
+                (getUrlCode == 'modify' ? (
+                  <>
+                    <ThunmbMainImg src={reviewDetail.mainImage} />
+                    <p>수정버튼 누른후 없음</p>
+                  </>
                 ) : (
-                  <ThunmbMainImg src={responseImgUrl[0]} />
+                  <p>아무것도 없음</p>
+                ))
+              ) : getUrlCode == 'modify' ? (
+                <>
+                  <p>수정 페이지 이미지</p>
+                  <ThunmbMainImg src={reviewDetail.mainImage} />
+                </>
+              ) : (
+                <>
+                  {myImage === undefined ? '' : <ThunmbMainImg src={myImage} />}
+                  <p>업로드 누른후?</p>
+                </>
+              )}
+
+              {/* {responseImgUrl.length != 0 ? (
+                imgRef.current?.value.length != 0 ? (
+                  <>
+                    <ThunmbMainImg src={myImage} />
+                    <p>
+                      {responseImgUrl.length}, {imgRef.current?.value.length}
+                    </p>
+                    <p>165번째</p>
+                  </>
+                ) : Object.keys(writeCode).length == 1 ? (
+                  <>
+                    <ThunmbMainImg src={reviewDetail.mainImage} />
+                    <p>
+                      {responseImgUrl.length}, {imgRef.current?.value.length}
+                    </p>
+                    <p>{Object.keys(writeCode).length}</p>
+                    <p>여기?</p>
+                  </>
+                ) : (
+                  <>
+                    <ThunmbMainImg src={responseImgUrl[0]} />
+                    <p>
+                      {responseImgUrl.length}, {imgRef.current?.value.length}
+                    </p>
+                    <p>write 코드 : {Object.keys(writeCode).length}</p>
+                    <p>170번째</p>
+                    <p>{responseImgUrl[0]}</p>
+                  </>
                 )
               ) : (
-                Object.keys(writeCode).length != 1 &&
-                <ThunmbMainImg src={reviewDetail.mainImage} />
-              )}
+                getUrlCode == 'modify' && (
+                  <>
+                    <ThunmbMainImg src={reviewDetail.mainImage} />
+                    <p>177번째</p>
+                    <p>{getUrlCode}</p>
+                  </>
+                )
+              )} */}
               <ThunmbImg onClick={() => imgRef.current?.click()}>
                 <img src={process.env.PUBLIC_URL + '/icons/union.svg'} />
                 <p>대표 이미지 변경</p>
@@ -199,13 +256,13 @@ const HeaderWrap = styled.div`
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(33, 33, 33, 0.15);
-  span {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 28px;
-    margin-left: 40px;
-  }
+`;
+const ReviewLink = styled(Link)`
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 28px;
+  margin-left: 40px;
 `;
 const WriteSubmitWrap = styled.div`
   width: 230px;
