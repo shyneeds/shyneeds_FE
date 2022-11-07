@@ -33,7 +33,7 @@ const Writing = () => {
         review.map((data: any, i: number) => {
           return (
             <ReviewWrap key={review[i].id}>
-              <Link to={`/community/detail/${review.id}`}>
+              <Link to={`/community/detail/${review[i].id}`}>
                 <img src={review[i].mainImage} alt="" />
                 <ReviewContentWrap>
                   <ReviewContentTitle>{review[i].title}</ReviewContentTitle>
