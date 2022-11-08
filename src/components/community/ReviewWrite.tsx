@@ -51,7 +51,6 @@ const ReviewWrite = () => {
         editorRef.current?.getInstance().setHTML(reviewDetail.contents))
       : '';
   }, []);
-  // console.log(reservationList.length);
 
   const onSubmit = (formData: any) => {
     console.log('submit 돌아가요');
@@ -60,13 +59,13 @@ const ReviewWrite = () => {
       ? ''
       : (formData['mainImage'] = responseImgUrl[0]);
     const contents = editorRef.current?.getInstance().getHTML();
-    Object.assign(formData, { contents }, { ...cookies });
+    Object.assign(formData, { contents });
     getUrlCode === 'modify'
       ? // typeof formData.mainImage === undefined &&
         // console.log(typeof formData.mainImage === undefined),
         // (formData['mainImage'] = reviewDetail.mainImage),
         ((formData['id'] = reviewDetail.id),
-        Object.assign(formData, { contents }, { ...cookies }),
+        Object.assign(formData, { contents }),
         console.log(formData),
         dispatch(modifyReviewDetail(formData)).then(() => navigate(-1)))
       : dispatch(postContent(formData)).then(() => navigate(-1));
@@ -82,15 +81,16 @@ const ReviewWrite = () => {
   const uploadImage = (e: any) => {
     setMyImage(URL.createObjectURL(e.target.files[0]));
     const blob = e.target.files[0];
-    const data = { ...cookies, blob };
-    dispatch(uploadImg(data)).then((res) => {
+    dispatch(uploadImg(blob)).then((res) => {
       setValue('mainImage', res.payload);
     });
   };
 
   const onUploadImage = async (blob: Blob, callback: any) => {
-    const data = { ...cookies, blob };
-    dispatch(uploadImg(data)).then((res) => {
+    const imgData = new FormData();
+    imgData.append('upload', blob);
+    console.log(imgData)
+    dispatch(uploadImg(imgData)).then((res) => {
       callback(res.payload, 'test');
     }); //url 콜백에 넣자
   };
@@ -167,7 +167,9 @@ const ReviewWrite = () => {
                     <p>수정버튼 누른후 없음</p>
                   </>
                 ) : (
-                  <p>아무것도 없음</p>
+                  // <p>아무것도 없음</p>
+                  <>
+                  </>
                 ))
               ) : getUrlCode == 'modify' ? (
                 <>
