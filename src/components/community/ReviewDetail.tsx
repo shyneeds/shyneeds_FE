@@ -14,23 +14,25 @@ import {
 } from '../../features/communityPage/reviewWriteSlice';
 import { useCookies } from 'react-cookie';
 
+type idType = string;
+
 const ReviewDetail = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const detailData = useAppSelector(reviewDetailData);
   const [cookies, setCookie] = useCookies(['token']);
-  const id = useParams().id;
+  const id : idType = useParams().id!;
   useEffect(() => {
-    dispatch(getReviewDetail({ id, ...cookies }));
+    dispatch(getReviewDetail(id));
   }, []);
   const onDeleteClick = (id: string) =>{
-    dispatch(deleteReviewDetail({ id, ...cookies })).then(()=>navigate(-1));
+    dispatch(deleteReviewDetail(id)).then(()=>{alert("삭제 되었습니다."),navigate(-1)});
   }
   const onModifyClick = () =>{
     navigate('/community/write/modify')
   }
   const onLikeClick = (review_id: string) =>{
-    dispatch(reviewLikePost({review_id,...cookies})).then(()=>dispatch(getReviewDetail({ id, ...cookies })))
+    dispatch(reviewLikePost(review_id)).then(()=>dispatch(getReviewDetail(id)))
   }
 
   return (
