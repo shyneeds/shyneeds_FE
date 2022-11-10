@@ -42,7 +42,7 @@ export const postReplyAsync = createAsyncThunk(
 export const modifyReplyAsync = createAsyncThunk(
   'MODIFY_REVIEW',
   async (data: any, thunkAPI) => {
-    const { comment, commentId, token, reviewId} = data;
+    const { comment, commentId, token, reviewId } = data;
     console.log(comment);
     return await axios({
       url: `http://13.125.151.45:8080/api/comment/update/`,
@@ -84,7 +84,7 @@ export const getReplyContentAsync = createAsyncThunk(
 export const delReplyAsync = createAsyncThunk(
   'DELETE_REPLY_CONTENT',
   async (data: any, thunkAPI) => {
-    const { commentid, token ,reviewId } = data;
+    const { commentid, token, reviewId } = data;
     return await axios({
       url: `http://13.125.151.45:8080/api/comment/${commentid}`,
       method: 'DELETE',
