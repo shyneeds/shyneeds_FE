@@ -60,6 +60,7 @@ const ReviewWrite = () => {
       : (formData['mainImage'] = responseImgUrl[0]);
     const contents = editorRef.current?.getInstance().getHTML();
     Object.assign(formData, { contents });
+
     getUrlCode === 'modify'
       ? // typeof formData.mainImage === undefined &&
         // console.log(typeof formData.mainImage === undefined),
@@ -78,27 +79,24 @@ const ReviewWrite = () => {
   };
   const imgRef = useRef<HTMLInputElement | null>(null);
   const [myImage, setMyImage] = useState<string>();
-  const uploadImage = (e: any) => {
+
+  const setMainImage = (e: any) => {
+    console.log('uploadImage 실행됨');
     setMyImage(URL.createObjectURL(e.target.files[0]));
     const blob = e.target.files[0];
-    dispatch(uploadImg(blob)).then((res) => {
+    const imgData = new FormData();
+    imgData.append('upload', blob);
+    dispatch(uploadImg(imgData)).then((res) => {
       setValue('mainImage', res.payload);
     });
   };
-
   const onUploadImage = async (blob: Blob, callback: any) => {
     const imgData = new FormData();
     imgData.append('upload', blob);
-    console.log(imgData)
     dispatch(uploadImg(imgData)).then((res) => {
       callback(res.payload, 'test');
     }); //url 콜백에 넣자
   };
-  // console.log(writeCode)
-  // console.log(Object.keys(writeCode).length)
-  // console.log("responseImgUrl 의 길이 : "+ responseImgUrl.length)
-  // console.log("upload후 받은 이미지 url : "+responseImgUrl)
-  // console.log("upload후 이미지가 있으면 나오는 Length : " +imgRef.current?.value.length)
 
   return (
     <Wrap>
@@ -159,29 +157,50 @@ const ReviewWrite = () => {
           </LeftWrap>
           <RightWrap>
             <InputImgBox>
-              {responseImgUrl.length == 0 ? (
+              {getUrlCode === 'modify' ? (
+                <>
+                  <p>수정</p>
+                  {myImage != undefined ? <ThunmbMainImg src={myImage} /> :<ThunmbMainImg src={reviewDetail.mainImage} />}
+                </>
+              ) : responseImgUrl.length == 0 ? (
+                <></>
+              ) : (
+                <>
+                  <p>글쓰기</p>
+                  {myImage ? (
+                    <ThunmbMainImg src={myImage} />
+                  ) : (
+                    <ThunmbMainImg src={responseImgUrl[0]} />
+                  )}
+                </>
+              )}
+
+              {/* {responseImgUrl.length == 0 ? (
                 imgRef.current?.value.length == 0 &&
                 (getUrlCode == 'modify' ? (
                   <>
+                    {responseImgUrl.length}
                     <ThunmbMainImg src={reviewDetail.mainImage} />
                     <p>수정버튼 누른후 없음</p>
                   </>
                 ) : (
-                  // <p>아무것도 없음</p>
                   <>
+                  <p>글쓰기 눌렀을때의 화면</p>
                   </>
                 ))
               ) : getUrlCode == 'modify' ? (
                 <>
                   <p>수정 페이지 이미지</p>
+                  {myImage === undefined ? <ThunmbMainImg src={reviewDetail.mainImage} /> : <ThunmbMainImg src={myImage} />}
                   <ThunmbMainImg src={reviewDetail.mainImage} />
+                  {<ThunmbMainImg src={myImage} />}
                 </>
-              ) : (
+              ) : (//처음 글쓸때 게시글에서 이미지 업로드를 한 후 보여지는 사진
                 <>
-                  {myImage === undefined ? '' : <ThunmbMainImg src={myImage} />}
-                  <p>업로드 누른후?</p>
+                  <p>여기니?</p>
+                  {myImage ? <ThunmbMainImg src={myImage} /> : <ThunmbMainImg src={responseImgUrl[0]} />}
                 </>
-              )}
+              )} */}
 
               {/* {responseImgUrl.length != 0 ? (
                 imgRef.current?.value.length != 0 ? (
@@ -228,7 +247,7 @@ const ReviewWrite = () => {
               <input
                 style={{ display: 'none' }}
                 ref={imgRef}
-                onChange={uploadImage}
+                onChange={setMainImage}
                 type="file"
                 accept="image/*"
               />

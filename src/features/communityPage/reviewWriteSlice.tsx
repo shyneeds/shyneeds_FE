@@ -1,36 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../app/store';
-import { customAxios } from '../../lib/customAxios';
-axios.defaults.headers.post['Content-Type']='multipart/form-data'
+import { customAxios, customAxiosFormData } from '../../lib/customAxios';
 
 export const uploadImg = createAsyncThunk(
   'POST_IMG',
   async (imgData: any, thunkAPI) => {
     return await 
-    customAxios.post('/review/image/upload',imgData).then((response)=>{console.log(response);
+    customAxiosFormData.post('/review/image/upload',imgData).then((response)=>{console.log(response);
       console.log(response.data);
-      thunkAPI.dispatch(getImgUrl(response.data));
+      // thunkAPI.dispatch(getImgUrl(response.data));
       return response.data
     }).catch((error)=>{return error})
-    // axios({
-      // headers: {
-        // 'Content-Type': 'multipart/form-data',
-      //   Authorization: `Bearer ${token}`,
-      // },
-    //   url: `http://13.125.151.45:8080/api/review/image/upload`,
-    //   method: 'post',
-    //   data: formData,
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //     console.log(response.data);
-    //     thunkAPI.dispatch(getImgUrl(response.data));
-    //     return response.data
-    //   })
-    //   .catch((error) => {
-    //     console.log({ error });
-    //   });
   }
 );
 export const postContent = createAsyncThunk(
@@ -84,17 +65,14 @@ const initialState: writeState = {
 export const writeSlice = createSlice({
   name: 'write',
   initialState,
-  // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    // Use the PayloadAction type to declare the contents of `action.payload`
-    getImgUrl: (state, action: PayloadAction<any>) => {
-      // state.imgUrl = action.payload;
-      state.imgUrl.push(action.payload);
+    resetImgUrl: (state) => {
+      state.imgUrl=[]
     },
   },
   extraReducers: (builder) => {
     builder.addCase(uploadImg.fulfilled, (state, action) => {
-      // state.imgUrl.push(action.payload);
+      state.imgUrl.push(action.payload);
     });
     builder.addCase(getReviewDetail.fulfilled, (state, action) => {
       state.reviewContent = action.payload;
@@ -102,7 +80,7 @@ export const writeSlice = createSlice({
   },
 });
 
-export const { getImgUrl } = writeSlice.actions;
+export const { resetImgUrl } = writeSlice.actions;
 export const imgUrl = (state: RootState) => state.write.imgUrl;
 export const reviewDetailData = (state: RootState) => state.write.reviewContent;
 
