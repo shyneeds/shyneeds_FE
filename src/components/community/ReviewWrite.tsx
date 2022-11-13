@@ -84,9 +84,11 @@ const ReviewWrite = () => {
     console.log('uploadImage 실행됨');
     setMyImage(URL.createObjectURL(e.target.files[0]));
     const blob = e.target.files[0];
-    // dispatch(uploadImg(blob)).then((res) => {
-    // setValue('mainImage', res.payload);
-    // });
+    const imgData = new FormData();
+    imgData.append('upload', blob);
+    dispatch(uploadImg(imgData)).then((res) => {
+      setValue('mainImage', res.payload);
+    });
   };
   const onUploadImage = async (blob: Blob, callback: any) => {
     const imgData = new FormData();
