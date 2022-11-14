@@ -30,6 +30,7 @@ export const getServerToken = createAsyncThunk(
         Authorization: KakaoToken,
       },
     }).then((res) => {
+      console.log(res)
       const state: any = thunkAPI.getState();
       thunkAPI.dispatch(userLogin(res.data.data))
       return res.data.data;
@@ -75,11 +76,14 @@ export const KakaoLoginSlice = createSlice({
       state.userToken = accessToken
       state.refreshToken = refreshToken;
       console.log('이건 넣은후 : '+state.userToken);
+      console.log(refreshToken);
       sessionStorage.setItem('refreshToken', refreshToken);
+      sessionStorage.setItem('userId', userId);
       state.authenticated = true; // 로그인 상태 확인
     },
     userLogout: (state, action: PayloadAction<boolean>) => {
       state.authenticated = action.payload;
+      console.log(state.authenticated)
       sessionStorage.removeItem('refreshToken');
       sessionStorage.removeItem('userId');
     },

@@ -44,7 +44,7 @@ function Login() {
     })
       .then((response) => {
         console.log({ response });
-        setCookie('token', response.data.data.refreshToken)
+        setCookie('token', response.data.data.accessToken)
         dispatch(userLogin(response.data.data));
         navigate(-1);
       })

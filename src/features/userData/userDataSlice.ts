@@ -1,25 +1,19 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { RootState } from '../../app/store';
+import { customAxios } from '../../lib/customAxios';
 
 export const getUserData = createAsyncThunk(
   'GET_USER_DATA',
-  async (token: string, thunkAPI) => {
-    return await axios({
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      url: `http://13.125.151.45:8080/api/my/user`,
-      method: 'get',
-    })
+  async () => {
+    return await customAxios
+      .get('/my/user')
       .then((response) => {
-        // console.log(response.data.data.reservationList);
-        // thunkAPI.dispatch(reservationList(response.data.data.reservationList));
+        console.log(response)
         return response.data.data.reservationList;
       })
       .catch((error) => {
-        console.log({ error });
+        console.log(error)
+        return error;
       });
   }
 );
@@ -52,7 +46,11 @@ export const userDataSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getUserData.fulfilled, (state, action) => {
-      state.reservationList = action.payload;
+      state.reservationList = action.payload
+      // .map((data:any,i:number)=>{
+      //   if(data.reservationStatus ==='예약확정'){return data.reservationPackage[0].title} 
+      // });
+      // console.log(action.payload)
     });
   },
 });
