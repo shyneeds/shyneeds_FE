@@ -11,11 +11,12 @@ import {
   modifyReplyAsync,
   postReplyAsync,
   replyData,
-  setReplyData,
 } from '../../features/communityPage/replySlice';
-import { useCookies } from 'react-cookie';
 import { useParams } from 'react-router-dom';
-import { authenticated, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
+import {
+  authenticated,
+  userId,
+} from '../../features/kakaoLogin/kakaoLoginSlice';
 
 type replyDataType = {
   data: [];
@@ -29,8 +30,15 @@ type replyDataType = {
 
 const ReviewReply = () => {
   const { register, handleSubmit, getValues, setValue, reset } = useForm();
+  const dispatch = useAppDispatch();
   const reviewNumber = useParams().id || '';
-  const [cookies, setCookie] = useCookies(['token']);
+  const [modify, setModify] = useState(false);
+  const [emojiClick, setEmojiClick] = useState(false);
+  const [commentId, setCommentId] = useState<number>(0);
+  const userIdInfo = useAppSelector(userId);
+  const isLogin = useAppSelector(authenticated);
+  const getReplyData = useAppSelector<any>(replyData);
+
   const onSubmit = (formData: any) => {
     reset({ comment: '' });
     dispatch(postReplyAsync(formData)).then((res) => {
@@ -39,9 +47,9 @@ const ReviewReply = () => {
         : alert('로그인 후 댓글을 작성해주세요');
     });
   };
-  const [modify, setModify] = useState(false);
-  const [emojiClick, setEmojiClick] = useState(false);
-  const [commentId, setCommentId] = useState<number>(0);
+  useEffect(() => {
+    dispatch(getReviewListAsync(reviewNumber));
+  }, []);
   const isEmojiClick = () => {
     emojiClick === false ? setEmojiClick(true) : setEmojiClick(false);
   };
@@ -66,31 +74,26 @@ const ReviewReply = () => {
   };
 
   const onDeleteReply = (id: number) => {
-    const data = { commentid: id, token: cookies, reviewId: reviewNumber };
-    dispatch(delReplyAsync(data));
+    dispatch(delReplyAsync(id)).then((res) => {
+      res.payload.statusCode === 200 && alert('댓글이 삭제되었습니다.'),
+        dispatch(getReviewListAsync(reviewNumber));
+    });
   };
-  const userIdInfo = useAppSelector(userId)
-  const isLogin = useAppSelector(authenticated)
-  const dispatch = useAppDispatch();
-  const getReplyData = useAppSelector<any>(replyData);
-  useEffect(() => {
-    dispatch(getReviewListAsync(reviewNumber));
-  }, []);
 
   const onReplyModify = () => {
     const data = {
       comment: getValues('modifyReply'),
       commentId: commentId,
-      token: cookies,
-      reviewId: reviewNumber,
     };
-    dispatch(modifyReplyAsync(data));
-    console.log(data);
+    dispatch(modifyReplyAsync(data)).then((res) => {
+      res.payload.statusCode === 200 && alert('수정되었습니다'),
+        dispatch(getReviewListAsync(reviewNumber));
+    });
   };
   return (
     <>
       {!modify &&
-        getReplyData.map((reply: replyDataType, i: any) => {
+        getReplyData?.map((reply: replyDataType, i: number) => {
           return (
             <NewReply key={i}>
               <NewReplyAuthorWrap>
@@ -179,7 +182,6 @@ const ReviewReply = () => {
               />
               <ReplySubmitButton
                 onClick={() => {
-                  setValue('token', cookies);
                   setValue('reviewId', reviewNumber);
                 }}
               >
@@ -271,9 +273,6 @@ const ReplyCancelButton = styled.button`
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),
       0 2px 10px 0 rgba(0, 0, 0, 0.12);
   }
-`;
-const NewReplyWrap = styled.div`
-  margin-top: 40px;
 `;
 
 const NewReply = styled.div`
