@@ -15,6 +15,7 @@ import {
 } from '../../features/communityPage/replySlice';
 import { useCookies } from 'react-cookie';
 import { useParams } from 'react-router-dom';
+import { authenticated, userId } from '../../features/kakaoLogin/kakaoLoginSlice';
 
 type replyDataType = {
   data: [];
@@ -38,7 +39,6 @@ const ReviewReply = () => {
         : alert('로그인 후 댓글을 작성해주세요');
     });
   };
-  const setReply = useAppSelector(setReplyData);
   const [modify, setModify] = useState(false);
   const [emojiClick, setEmojiClick] = useState(false);
   const [commentId, setCommentId] = useState<number>(0);
@@ -64,14 +64,13 @@ const ReviewReply = () => {
     setModify(!modify);
     setCommentId(id);
   };
-  useEffect(() => {
-    setValue('modifyReply', setReply);
-  }, [setReply]);
+
   const onDeleteReply = (id: number) => {
     const data = { commentid: id, token: cookies, reviewId: reviewNumber };
     dispatch(delReplyAsync(data));
   };
-
+  const userIdInfo = useAppSelector(userId)
+  const isLogin = useAppSelector(authenticated)
   const dispatch = useAppDispatch();
   const getReplyData = useAppSelector<any>(replyData);
   useEffect(() => {
@@ -88,7 +87,6 @@ const ReviewReply = () => {
     dispatch(modifyReplyAsync(data));
     console.log(data);
   };
-
   return (
     <>
       {!modify &&
@@ -106,18 +104,21 @@ const ReviewReply = () => {
               </NewReplyAuthorWrap>
               <NewReplyContent>{reply.comment}</NewReplyContent>
               <NewReplyButtonWrap>
-                {sessionStorage.getItem('userId') === reply.userId + '' ? (
+                {isLogin === true && (
                   <>
-                    <button>댓글</button> <p>/</p>
+                    <button>댓글</button>
+                  </>
+                )}
+                {userIdInfo === reply.userId ? (
+                  <>
+                    <p>/</p>
                     <button onClick={() => toggleModify(reply.id)}>수정</button>
                     <p>/</p>
                     <button onClick={() => onDeleteReply(reply.id)}>
                       삭제
                     </button>
                   </>
-                ) : (
-                  null
-                )}
+                ) : null}
               </NewReplyButtonWrap>
             </NewReply>
           );
