@@ -83,16 +83,15 @@ export const KakaoLoginSlice = createSlice({
     },
     userLogout: (state, action: PayloadAction<boolean>) => {
       state.authenticated = action.payload;
+      state.userId=0;
       console.log(state.authenticated)
       sessionStorage.removeItem('refreshToken');
       sessionStorage.removeItem('userId');
     },
     isLogin: (state, { payload }) => {
       state.authenticated = true;
-      // const { accessToken, userId, refreshToken } = payload;
-      // state.userToken = accessToken; // 백엔드에서 발급받은 토큰
-      // state.refreshToken = refreshToken;
-      // state.userId = userId;
+      state.refreshToken = sessionStorage.getItem('refreshToken') || ""
+      state.userId = parseInt(sessionStorage.getItem('userId')||"")      
     },
   },
   extraReducers: (builder) => {

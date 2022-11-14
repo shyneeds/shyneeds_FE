@@ -11,10 +11,12 @@ import {
   modifyReplyAsync,
   postReplyAsync,
   replyData,
-  setReplyData,
 } from '../../features/communityPage/replySlice';
-import { useCookies } from 'react-cookie';
 import { useParams } from 'react-router-dom';
+import {
+  authenticated,
+  userId,
+} from '../../features/kakaoLogin/kakaoLoginSlice';
 
 type replyDataType = {
   data: [];
@@ -27,24 +29,27 @@ type replyDataType = {
 };
 
 const ReviewReply = () => {
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    setValue,
-    reset,
-    // formState: { errors }, 추후 required 사용 예정
-  } = useForm();
-  const reviewNumber = useParams().id;
-  const [cookies, setCookie] = useCookies(['token']);
-  const onSubmit = (formData: any) => {
-    reset({ comment: '' });
-    dispatch(postReplyAsync(formData));
-  };
-  const setReply = useAppSelector(setReplyData);
+  const { register, handleSubmit, getValues, setValue, reset } = useForm();
+  const dispatch = useAppDispatch();
+  const reviewNumber = useParams().id || '';
   const [modify, setModify] = useState(false);
   const [emojiClick, setEmojiClick] = useState(false);
   const [commentId, setCommentId] = useState<number>(0);
+  const userIdInfo = useAppSelector(userId);
+  const isLogin = useAppSelector(authenticated);
+  const getReplyData = useAppSelector<any>(replyData);
+
+  const onSubmit = (formData: any) => {
+    reset({ comment: '' });
+    dispatch(postReplyAsync(formData)).then((res) => {
+      res.payload === 200
+        ? dispatch(getReviewListAsync(formData.reviewId))
+        : alert('로그인 후 댓글을 작성해주세요');
+    });
+  };
+  useEffect(() => {
+    dispatch(getReviewListAsync(reviewNumber));
+  }, []);
   const isEmojiClick = () => {
     emojiClick === false ? setEmojiClick(true) : setEmojiClick(false);
   };
@@ -58,40 +63,37 @@ const ReviewReply = () => {
     setEmojiClick(false);
   };
   const toggleModify = (id: number) => {
-    const data = { commentid: id, token: cookies };
-    dispatch(getReplyContentAsync(data));
+    dispatch(getReplyContentAsync(id))
+      .then((res) => {
+        res.payload.statusCode === 200 &&
+          setValue('modifyReply', res.payload.data.comment);
+      })
+      .catch((error) => console.log(error));
     setModify(!modify);
     setCommentId(id);
   };
-  useEffect(() => {
-    setValue('modifyReply', setReply);
-  }, [setReply]);
-  const onDeleteReply = (id: number) => {
-    const data = { commentid: id, token: cookies, reviewId: reviewNumber };
-    dispatch(delReplyAsync(data));
-  };
 
-  const dispatch = useAppDispatch();
-  const getReplyData = useAppSelector<any>(replyData);
-  useEffect(() => {
-    dispatch(getReviewListAsync(reviewNumber));
-  }, []);
+  const onDeleteReply = (id: number) => {
+    dispatch(delReplyAsync(id)).then((res) => {
+      res.payload.statusCode === 200 && alert('댓글이 삭제되었습니다.'),
+        dispatch(getReviewListAsync(reviewNumber));
+    });
+  };
 
   const onReplyModify = () => {
     const data = {
       comment: getValues('modifyReply'),
       commentId: commentId,
-      token: cookies,
-      reviewId: reviewNumber,
     };
-    dispatch(modifyReplyAsync(data));
-    console.log(data);
+    dispatch(modifyReplyAsync(data)).then((res) => {
+      res.payload.statusCode === 200 && alert('수정되었습니다'),
+        dispatch(getReviewListAsync(reviewNumber));
+    });
   };
-
   return (
     <>
       {!modify &&
-        getReplyData.map((reply: replyDataType, i: any) => {
+        getReplyData?.map((reply: replyDataType, i: number) => {
           return (
             <NewReply key={i}>
               <NewReplyAuthorWrap>
@@ -105,10 +107,21 @@ const ReviewReply = () => {
               </NewReplyAuthorWrap>
               <NewReplyContent>{reply.comment}</NewReplyContent>
               <NewReplyButtonWrap>
-                <button>댓글</button> <p>/</p>
-                <button onClick={() => toggleModify(reply.id)}>수정</button>
-                <p>/</p>
-                <button onClick={() => onDeleteReply(reply.id)}>삭제</button>
+                {isLogin === true && (
+                  <>
+                    <button>댓글</button>
+                  </>
+                )}
+                {userIdInfo === reply.userId ? (
+                  <>
+                    <p>/</p>
+                    <button onClick={() => toggleModify(reply.id)}>수정</button>
+                    <p>/</p>
+                    <button onClick={() => onDeleteReply(reply.id)}>
+                      삭제
+                    </button>
+                  </>
+                ) : null}
               </NewReplyButtonWrap>
             </NewReply>
           );
@@ -169,7 +182,6 @@ const ReviewReply = () => {
               />
               <ReplySubmitButton
                 onClick={() => {
-                  setValue('token', cookies);
                   setValue('reviewId', reviewNumber);
                 }}
               >
@@ -261,9 +273,6 @@ const ReplyCancelButton = styled.button`
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16),
       0 2px 10px 0 rgba(0, 0, 0, 0.12);
   }
-`;
-const NewReplyWrap = styled.div`
-  margin-top: 40px;
 `;
 
 const NewReply = styled.div`

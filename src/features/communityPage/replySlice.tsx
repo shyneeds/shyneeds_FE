@@ -1,101 +1,56 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice,createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import axios from 'axios';
+import { customAxios } from '../../lib/customAxios';
 
 export const getReviewListAsync = createAsyncThunk(
   'GET_REVIEW_LIST',
-  async (id: any, thunkAPI) => {
-    return await axios({
-      url: `http://13.125.151.45:8080/api/comment/${id}/list`,
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/x-www-form-urlencoded',
-      },
-    }).then((res) => {
-      thunkAPI.dispatch(getReply(res.data.data));
-      return res;
-    });
+  async (id: string) => {
+    return await customAxios
+      .get(`comment/${id}/list`)
+      .then((response) => {
+        return response.data.data;
+      })
+      .catch((error) => {
+        return error;
+      });
   }
 );
 export const postReplyAsync = createAsyncThunk(
-  // 완성
   'POST_COMMENT',
-  async (formData: any, thunkAPI) => {
-    const { comment, reviewId, token } = formData;
-    return await axios({
-      url: `http://13.125.151.45:8080/api/comment/register`,
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token.token}`,
-        'Content-type': 'application/json',
-      },
-      data: {
-        comment: comment,
-        reviewId: reviewId,
-      },
-    }).then((res) => {
-      thunkAPI.dispatch(getReviewListAsync(reviewId));
-      return res;
-    });
+  async (formData: any) => {
+    return await customAxios
+      .post('/comment/register', formData)
+      .then((response) => {
+        return response.data.statusCode;
+      });
   }
 );
 export const modifyReplyAsync = createAsyncThunk(
   'MODIFY_REVIEW',
   async (data: any, thunkAPI) => {
-    const { comment, commentId, token, reviewId } = data;
-    console.log(comment);
-    return await axios({
-      url: `http://13.125.151.45:8080/api/comment/update/`,
-      method: 'put',
-      headers: {
-        Authorization: `Bearer ${token.token}`,
-        'Content-type': 'application/json',
-      },
-      data: {
-        comment: comment,
-        commentId: commentId,
-      },
-    }).then((res) => {
-      thunkAPI.dispatch(getReviewListAsync(reviewId));
-      console.log(res);
-      return res;
+    return await customAxios.put('/comment/update', data).then((res) => {
+      return res.data;
     });
   }
 );
 export const getReplyContentAsync = createAsyncThunk(
-  // 됨
   'GET_REPLY_CONTENT',
-  async (data: any, thunkAPI) => {
-    const { commentid, token } = data;
-    return await axios({
-      url: `http://13.125.151.45:8080/api/comment/${commentid}`,
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token.token}`,
-        'Content-type': 'application/x-www-form-urlencoded',
-      },
-    }).then((res) => {
-      thunkAPI.dispatch(setReply(res.data.data.comment));
-      console.log(res.data.data.comment);
-      return res;
-    });
+  async (id: any, thunkAPI) => {
+    return await customAxios
+      .get(`/comment/${id}`)
+      .then((res) => {
+        return res.data;
+      })
+      .catch((error) => {
+        return error;
+      });
   }
 );
 export const delReplyAsync = createAsyncThunk(
   'DELETE_REPLY_CONTENT',
-  async (data: any, thunkAPI) => {
-    const { commentid, token, reviewId } = data;
-    return await axios({
-      url: `http://13.125.151.45:8080/api/comment/${commentid}`,
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token.token}`,
-        'Content-type': 'application/x-www-form-urlencoded',
-      },
-    }).then((res) => {
-      thunkAPI.dispatch(getReviewListAsync(reviewId));
-      console.log(res);
-      return res;
+  async (id: number, thunkAPI) => {
+    return await customAxios.delete(`/comment/${id}`).then((res) => {
+      return res.data;
     });
   }
 );
@@ -123,9 +78,7 @@ const initialState: LoginState = {
 export const replySlice = createSlice({
   name: 'reply',
   initialState,
-  // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    // Use the PayloadAction type to declare the contents of `action.payload`
     getReply: (state, action) => {
       state.data = action.payload;
     },
@@ -137,8 +90,15 @@ export const replySlice = createSlice({
     builder
       .addCase(getReviewListAsync.fulfilled, (state, action) => {
         // console.log(action.payload);
+        state.data = action.payload;
       })
-      .addCase(postReplyAsync.pending, (state) => {
+      .addCase(postReplyAsync.fulfilled, () => {
+        // console.log("테스트")
+      })
+      .addCase(getReplyContentAsync.fulfilled, () => {
+        // console.log("테스트")
+      })
+      .addCase(modifyReplyAsync.fulfilled, () => {
         // console.log("테스트")
       });
   },
