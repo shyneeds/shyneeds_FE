@@ -23,11 +23,9 @@ const Pagenation = () => {
     for (let i = 0; i < n; i++) totalArr[i] = i + 1;
     return totalArr;
   };
-  
   const startPage = Number(blockNumber * 10);
   const rangeArr = createArr(totalPages);
   const sliceArr = rangeArr?.slice(startPage, Number(10) + startPage);
-  // dispatch(getReviewList())
   return (
     <>
       <Nav>

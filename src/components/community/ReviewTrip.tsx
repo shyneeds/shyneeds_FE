@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { useCookies } from 'react-cookie';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { searchWord, totalElementsNum } from '../../features/communityPage/communityPageSlice';
 import { resetImgUrl } from '../../features/communityPage/reviewWriteSlice';
-import { getUserData } from '../../features/userData/userDataSlice';
+import { authenticated } from '../../features/kakaoLogin/kakaoLoginSlice';
 import Pagenation from './Pagination';
 import ReviewContent from './ReviewContent';
 
@@ -14,15 +13,11 @@ const ReviewTrip = () => {
   const {
     register,
     handleSubmit,
-    getValues,
-    setValue,
-    reset,
-    // formState: { errors }, 추후 required 사용 예정
   } = useForm();
-  const [cookies , setCookies] = useCookies(['token']);
   const dispatch = useAppDispatch();
   const [tab, setTab] = useState<number>(0);
   const totalNum = useAppSelector(totalElementsNum);
+  const isLogin = useAppSelector(authenticated);
   const onSubmit = (formData: any) => {
     dispatch(searchWord(formData.search))
   };
@@ -57,7 +52,7 @@ const ReviewTrip = () => {
             <input {...register('search')} placeholder="검색" />
           </form>
         </SearchBox>
-        <WriteButton to="/community/write" onClick={()=>dispatch(resetImgUrl())}>글쓰기</WriteButton>
+        {isLogin === true && <WriteButton to="/community/write" onClick={()=>dispatch(resetImgUrl())}>글쓰기</WriteButton>}
       </SearchWrap>
       <ReviewContent />
       <Pagenation />

@@ -29,59 +29,44 @@ const ReviewWrite = () => {
     handleSubmit,
     getValues,
     setValue,
-    watch,
     formState: { errors },
   } = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const getUrlCode = useParams().modify;
-  const writeCode = useParams();
   const responseImgUrl = useAppSelector(imgUrl);
   const [cookies, setCookies] = useCookies(['token']);
   const reservationList: any = useAppSelector(userReservationList);
   const reviewDetail = useAppSelector(reviewDetailData);
   const editorRef = useRef<Editor>(null);
   useEffect(() => {
-    dispatch(getUserData(cookies.token));
+    dispatch(getUserData())
+    // .then((res)=>console.log(res));
     getUrlCode === 'modify'
       ? (console.log(reviewDetail),
         setValue('title', reviewDetail.title),
-        // setValue('mainImage', reviewDetail.mainImage),
         setValue('reservationId', reviewDetail.reservationId),
         editorRef.current?.getInstance().setHTML(reviewDetail.contents))
       : '';
   }, []);
-
   const onSubmit = (formData: any) => {
-    console.log('submit 돌아가요');
-    console.log(Object.keys('mainImage').length === 0);
-    Object.keys('mainImage').length === 0
-      ? ''
-      : (formData['mainImage'] = responseImgUrl[0]);
+    Object.keys('mainImage').length === 0 && null;
+
     const contents = editorRef.current?.getInstance().getHTML();
     Object.assign(formData, { contents });
 
     getUrlCode === 'modify'
-      ? // typeof formData.mainImage === undefined &&
-        // console.log(typeof formData.mainImage === undefined),
-        // (formData['mainImage'] = reviewDetail.mainImage),
-        ((formData['id'] = reviewDetail.id),
+      ? ((formData['id'] = reviewDetail.id),
         Object.assign(formData, { contents }),
         console.log(formData),
         dispatch(modifyReviewDetail(formData)).then(() => navigate(-1)))
       : dispatch(postContent(formData)).then(() => navigate(-1));
   };
 
-  const onChange = () => {
-    // 단순 로그 찍기용 함수
-    const data = editorRef.current?.getInstance().getHTML();
-    // console.log(data); // TODO: 지울거
-  };
   const imgRef = useRef<HTMLInputElement | null>(null);
   const [myImage, setMyImage] = useState<string>();
 
   const setMainImage = (e: any) => {
-    console.log('uploadImage 실행됨');
     setMyImage(URL.createObjectURL(e.target.files[0]));
     const blob = e.target.files[0];
     const imgData = new FormData();
@@ -95,7 +80,7 @@ const ReviewWrite = () => {
     imgData.append('upload', blob);
     dispatch(uploadImg(imgData)).then((res) => {
       callback(res.payload, 'test');
-    }); //url 콜백에 넣자
+    });
   };
 
   return (
@@ -120,13 +105,13 @@ const ReviewWrite = () => {
                   required: true,
                 })}
               />
-              <BirthSelect
+              <TourSelect
                 // defaultValue={reviewDetail?.reservationId}
                 {...register('reservationId', { required: true })} // TODO: 추후 미선택시 선택되게끔 erros 설정해야함
               >
-                {reservationList.length === 0
-                  ? '예약내역이 없어요'
-                  : reservationList.map((data: any, i: number) => {
+                {reservationList?.length === 0
+                  ? <option>다녀온 여행이 없습니다.</option>
+                  : reservationList?.map((data: any, i: number) => {
                       if (data.reservationStatus === '예약확정') {
                         // console.log(data.reservationPackage[0].title , " id= " + data.reservationId);
                         return (
@@ -136,7 +121,7 @@ const ReviewWrite = () => {
                         );
                       }
                     })}
-              </BirthSelect>
+              </TourSelect>
             </InputBox>
             <EditorWrap>
               <Editor
@@ -148,7 +133,6 @@ const ReviewWrite = () => {
                 hideModeSwitch={true}
                 language="ko-KR"
                 placeholder="내용을 작성해주세요."
-                onChange={onChange}
                 hooks={{
                   addImageBlobHook: onUploadImage,
                 }}
@@ -160,7 +144,11 @@ const ReviewWrite = () => {
               {getUrlCode === 'modify' ? (
                 <>
                   <p>수정</p>
-                  {myImage != undefined ? <ThunmbMainImg src={myImage} /> :<ThunmbMainImg src={reviewDetail.mainImage} />}
+                  {myImage != undefined ? (
+                    <ThunmbMainImg src={myImage} />
+                  ) : (
+                    <ThunmbMainImg src={reviewDetail.mainImage} />
+                  )}
                 </>
               ) : responseImgUrl.length == 0 ? (
                 <></>
@@ -268,6 +256,7 @@ const EditorWrap = styled.div`
 const Wrap = styled.div`
   position: relative;
   width: 100%;
+  height : 100%;
 `;
 
 const HeaderWrap = styled.div`
@@ -327,14 +316,15 @@ const CancelButton = styled.button`
 
 const LeftWrap = styled.section`
   width: 80%;
-  height: 1080px;
+  /* height: 1080px; */
+  height : 100%;
   padding: 20px;
+  border-right: 1px solid #cccccc;
 `;
 const RightWrap = styled.section`
   width: 20%;
-  height: 1080px;
+  height : 100%;
   padding: 20px;
-  border-left: 1px solid #cccccc;
 `;
 const InputBox = styled.div`
   display: flex;
@@ -384,7 +374,7 @@ const ThunmbImg = styled.div`
     color: #aaaaaa;
   }
 `;
-const BirthSelect = styled.select`
+const TourSelect = styled.select`
   align-items: center;
   padding: 11px 20px;
   width: 190px;
