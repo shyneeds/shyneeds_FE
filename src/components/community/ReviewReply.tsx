@@ -27,19 +27,16 @@ type replyDataType = {
 };
 
 const ReviewReply = () => {
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    setValue,
-    reset,
-    // formState: { errors }, 추후 required 사용 예정
-  } = useForm();
-  const reviewNumber = useParams().id;
+  const { register, handleSubmit, getValues, setValue, reset } = useForm();
+  const reviewNumber = useParams().id || '';
   const [cookies, setCookie] = useCookies(['token']);
   const onSubmit = (formData: any) => {
     reset({ comment: '' });
-    dispatch(postReplyAsync(formData));
+    dispatch(postReplyAsync(formData)).then((res) => {
+      res.payload === 200
+        ? dispatch(getReviewListAsync(formData.reviewId))
+        : alert('로그인 후 댓글을 작성해주세요');
+    });
   };
   const setReply = useAppSelector(setReplyData);
   const [modify, setModify] = useState(false);
@@ -58,8 +55,12 @@ const ReviewReply = () => {
     setEmojiClick(false);
   };
   const toggleModify = (id: number) => {
-    const data = { commentid: id, token: cookies };
-    dispatch(getReplyContentAsync(data));
+    dispatch(getReplyContentAsync(id))
+      .then((res) => {
+        res.payload.statusCode === 200 &&
+          setValue('modifyReply', res.payload.data.comment);
+      })
+      .catch((error) => console.log(error));
     setModify(!modify);
     setCommentId(id);
   };
@@ -105,10 +106,18 @@ const ReviewReply = () => {
               </NewReplyAuthorWrap>
               <NewReplyContent>{reply.comment}</NewReplyContent>
               <NewReplyButtonWrap>
-                <button>댓글</button> <p>/</p>
-                <button onClick={() => toggleModify(reply.id)}>수정</button>
-                <p>/</p>
-                <button onClick={() => onDeleteReply(reply.id)}>삭제</button>
+                {sessionStorage.getItem('userId') === reply.userId + '' ? (
+                  <>
+                    <button>댓글</button> <p>/</p>
+                    <button onClick={() => toggleModify(reply.id)}>수정</button>
+                    <p>/</p>
+                    <button onClick={() => onDeleteReply(reply.id)}>
+                      삭제
+                    </button>
+                  </>
+                ) : (
+                  null
+                )}
               </NewReplyButtonWrap>
             </NewReply>
           );
