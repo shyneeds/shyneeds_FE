@@ -25,7 +25,7 @@ function App() {
   const [cookies, setCookie] = useCookies(['token']);
   const dispatch = useAppDispatch();
   const loggedInfo = () => {
-    cookies && dispatch(isLogin(cookies));
+    cookies.token != undefined && dispatch(isLogin(cookies));
   };
   return (
     <>
