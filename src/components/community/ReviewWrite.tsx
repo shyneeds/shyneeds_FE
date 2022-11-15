@@ -29,7 +29,6 @@ const ReviewWrite = () => {
     handleSubmit,
     getValues,
     setValue,
-    watch,
     formState: { errors },
   } = useForm();
   const dispatch = useAppDispatch();
@@ -52,10 +51,12 @@ const ReviewWrite = () => {
   }, []);
   const onSubmit = (formData: any) => {
     Object.keys('mainImage').length === 0 && null;
-
+    getValues('mainImage') === undefined && (formData['mainImage'] = responseImgUrl[0]);
     const contents = editorRef.current?.getInstance().getHTML();
     Object.assign(formData, { contents });
 
+
+    console.log(formData);
     getUrlCode === 'modify'
       ? ((formData['id'] = reviewDetail.id),
         Object.assign(formData, { contents }),
@@ -68,7 +69,6 @@ const ReviewWrite = () => {
   const [myImage, setMyImage] = useState<string>();
 
   const setMainImage = (e: any) => {
-    console.log('uploadImage 실행됨');
     setMyImage(URL.createObjectURL(e.target.files[0]));
     const blob = e.target.files[0];
     const imgData = new FormData();
@@ -81,7 +81,7 @@ const ReviewWrite = () => {
     const imgData = new FormData();
     imgData.append('upload', blob);
     dispatch(uploadImg(imgData)).then((res) => {
-      callback(res.payload, 'callbackImg');
+      callback(res.payload, 'test');
     });
   };
 
