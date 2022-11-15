@@ -29,6 +29,7 @@ const ReviewWrite = () => {
     handleSubmit,
     getValues,
     setValue,
+    watch,
     formState: { errors },
   } = useForm();
   const dispatch = useAppDispatch();
@@ -67,6 +68,7 @@ const ReviewWrite = () => {
   const [myImage, setMyImage] = useState<string>();
 
   const setMainImage = (e: any) => {
+    console.log('uploadImage 실행됨');
     setMyImage(URL.createObjectURL(e.target.files[0]));
     const blob = e.target.files[0];
     const imgData = new FormData();
@@ -79,7 +81,7 @@ const ReviewWrite = () => {
     const imgData = new FormData();
     imgData.append('upload', blob);
     dispatch(uploadImg(imgData)).then((res) => {
-      callback(res.payload, 'test');
+      callback(res.payload, 'callbackImg');
     });
   };
 
@@ -143,7 +145,6 @@ const ReviewWrite = () => {
             <InputImgBox>
               {getUrlCode === 'modify' ? (
                 <>
-                  <p>수정</p>
                   {myImage != undefined ? (
                     <ThunmbMainImg src={myImage} />
                   ) : (
@@ -154,7 +155,6 @@ const ReviewWrite = () => {
                 <></>
               ) : (
                 <>
-                  <p>글쓰기</p>
                   {myImage ? (
                     <ThunmbMainImg src={myImage} />
                   ) : (
