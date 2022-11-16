@@ -22,12 +22,12 @@ customAxios.interceptors.request.use(
   function(config:any){
     const refreshToken = sessionStorage.getItem('refreshToken')
     if(!refreshToken){
-      config.headers['refreshToken'] = null;
+      config.headers['refresh_token'] = null;
       config.headers['accessToken'] = null;
       return config
     }
     config.headers['Authorization']="Bearer "+getCookie('token');
-    // config.headers['refreshToken']="Bearer "+refreshToken;
+    config.headers['refresh_token']="Bearer "+refreshToken;
     return config
   }
 )

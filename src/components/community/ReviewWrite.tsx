@@ -51,10 +51,12 @@ const ReviewWrite = () => {
   }, []);
   const onSubmit = (formData: any) => {
     Object.keys('mainImage').length === 0 && null;
-
+    getValues('mainImage') === undefined && (formData['mainImage'] = responseImgUrl[0]);
     const contents = editorRef.current?.getInstance().getHTML();
     Object.assign(formData, { contents });
 
+
+    console.log(formData);
     getUrlCode === 'modify'
       ? ((formData['id'] = reviewDetail.id),
         Object.assign(formData, { contents }),
@@ -143,7 +145,6 @@ const ReviewWrite = () => {
             <InputImgBox>
               {getUrlCode === 'modify' ? (
                 <>
-                  <p>수정</p>
                   {myImage != undefined ? (
                     <ThunmbMainImg src={myImage} />
                   ) : (
@@ -154,7 +155,6 @@ const ReviewWrite = () => {
                 <></>
               ) : (
                 <>
-                  <p>글쓰기</p>
                   {myImage ? (
                     <ThunmbMainImg src={myImage} />
                   ) : (
