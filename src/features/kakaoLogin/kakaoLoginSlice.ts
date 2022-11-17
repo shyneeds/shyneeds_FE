@@ -3,7 +3,7 @@ import { RootState } from '../../app/store';
 import axios from 'axios';
 import { REDIRECT_URL } from '../../constants/KAKAO_AUTH_URL';
 import { API_URL } from '../../constants/API_URL';
-import session from 'redux-persist/lib/storage/session';
+axios.defaults.withCredentials = true;
 
 export const KakaoLoginAsync = createAsyncThunk(
   'GET_ACCESS_CODE',
@@ -91,7 +91,8 @@ export const KakaoLoginSlice = createSlice({
     isLogin: (state, { payload }) => {
       state.authenticated = true;
       state.refreshToken = sessionStorage.getItem('refreshToken') || ""
-      state.userId = parseInt(sessionStorage.getItem('userId')||"")      
+      state.userId = parseInt(sessionStorage.getItem('userId')||"") 
+     
     },
   },
   extraReducers: (builder) => {
