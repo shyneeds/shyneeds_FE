@@ -2,16 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import {
-  // userDataName,
-  // userDataImage,
-  // userDataGender,
-  userUserInfo,
-} from '../../features/userData/userDataSlice';
+import { useAppSelector } from '../../app/hooks';
+import { userUserInfo } from '../../features/userData/userDataSlice';
 import { userToken } from '../../features/kakaoLogin/kakaoLoginSlice';
 import { useNavigate } from 'react-router';
-import { useCookies } from 'react-cookie';
 
 const Modify = () => {
   const now = new Date();
@@ -40,12 +34,11 @@ const Modify = () => {
     console.log(data.profileImage);
     delete data.password_repeat;
     delete data.profileImage;
-    // formData.append('profileImage', data.profileImage);
     formData.append(
       'userInfo',
       new Blob([JSON.stringify(data)], { type: 'application/json' })
     );
-    console.log(JSON.stringify(data));
+    // console.log(JSON.stringify(data));
 
     axios({
       method: 'PATCH',
@@ -53,7 +46,6 @@ const Modify = () => {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
-        // 'Content-type': 'application/json',
       },
       data: formData,
     })
@@ -74,23 +66,10 @@ const Modify = () => {
   };
   const imgRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
-  // const userName = useAppSelector(userDataName);
-  // const userImage = useAppSelector(userDataImage);
-  // const userGender = useAppSelector(userDataGender);
+
   const userInfo = useAppSelector<any>(userUserInfo);
   const userImg: any = userInfo.profileImage;
-  useEffect(() => {
-    console.log(myImage);
-  }, [myImage]);
-  console.log(userImg);
 
-  // const modify = () => {};
-
-  // useEffect(() => {
-  //   //only use for Test
-  //   // console.log(selectedDate);
-  //   // console.log(passwordRef.current?.value);
-  // }, [selectedDate]);
   useEffect(() => {
     if (userInfo.gender === 'male') {
       setTab(0);
@@ -112,10 +91,7 @@ const Modify = () => {
       );
     }
   };
-  const isError = () => {
-    Object.keys(errors).length === 0 && alert('회원가입이 완료되었습니다.'),
-      navigate(-1);
-  };
+
   return (
     <div>
       <h2>회원정보수정</h2>
@@ -126,7 +102,7 @@ const Modify = () => {
               src={
                 userImg.includes('undefined')
                   ? process.env.PUBLIC_URL + '/icons/ic-member.svg'
-                  : myImage
+                  : userImg
               }
               onClick={() => imgRef.current?.click()}
             />
@@ -191,6 +167,7 @@ const Modify = () => {
           <InputBox>
             <NameStyle>연락처</NameStyle>
             <InputStyle
+              defaultValue={userInfo.phoneNumber}
               placeholder="연락처를 적어주세요"
               style={{ outline: errors.phoneNumber ? '2px solid red' : '' }}
               {...register('phoneNumber', {
