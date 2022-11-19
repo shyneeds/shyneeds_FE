@@ -11,12 +11,6 @@ export const customAxios: AxiosInstance = axios.create({
     Authorization: '',
   },
 });
-export const customAxiosFormData: AxiosInstance = axios.create({
-  baseURL: `http://13.125.151.45:8080/api`, // 기본 서버 주소 입력
-  headers: {
-    'Content-Type' : 'multipart/form-data',
-  },
-});
 
 customAxios.interceptors.request.use(
   function(config:any){
