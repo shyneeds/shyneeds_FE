@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../app/store';
-import { customAxios, customAxiosFormData } from '../../lib/customAxios';
+import { customAxios } from '../../lib/customAxios';
 
 export const uploadImg = createAsyncThunk('POST_IMG', async (imgData: any) => {
-  return await customAxiosFormData
-    .post('/review/image/upload', imgData)
+  return await customAxios
+    .post('/review/image/upload', imgData,{ headers : { 'Content-Type' : 'multipart/form-data'}})
     .then((response) => {
       return response.data;
     })
