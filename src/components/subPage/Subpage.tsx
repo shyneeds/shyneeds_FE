@@ -48,18 +48,23 @@ const Subpage = () => {
           <Logo>
             <Link to="/">
               <img
-                src={process.env.PUBLIC_URL + 'logo-147x24-050.svg'}
+                src={
+                  process.env.PUBLIC_URL + '/icons/subPage/logo-147x24-050.svg'
+                }
                 alt=""
               />
             </Link>
           </Logo>
           <InputBox>
             <img
-              src={process.env.PUBLIC_URL + '/icons/search.png'}
+              src={
+                process.env.PUBLIC_URL +
+                '/icons/subPage/ic-search-24x24-050.svg'
+              }
               alt="search.png"
             />
-            <input
-              type="text"
+            <SearchInput
+              // type="text"
               placeholder="여행 그룹이나 상품을 검색해보세요"
             />
           </InputBox>
@@ -75,8 +80,8 @@ const Subpage = () => {
             그룹별 여행 &nbsp;&nbsp;&gt;&nbsp;&nbsp; 5070
           </PageCategory>
           <TitleTab>
-            <PageTitle>그룹별 여행</PageTitle>
-            <SubUl_first>
+            <PageTitle>지역별 여행</PageTitle>
+            {/* <SubUl_first>
               <SubLi_first>
                 <Link to="/subPage">5070끼리</Link>
               </SubLi_first>
@@ -95,7 +100,7 @@ const Subpage = () => {
               <SubLi_first>
                 <Link to="/subPage">누구든지</Link>
               </SubLi_first>
-            </SubUl_first>
+            </SubUl_first> */}
           </TitleTab>
         </MiddleInner>
       </MiddleWrap>
@@ -112,9 +117,18 @@ const Subpage = () => {
         <ProductWrap>
           {categoryProduct.map((data: any) => {
             return (
-              <Product key={data.travelPackageId}>
-                <img src={data.mainImage} alt="" />
-              </Product>
+              <Link
+                to={'/offers/' + data.travelPackageId}
+                key={data.travelPackageId}
+              >
+                <Product>
+                  <img src={data.mainImage} alt="" />
+                  <ProductInfo>
+                    <h2>{data.travelPackageTitle}</h2>
+                    <p>{data.price} 원</p>
+                  </ProductInfo>
+                </Product>
+              </Link>
             );
           })}
         </ProductWrap>
@@ -147,37 +161,40 @@ const Logo = styled.div`
 const InputBox = styled.div`
   width: 326px;
   height: 48px;
-  background-color: #f5f5f5;
-  opacity: 0.1;
+  background-color: #5592f5;
   display: flex;
   align-items: center;
   margin: 12px;
   padding: 12px;
 
   img {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     margin-left: 4px;
     margin-right: 8px;
     color: #fff;
   }
-
-  input {
-    width: 220px;
-    height: 24px;
-    padding: 12px 0;
-  }
-
-  placeholder {
-    color: #fff;
-  }
 `;
 
+const SearchInput = styled.input`
+  width: 220px;
+  height: 24px;
+  padding: 12px 0;
+  &::placeholder {
+    color: white;
+  }
+`;
 const UserMenu = styled.div`
   margin-left: auto;
   width: 22rem;
   display: flex;
   justify-content: space-between;
+  > a {
+    color: #fff;
+  }
+  > a:hover {
+    color: #fff !important;
+  }
 `;
 
 const MiddleWrap = styled.p`
@@ -198,6 +215,7 @@ const PageTitle = styled.h1`
   font-size: 2rem;
   font-weight: bold;
   color: #333;
+  margin: 0 0 25px;
 `;
 
 const SubUl_first = styled.ul`
@@ -263,15 +281,41 @@ const Sort = styled.p`
     vertical-align: middle;
   }
 `;
-const ProductWrap = styled.div``;
+const ProductWrap = styled.div`
+  padding: 10px 0 50px;
+`;
 const Product = styled.div`
   display: inline-block;
   width: 284px;
   margin: 0 16px 0 0;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  overflow: hidden;
   :nth-child(4n) {
     margin-right: 0px;
   }
 `;
+const ProductInfo = styled.div`
+  padding: 20px;
+  > h2 {
+    margin: 0 0 16px;
+    font-weight: 500;
+    font-size: 1.25rem;
+  }
+  > p {
+    font-size: 16px;
+    color: #666666;
+  }
+`;
 
+// const TopLi = styled.li`
+//   color: #fff;
+
+//   &:hover {
+//     padding-bottom: 1.25rem;
+//     margin-top: 1.25rem;
+//     color: #fff;
+//   }
+// `;
 export default Subpage;
 ``;
