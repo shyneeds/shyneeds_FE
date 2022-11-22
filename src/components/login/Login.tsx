@@ -15,7 +15,7 @@ import {
 } from '../../features/kakaoLogin/kakaoLoginSlice';
 import axios from 'axios';
 const { Kakao } = window;
-
+axios.defaults.withCredentials = true;
 function Login() {
   const [cookies, setCookie] = useCookies(['token']);
   useEffect(() => {

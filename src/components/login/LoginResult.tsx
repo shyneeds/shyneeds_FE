@@ -1,8 +1,7 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppDispatch } from '../../app/hooks';
 import {
   KakaoLoginAsync,
-  userToken,
 } from '../../features/kakaoLogin/kakaoLoginSlice';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
@@ -12,20 +11,21 @@ const LoginResult = () => {
   const [cookies, setCookie] = useCookies(['token']);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const serverToken = useAppSelector(userToken);
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get('code');
 
+  const onLogin = () => {
+    code &&
+      dispatch(KakaoLoginAsync(code))
+        .then((res) =>
+          setCookie('token', res.payload.payload, { path: '/', maxAge: 1800 })
+        )
+        .then(() => navigate(-2));
+  };
+  
   useEffect(() => {
-    if (serverToken === (undefined||'')) {
-      code && dispatch(KakaoLoginAsync(code));
-      console.log(serverToken)
-    } else {
-      console.log(serverToken)
-      setCookie('token', serverToken, { path: '/', maxAge: 1800 });
-      navigate(-2);
-    }
-  }, [serverToken]);
+    onLogin();
+  }, []);
 
   return (
     <>
