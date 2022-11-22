@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import ReviewDetailData from './ReviewDetailData';
-import { useState } from 'react';
 import RelatedData from './RelatedData';
 import ReviewReply from './ReviewReply';
 import { useNavigate, useParams } from 'react-router';
@@ -12,7 +10,7 @@ import {
   reviewDetailData,
   reviewLikePost,
 } from '../../features/communityPage/reviewWriteSlice';
-import { useCookies } from 'react-cookie';
+import { userId } from '../../features/kakaoLogin/kakaoLoginSlice';
 
 type idType = string;
 
@@ -20,7 +18,7 @@ const ReviewDetail = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const detailData = useAppSelector(reviewDetailData);
-  const [cookies, setCookie] = useCookies(['token']);
+  //TODO: 백엔드 분에게 나중에 userIdinfo를 이용하여 권한에따른 분기처리를 위해 필요함. const userIdInfo = useAppSelector(userId);
   const id : idType = useParams().id!;
   useEffect(() => {
     dispatch(getReviewDetail(id));
@@ -34,7 +32,6 @@ const ReviewDetail = () => {
   const onLikeClick = (review_id: string) =>{
     dispatch(reviewLikePost(review_id)).then(()=>dispatch(getReviewDetail(id)))
   }
-
   return (
     <Wrap>
       <TopCategoryWrap>
@@ -103,8 +100,12 @@ const ReviewDetail = () => {
         </RelateProduct>
         <ReviewReply /> {/*댓글 기능*/}
         <MenuWrap>
+          {/* {userIdInfo === 100 &&
+            <> */}
           <ContentModiftyButton onClick={()=>onModifyClick()}>수정</ContentModiftyButton>
           <ContentDeleteButton onClick={()=>onDeleteClick(id as string)}>삭제</ContentDeleteButton>
+          {/* </>
+} */}
         </MenuWrap>
       </ReviewContentWrap>
     </Wrap>
