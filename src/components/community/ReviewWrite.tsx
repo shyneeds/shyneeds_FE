@@ -35,13 +35,11 @@ const ReviewWrite = () => {
   const navigate = useNavigate();
   const getUrlCode = useParams().modify;
   const responseImgUrl = useAppSelector(imgUrl);
-  const [cookies, setCookies] = useCookies(['token']);
   const reservationList: any = useAppSelector(userReservationList);
   const reviewDetail = useAppSelector(reviewDetailData);
   const editorRef = useRef<Editor>(null);
   useEffect(() => {
-    dispatch(getUserData())
-    // .then((res)=>console.log(res));
+    dispatch(getUserData());
     getUrlCode === 'modify'
       ? (console.log(reviewDetail),
         setValue('title', reviewDetail.title),
@@ -51,10 +49,10 @@ const ReviewWrite = () => {
   }, []);
   const onSubmit = (formData: any) => {
     Object.keys('mainImage').length === 0 && null;
-    getValues('mainImage') === undefined && (formData['mainImage'] = responseImgUrl[0]);
+    getValues('mainImage') === undefined &&
+      (formData['mainImage'] = responseImgUrl[0]);
     const contents = editorRef.current?.getInstance().getHTML();
     Object.assign(formData, { contents });
-
 
     console.log(formData);
     getUrlCode === 'modify'
@@ -108,21 +106,21 @@ const ReviewWrite = () => {
                 })}
               />
               <TourSelect
-                // defaultValue={reviewDetail?.reservationId}
                 {...register('reservationId', { required: true })} // TODO: 추후 미선택시 선택되게끔 erros 설정해야함
               >
-                {reservationList?.length === 0
-                  ? <option>다녀온 여행이 없습니다.</option>
-                  : reservationList?.map((data: any, i: number) => {
-                      if (data.reservationStatus === '예약확정') {
-                        // console.log(data.reservationPackage[0].title , " id= " + data.reservationId);
-                        return (
-                          <option key={i} value={data.reservationId as number}>
-                            {data.reservationPackage[0].title}
-                          </option>
-                        );
-                      }
-                    })}
+                {reservationList?.length === 0 ? (
+                  <option>다녀온 여행이 없습니다.</option>
+                ) : (
+                  reservationList?.map((data: any, i: number) => {
+                    if (data.reservationStatus === '예약확정') {
+                      return (
+                        <option key={i} value={data.reservationId as number}>
+                          {data.reservationPackage[0].title}
+                        </option>
+                      );
+                    }
+                  })
+                )}
               </TourSelect>
             </InputBox>
             <EditorWrap>
@@ -162,72 +160,6 @@ const ReviewWrite = () => {
                   )}
                 </>
               )}
-
-              {/* {responseImgUrl.length == 0 ? (
-                imgRef.current?.value.length == 0 &&
-                (getUrlCode == 'modify' ? (
-                  <>
-                    {responseImgUrl.length}
-                    <ThunmbMainImg src={reviewDetail.mainImage} />
-                    <p>수정버튼 누른후 없음</p>
-                  </>
-                ) : (
-                  <>
-                  <p>글쓰기 눌렀을때의 화면</p>
-                  </>
-                ))
-              ) : getUrlCode == 'modify' ? (
-                <>
-                  <p>수정 페이지 이미지</p>
-                  {myImage === undefined ? <ThunmbMainImg src={reviewDetail.mainImage} /> : <ThunmbMainImg src={myImage} />}
-                  <ThunmbMainImg src={reviewDetail.mainImage} />
-                  {<ThunmbMainImg src={myImage} />}
-                </>
-              ) : (//처음 글쓸때 게시글에서 이미지 업로드를 한 후 보여지는 사진
-                <>
-                  <p>여기니?</p>
-                  {myImage ? <ThunmbMainImg src={myImage} /> : <ThunmbMainImg src={responseImgUrl[0]} />}
-                </>
-              )} */}
-
-              {/* {responseImgUrl.length != 0 ? (
-                imgRef.current?.value.length != 0 ? (
-                  <>
-                    <ThunmbMainImg src={myImage} />
-                    <p>
-                      {responseImgUrl.length}, {imgRef.current?.value.length}
-                    </p>
-                    <p>165번째</p>
-                  </>
-                ) : Object.keys(writeCode).length == 1 ? (
-                  <>
-                    <ThunmbMainImg src={reviewDetail.mainImage} />
-                    <p>
-                      {responseImgUrl.length}, {imgRef.current?.value.length}
-                    </p>
-                    <p>{Object.keys(writeCode).length}</p>
-                    <p>여기?</p>
-                  </>
-                ) : (
-                  <>
-                    <ThunmbMainImg src={responseImgUrl[0]} />
-                    <p>
-                      {responseImgUrl.length}, {imgRef.current?.value.length}
-                    </p>
-                    <p>write 코드 : {Object.keys(writeCode).length}</p>
-                    <p>170번째</p>
-                    <p>{responseImgUrl[0]}</p>
-                  </>
-                )
-              ) : (
-                getUrlCode == 'modify' && (
-                  <>
-                    <ThunmbMainImg src={reviewDetail.mainImage} />
-                    <p>177번째</p>
-                    <p>{getUrlCode}</p>
-                  </>
-                )
-              )} */}
               <ThunmbImg onClick={() => imgRef.current?.click()}>
                 <img src={process.env.PUBLIC_URL + '/icons/union.svg'} />
                 <p>대표 이미지 변경</p>
@@ -256,7 +188,7 @@ const EditorWrap = styled.div`
 const Wrap = styled.div`
   position: relative;
   width: 100%;
-  height : 100%;
+  height: 100%;
 `;
 
 const HeaderWrap = styled.div`
@@ -317,13 +249,13 @@ const CancelButton = styled.button`
 const LeftWrap = styled.section`
   width: 80%;
   /* height: 1080px; */
-  height : 100%;
+  height: 100%;
   padding: 20px;
   border-right: 1px solid #cccccc;
 `;
 const RightWrap = styled.section`
   width: 20%;
-  height : 100%;
+  height: 100%;
   padding: 20px;
 `;
 const InputBox = styled.div`
