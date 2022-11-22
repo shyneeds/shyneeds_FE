@@ -8,14 +8,11 @@ import { API_URL } from '../../constants/API_URL';
 import { KAKAO_AUTH_URL } from '../../constants/KAKAO_AUTH_URL';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import {
-  userLogin,
-  loginToken,
-} from '../../features/kakaoLogin/kakaoLoginSlice';
+import { useAppDispatch } from '../../app/hooks';
+import { userLogin } from '../../features/kakaoLogin/kakaoLoginSlice';
 import axios from 'axios';
 const { Kakao } = window;
-axios.defaults.withCredentials = true;
+
 function Login() {
   const [cookies, setCookie] = useCookies(['token']);
   useEffect(() => {
@@ -44,7 +41,7 @@ function Login() {
     })
       .then((response) => {
         console.log({ response });
-        setCookie('token', response.data.data.accessToken)
+        setCookie('token', response.data.data.accessToken);
         dispatch(userLogin(response.data.data));
         navigate(-1);
       })

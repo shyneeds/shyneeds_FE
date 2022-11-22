@@ -43,8 +43,8 @@ const SignUp = () => {
         console.log({ error });
       });
     isError();
-  };
-  const passwordRef = useRef<HTMLInputElement | null>(null);
+  }; //TODO: 추후에 intercepter 를 이용하여 응답값들을 isError() 없이 처리하도록 리펙토링하여야함.
+  const passwordRef = useRef<HTMLInputElement | null>(null); //TODO: useRef 를 쓸필요가 없을 것 같고, 추후에 htmlFor
 
   const isPhoneNum = () => {
     if (watch('phoneNumber').length === 13) {
