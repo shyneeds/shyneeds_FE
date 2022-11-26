@@ -85,14 +85,14 @@ export const deleteReviewDetail = createAsyncThunk(
 );
 export const reviewLikePost = createAsyncThunk(
   'POST_LIKE',
-  async (review_id: string, thunkAPI) => {
+  async (review_id: string) => {
     return await customAxios.post(`/review/like?review_id=${review_id}`);
   }
 );
 
 export interface writeState {
-  imgUrl: Array<any>;
-  reviewContent: any;
+  imgUrl: Array<string>;
+  reviewContent: any; //TODO: 추후 TYPE설정들 해야함...
 }
 
 const initialState: writeState = {
@@ -114,6 +114,7 @@ export const writeSlice = createSlice({
     });
     builder.addCase(getReviewDetail.fulfilled, (state, action) => {
       state.reviewContent = action.payload;
+      console.log(action.payload)
     });
   },
 });

@@ -29,7 +29,6 @@ function Login() {
   } = useForm();
 
   const onSubmit = (formData: any) => {
-    console.log(formData);
     axios({
       headers: {
         'Content-Type': 'application/json',

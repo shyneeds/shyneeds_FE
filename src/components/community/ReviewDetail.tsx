@@ -10,7 +10,7 @@ import {
   reviewDetailData,
   reviewLikePost,
 } from '../../features/communityPage/reviewWriteSlice';
-import { userId } from '../../features/kakaoLogin/kakaoLoginSlice';
+
 
 type idType = string;
 
