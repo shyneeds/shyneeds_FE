@@ -8,17 +8,22 @@ import { API_URL } from '../../constants/API_URL';
 import { KAKAO_AUTH_URL } from '../../constants/KAKAO_AUTH_URL';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { useAppDispatch } from '../../app/hooks';
-import { userLogin } from '../../features/kakaoLogin/kakaoLoginSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import {
+  authenticated,
+  userLogin,
+} from '../../features/kakaoLogin/kakaoLoginSlice';
 import axios from 'axios';
 const { Kakao } = window;
 
 function Login() {
+  const isLogin = useAppSelector(authenticated);
   const [cookies, setCookie] = useCookies(['token']);
   useEffect(() => {
     if (!Kakao.isInitialized()) {
       Kakao.init(process.env.REACT_APP_KAKAO_API_KEY);
     }
+    isCheckLogin().then((res) => res && navigate(-1));
   }, []);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -27,6 +32,11 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const isCheckLogin = async () => {
+    isLogin && alert('이미 로그인 되어있습니다.');
+
+    return isLogin;
+  };
 
   const onSubmit = (formData: any) => {
     axios({
