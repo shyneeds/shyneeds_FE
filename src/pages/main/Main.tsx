@@ -1,24 +1,27 @@
-import React from 'react'
-import styled from 'styled-components';
-import Header from '../../components/common/Header';
-import Carousel from '../../components/carousel/Carousel';
-import Footer from '../../components/common/Footer';
-import { PersonalSection } from "../.././components/personalSection/PersonalSection"
-
-const MainPageStyles = styled.div`
-  width: 62vw;
-  margin: 0 auto;
-`
+import Header from '../../components/common/header/Header';
+import { MainBanner } from '../../components/mainPage/banner/MainBanner/MainBanner';
+import { AsideSection } from '../../components/common/aside/AsideSection';
+import { RecommendedByGroup } from '../../components/mainPage/recommended/RecommendedByGroup';
+import { RecommendedByRegion } from '../../components/mainPage/recommended/RecommendedByRegion';
+import { RecommendedByTheme } from '../../components/mainPage/recommended/RecommendedByTheme';
+import { RecommendedByExhibition } from '../../components/mainPage/recommended/RecommendedByExhibition ';
+import Review from '../../components/review/Review';
+import Footer from '../../components/common/footer/Footer';
+import { PromotionBanner } from '../../components/mainPage/banner/PromotionBanner';
 
 export default function Main() {
   return (
     <>
       <Header />
-      <Carousel />
-      <MainPageStyles>
-        <PersonalSection />
-      </MainPageStyles>
+      <MainBanner />
+      <AsideSection />
+      <RecommendedByGroup />
+      <RecommendedByRegion />
+      <RecommendedByTheme />
+      <RecommendedByExhibition />
+      <Review />
+      <PromotionBanner />
       <Footer />
     </>
-  )
+  );
 }
